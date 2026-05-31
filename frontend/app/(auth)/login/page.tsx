@@ -56,6 +56,15 @@ export default function LoginPage() {
     return (
         <div className="flex flex-col width-full min-h-screen items-center justify-center gap-4">
             <div className='font-heading text-4xl font-bold'>Greetings from <span className="text-primary">NUS</span> <span className="text-secondary">Savnac</span>!</div>
+            <button className="w-full max-w-sm mt-5 font-sans text-md h-12 flex items-center justify-center border border-input rounded hover:bg-primary hover:text-white">
+                <img src="/microsoft-logo.png" alt="Microsoft Logo" width={20} height={20} className="inline-block mr-2" />
+                Continue with Microsoft
+            </button>
+            <div className="flex w-full max-w-sm items-center gap-3 mt-4">
+                <div className="h-px flex-1 bg-border"></div>
+                <span className="text-xs font-sans font-medium tracking-[0.2em] text-muted-foreground">OR</span>
+                <div className="h-px flex-1 bg-border"></div>
+            </div>
             <div className='font-sans text-muted-foreground mt-4'>
                 Login with your email and password
             </div>
