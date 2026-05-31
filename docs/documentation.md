@@ -1,4 +1,7 @@
 # NUS SAVNAC DOCUMENTATION
+<p align="center">
+  <img src="./images/logo.png" width="200">
+</p>
 
 *Team name*
 **SchedWarden**
@@ -7,43 +10,61 @@
 **NUS Savnac**
 
 ## 1. Introduction
-### 1.1. Motivation 
-The current learning ecosystem at the **National University of Singapore** relies heavily on platforms such as ***Canvas*** and external systems like ***Coursemology***. However, course coordinators adopt different teaching workflows, resulting in inconsistent structures across modules. For instance, some modules rely on quizzes and assignments within Canvas, while others require students to access external platforms.
 
-Furthermore, ***Canvas*** does not provide a unified view of all academic responsibilities. Important tasks such as tutorial preparation, lab work, and self-directed study are often not explicitly tracked within the system, requiring students to manage them manually. This becomes especially challenging for freshmen who are still adapting to university-level learning.
+### 1.1 Motivation
 
-In addition, navigating course materials in ***Canvas*** – particularly within the *Files* section—can be inefficient due to deeply nested folder structures. Students frequently need to access these materials, making the process repetitive and time-consuming.
+The current learning ecosystem at the **National University of Singapore (NUS)** relies heavily on platforms such as ***Canvas*** and external systems such as ***Coursemology***. While these platforms provide essential functionality for course administration and content delivery, their usage often varies significantly across modules due to differences in teaching styles and course requirements. As a result, students are frequently required to navigate multiple platforms in order to access learning materials, submit assignments, complete quizzes, and track academic progress.
 
-Lastly, ***Canvas*** lacks built-in tools for structured study planning and task scheduling. Students are often required to rely on external applications to organize their academic workload, leading to fragmented workflows.
+Furthermore, ***Canvas*** does not provide a centralized view of a student's overall academic workload. Important responsibilities such as tutorial preparation, revision sessions, project milestones, and self-directed study are often managed separately by students. This challenge is especially apparent for freshmen, who are still adapting to the increased independence and workload associated with university education.
 
-These limitations increase cognitive load and reduce productivity, motivating the need for a centralized and student-centric system to streamline academic management.
+Another limitation lies in the organization of learning resources. Although Canvas provides a *Files* section for course materials, resources are often stored within deeply nested folder structures. Students may need to repeatedly navigate through multiple layers of folders to access frequently used documents, resulting in an inefficient and repetitive workflow.
 
-### 1.2. Project Overview
-***NUS Savnac*** is a academic management website that is designed specifically for NUS students, helping them centralize their study resources, schedule, to-do list, etc.
+In addition, Canvas lacks integrated tools for long-term study planning, task management, and productivity tracking. Students are therefore required to rely on external applications such as calendars, task managers, and productivity tools to organize their academic commitments. The use of multiple disconnected systems creates fragmented workflows and increases the cognitive effort required to manage university life effectively.
 
-The name *Savnac* is the reverse of the name *Canvas*, which is the platform that runs courses of NUS, allowing students to access courses' materials, viewing grades and announcements. ***NUS Savnac*** will play the role of an assistant, extending the limitations of Canvas, which will ease the heaviness of workload, making students' university life easier and more organizable.
+These limitations motivated the development of **NUS Savnac**, a centralized academic management platform that aims to streamline academic organization, improve productivity, and provide students with a more unified learning experience.
 
-***NUS Savnac*** system has 4 main features:
-- **Dashboard** - This feature contains multiple sub-features. Users can add new NUS courses, adding their own folders to the course that can link to external resources, especially the *Files* section of the course. The system also fetches data (schedule, workload, exam dates) of the course from NUSMods, and helps students view their weekly to-dos of the course.
+### 1.2 Project Overview
 
-- **Scheduler** - This page is a semester-based schedule planner that aligned with NUS Academic Calendar. It gathers the schedules of all added courses and displays them in one interface. Students can add their own events on certain dates, set up their study routines, as well as having a view of upcoming events.
+***NUS Savnac*** is an academic management platform designed specifically for students of the **National University of Singapore**. The platform aims to centralize course information, study resources, schedules, and task management tools within a single application, reducing the need for students to switch between multiple systems throughout their daily academic activities.
 
-- **Task** - This page collects the to-do lists of all courses and displays it in one interface. The page is designed in a way such that can help the students easily track their weekly progress, and motivate them to finish all the tasks.
+The name *Savnac* is derived from the reverse spelling of *Canvas*, reflecting the project's goal of complementing and extending the functionality provided by the university's primary learning management system. Rather than replacing Canvas, NUS Savnac acts as a productivity-focused companion platform that helps students organize their academic responsibilities more efficiently.
 
-- **Reminder System** - This small system will keep track of the upcoming deadlines and remind the users before the deadlines a specific amount of time depending on users' choice. The reminding message will be announced via the registered email.
+The platform consists of four core features:
 
-The system is not limited to those 4 main features. It is also extended with other small features that can boost students productivity:
-- **Pomodoro Timer** - This feature can help students queue a series of tasks they want to do and set the time limit they want to finish those tasks. This functionality can enhance focus and productivity.
+* **Dashboard** – Serves as the central hub of the application. Students can add NUS modules, organize course-specific resources, create custom folders containing external links, and access module information retrieved from NUSMods. The dashboard also provides a consolidated view of upcoming academic activities and course-related tasks.
 
-- **AI Advising System** - Manually setting up the study routines in the scheduler as well as the to-dos for upcoming deadlines can be a bit of pain. Therefore, this advising system can suggest optimal study routines and to-do tasks so that students can follow.
+* **Scheduler** – A semester-based scheduling system aligned with the NUS Academic Calendar. The scheduler aggregates module schedules and user-created events into a unified timeline, allowing students to plan their study routines and monitor upcoming commitments.
 
-- **Voice Command System** - This system contains a set of predefined voice commands which users can use to interact with the system instead of manual interaction.
+* **Task Management** – A centralized task-tracking interface that consolidates assignments, deadlines, and personal tasks across all registered courses. Tasks are organized in a structured manner to help students monitor their academic progress and maintain productivity throughout the semester.
 
-### 1.3. Expectations
-***NUS Savnac*** is a mixture of many features that is designed for the better use of Canvas as well as enhacing students studies and university life. Therefore, this website is expected to fully:
-- group students courses information, schedules, and to-dos appropriately so that it can ease the students' workload and avoid extra work.
-- provide tools to enhance focus and productivity of users
-- make sure students can have an overview of all their work and does not unintendedly miss any deadlines.
+* **Reminder System** – An automated notification system that monitors upcoming deadlines and events. Users can configure reminder intervals according to their preferences, and notifications are delivered through email to ensure important deadlines are not overlooked.
+
+Beyond its core functionality, NUS Savnac also incorporates several productivity-enhancing features:
+
+* **Pomodoro Timer** – Enables users to create focused study sessions by allocating time blocks to specific tasks. This feature encourages effective time management and minimizes distractions during study periods.
+
+* **AI Advising System** – Assists students in planning their schedules and academic workload by generating personalized recommendations for study routines and task prioritization.
+
+* **Voice Command System** – Provides a collection of predefined voice commands that allow users to interact with selected system functionalities through voice-based input, improving accessibility and convenience.
+
+By combining academic management, scheduling, productivity tools, and intelligent assistance within a single platform, NUS Savnac aims to reduce administrative overhead and allow students to focus more effectively on learning.
+
+### 1.3 Expectations
+
+NUS Savnac is designed to serve as a comprehensive academic companion for NUS students. The project aims to improve the way students organize, manage, and track their academic responsibilities throughout the semester.
+
+The system is expected to:
+
+* Provide a centralized platform for managing courses, schedules, tasks, and study resources.
+* Reduce the effort required to navigate between multiple academic systems and applications.
+* Improve visibility of upcoming deadlines, events, and academic commitments.
+* Encourage productive study habits through integrated productivity tools such as the Pomodoro Timer and Reminder System.
+* Assist students in planning and prioritizing their workload through intelligent scheduling recommendations.
+* Minimize the likelihood of missed deadlines and overlooked academic responsibilities.
+* Deliver a more organized and efficient academic experience for students throughout their university journey.
+
+Ultimately, the project seeks to reduce cognitive load associated with academic management and enable students to dedicate more time and attention to meaningful learning activities.
+
 ## 2. System Design
 ### 2.1. Overall Architecture
 The overall architecture of the system is shown below.
@@ -152,9 +173,63 @@ For credentials authentication, user information is validated and verified again
 ## 3. Feature Implementation
 ### 3.1. User Authentication
 #### 3.1.1. Feature Overview
+The User Authentication feature enables users to securely access and manage their accounts within ***NUS Savnac***. The system supports both traditional credentials-based authentication and Microsoft OAuth, providing users with multiple sign-in options.
+- The credentials-based authentication provides users with easy access method to *NUS Savnac* by just entering email and password.
+- Microsoft OAuth method allows NUS students to login with their NUS Outlook account.
+
+Authentication is required before accessing protected features such as course management dashboard, scheduling, and task tracking.
 
 #### 3.1.2. Key Functionalities
+- User registration by email and password
+- User login using emal and password
+- Automatic account registration for first-time Microsoft OAuth users
+- User login using Microsoft OAuth
+- Secure session management by Auth.js
 
-#### 3.1.3. Implementation Highlights
+#### 3.1.3. Technical Implementation
+##### Credentials-Based Authentication
 
-#### 3.1.4. Screenshots
+The credentials authentication workflow is implemented using Auth.js, PostgreSQL, and Prisma. This authentication method allows users to create and access accounts using an email-password combination.
+
+**Login Flow**
+
+* Users submit their email and password through the login form.
+* The frontend performs basic input validation before forwarding the authentication request to Auth.js.
+* Auth.js invokes the custom credentials provider, which communicates with the backend authentication service.
+* The backend queries the `users` table through Prisma to retrieve the corresponding user record.
+* The submitted password is compared against the stored password hash using a secure password verification algorithm.
+* Upon successful verification, Auth.js creates a user session and grants access to protected application routes.
+* Invalid credentials result in an authentication failure response and the user remains on the login page.
+
+**Registration Flow**
+
+* Users provide a display name, email address, and password through the registration form.
+* Input validation is performed to ensure all required fields are present and satisfy security requirements.
+* Passwords must:
+
+  * Contain at least 8 characters
+  * Include at least one uppercase letter
+  * Include at least one lowercase letter
+  * Include at least one numeric character
+  * Include at least one special character
+* The backend verifies that the email address is not already associated with an existing account.
+* The password is hashed before being persisted to the database.
+* A new user record is created in the `users` table through Prisma.
+* Upon successful registration, users are redirected to the login page to authenticate using their newly created credentials.
+
+##### Microsoft OAuth Authentication
+
+In addition to credentials-based authentication, the platform supports Microsoft OAuth through Auth.js. This provides a passwordless authentication mechanism and simplifies account onboarding for NUS students.
+
+**OAuth Authentication Flow**
+
+* Users may initiate authentication through the **Continue with Microsoft** option available on both the login and registration pages.
+* Auth.js redirects users to Microsoft's OAuth authorization endpoint.
+* User identity verification is delegated to Microsoft's authentication infrastructure.
+* After successful authorization, Microsoft returns the user's profile information to Auth.js.
+* The system checks whether an account associated with the authenticated email already exists in the database.
+* If an account exists, a new session is established immediately.
+* If no account is found, the system automatically provisions a new user record in the `users` table before creating a session.
+* Users are then redirected to the application dashboard.
+
+This hybrid authentication architecture combines traditional credentials-based authentication with modern OAuth-based authentication, providing both flexibility and convenience while maintaining a consistent session management workflow across the platform.
