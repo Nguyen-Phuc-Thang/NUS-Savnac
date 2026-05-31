@@ -179,6 +179,23 @@ The User Authentication feature enables users to securely access and manage thei
 
 Authentication is required before accessing protected features such as course management dashboard, scheduling, and task tracking.
 
+<p align="center">
+  <img src="images/login-screenshot.jpeg" width="900"/>
+</p>
+
+<p align="center">
+  <em>Figure 3.1. Login Page</em>
+</p>
+
+
+<p align="center">
+  <img src="images/register-screenshot.jpeg" width="900"/>
+</p>
+
+<p align="center">
+  <em>Figure 3.2. Register Page</em>
+</p>
+
 #### 3.1.2. Key Functionalities
 - User registration by email and password
 - User login using emal and password
