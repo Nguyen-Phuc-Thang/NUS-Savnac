@@ -9,6 +9,9 @@
 *Project name*
 **NUS Savnac**
 
+*Production*
+https://nus-savnac.vercel.app/
+
 ## 1. Introduction
 
 ### 1.1 Motivation
