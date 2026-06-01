@@ -10,6 +10,11 @@ export class AuthController {
     return this.authService.register(body.email, body.password, body.name);
   }
 
+  @Post('verify')
+  async verify(@Body() body: any) {
+    return this.authService.verify(body.email, body.code);
+  }
+
   @Post('login')
   @HttpCode(200)
   async login(@Body() body: any) {

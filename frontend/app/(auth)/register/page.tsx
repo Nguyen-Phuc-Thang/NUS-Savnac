@@ -4,9 +4,11 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 
 export default function RegisterPage() {
+    const router = useRouter();
     const [conditionMatches, setConditionMatches] = useState({
         length: false,
         uppercase: false,
@@ -25,8 +27,31 @@ export default function RegisterPage() {
     const [displayNameEmpty, setDisplayNameEmpty] = useState(false);
     const [emailEmpty, setEmailEmpty] = useState(false);
     const [passwordEmpty, setPasswordEmpty] = useState(false);
+    const [nusEmailRequired, setNusEmailRequired] = useState(false);
 
     const handleRegister = async () => {
+
+        if (!displayName) {
+            setDisplayNameEmpty(true);
+            return;
+        } else {
+            setDisplayNameEmpty(false);
+        }
+
+        if (!email) {
+            setEmailEmpty(true);
+            return;
+        } else {
+            setEmailEmpty(false);
+        }
+
+        if (email && !email.endsWith("@u.nus.edu")) {
+            setNusEmailRequired(true);
+            return;
+        } else {
+            setNusEmailRequired(false);
+        }
+
         const isValid = Object.values(conditionMatches).every((match) => match);
         if (!isValid) {
             alert("Please ensure your password meets all the requirements.");
@@ -48,8 +73,7 @@ export default function RegisterPage() {
         });
 
         if (response.ok) {
-            alert("Registration successful! Please log in.");
-            window.location.href = "/login";
+            router.push("/verify?email=" + email);
         } else if (response.status === 500) {
             setEmailAlreadyExists(true);
         }
@@ -69,16 +93,6 @@ export default function RegisterPage() {
         <div className="flex flex-col width-full min-h-screen items-center justify-center gap-4">
             <div className='h-20'></div>
             <div className='font-heading text-4xl font-bold'>Create a <span className="text-primary">new</span> <span className="text-secondary">account</span></div>
-            <button className="w-full max-w-sm mt-5 font-sans text-md h-12 flex items-center justify-center border border-input rounded hover:bg-primary hover:text-white">
-                <img src="/microsoft-logo.png" alt="Microsoft Logo" width={20} height={20} className="inline-block mr-2" />
-                Continue with Microsoft
-            </button>
-            <div className="flex w-full max-w-sm items-center gap-3 mt-4">
-                <div className="h-px flex-1 bg-border"></div>
-                <span className="text-xs font-sans font-medium tracking-[0.2em] text-muted-foreground">OR</span>
-                <div className="h-px flex-1 bg-border"></div>
-            </div>
-
             <div className='font-sans text-muted-foreground mt-4'>
                 Filling in your details below
             </div>
@@ -92,6 +106,9 @@ export default function RegisterPage() {
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                 />
+                <FieldDescription className={'font-sans text-xs text-muted-foreground ' + (displayNameEmpty ? 'text-red-500' : '') + ' ml-3'}>
+                    {displayNameEmpty ? 'Display name is required' : ''}
+                </FieldDescription>
             </Field>
 
             <Field className="w-full max-w-sm">
@@ -103,6 +120,12 @@ export default function RegisterPage() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
+                <FieldDescription className={'font-sans text-xs text-muted-foreground ' + (emailEmpty ? 'text-red-500' : '') + ' ml-3'}>
+                    {emailEmpty ? 'Email is required' : ''}
+                </FieldDescription>
+                <FieldDescription className={'font-sans text-xs text-muted-foreground ' + (nusEmailRequired ? 'text-red-500' : '') + ' ml-3'}>
+                    {nusEmailRequired ? 'Please use your NUS email address' : ''}
+                </FieldDescription>
                 <FieldDescription className={'font-sans text-xs text-muted-foreground ' + (emailAlreadyExists ? 'text-red-500' : '') + ' ml-3'}>
                     {emailAlreadyExists ? 'This email already exists' : ''}
                 </FieldDescription>

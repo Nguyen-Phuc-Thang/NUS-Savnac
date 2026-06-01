@@ -1,5 +1,6 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import AzureADProvider from "next-auth/providers/azure-ad";
 
 export const authOptions = {
     providers: [
