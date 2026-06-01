@@ -202,20 +202,11 @@ Authentication is a prerequisite for accessing protected features within the sys
 </p>
 
 <p align="center">
-  <img src="images/login-page.jpeg" width="900"/>
-</p>
-
-<p align="center">
-  <em>Figure 3.1. Login Page</em>
-</p>
-
-
-<p align="center">
   <img src="images/verification-page.jpeg" width="900"/>
 </p>
 
 <p align="center">
-  <em>Figure 3.2. Email Verification Page</em>
+  <em>Figure 3.3. Email Verification Page</em>
 </p>
 
 #### 3.1.2. Key Functionalities
