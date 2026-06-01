@@ -12,6 +12,10 @@
 *Production*
 https://nus-savnac.vercel.app/
 
+*For testing purposes, please use the below account*
+*Email: test@gmail.com*
+*Password: 123456*
+
 ## 1. Introduction
 
 ### 1.1 Motivation
@@ -73,7 +77,7 @@ Ultimately, the project seeks to reduce cognitive load associated with academic 
 The overall architecture of the system is shown below.
 
 <p align="center">
-  <img src="images/overall_arch.jpg" width="900"/>
+  <img src="images/overall-arch.jpg" width="900"/>
 </p>
 
 <p align="center">
@@ -133,8 +137,6 @@ User data, tasks, events, folders, and course information are stored in a Postgr
   * *Credentials (Username and Password)*
     Provides traditional account-based authentication, allowing users to securely register and log in using their email and password.
 
-  * *Microsoft OAuth*
-    Enables users to authenticate using their Microsoft accounts, providing a convenient and secure single sign-on experience.
 
 #### Deployment
 
@@ -169,21 +171,21 @@ The design for authentication system is shown as below.
   <em>Figure 2. Authentication System Design</em>
 </p>
 
-The authentication system is built around **Auth.js** and supports both *credentials-based authentication* and *Microsoft OAuth*. Authentication responsibilities are separated across the frontend, Auth.js provider layer, backend services, and database layer to improve maintainability and security.
+This authentication design implements a secure credentials (email and password) registration and login system using a layered architecture. Users can sign in through the login page, where credentials are validated and authenticated against stored account data.
 
-For credentials authentication, user information is validated and verified against encrypted passwords stored in the database before a session is created. For Microsoft OAuth, user identity is delegated to Microsoft's authentication service, and new user records are automatically created when necessary. This design provides a flexible authentication architecture while maintaining a consistent session management workflow.
+For new registrations, user information is validated, the password is encrypted, and a one-time password (OTP) is generated and sent via email. Registration data is temporarily stored in a `pending users` table until OTP verification is completed. Once verified, a new user record is created in the main `users` table. The system separates responsibilities across frontend, authentication middleware, controller, service, and database layers, improving maintainability, scalability, and security.
 
 ## 3. Feature Implementation
 ### 3.1. User Authentication
 #### 3.1.1. Feature Overview
-The User Authentication feature enables users to securely access and manage their accounts within ***NUS Savnac***. The system supports both traditional credentials-based authentication and Microsoft OAuth, providing users with multiple sign-in options.
-- The credentials-based authentication provides users with easy access method to *NUS Savnac* by just entering email and password.
-- Microsoft OAuth method allows NUS students to login with their NUS Outlook account.
+The **User Authentication** feature enables users to securely access and manage their accounts within ***NUS Savnac***. The system is built on a credentials-based authentication mechanism, allowing users to sign up and log in using their email and password.
 
-Authentication is required before accessing protected features such as course management dashboard, scheduling, and task tracking.
+To enhance security and ensure the validity of user accounts, the registration process includes email-based *One-Time Password (OTP)* verification. Users are required to verify their email address before completing the account creation process.
+
+Authentication is a prerequisite for accessing protected features within the system, including the course management dashboard, scheduling tools, and task tracking functionalities.
 
 <p align="center">
-  <img src="images/login-screenshot.jpeg" width="900"/>
+  <img src="images/login-page.jpeg" width="900"/>
 </p>
 
 <p align="center">
@@ -192,18 +194,34 @@ Authentication is required before accessing protected features such as course ma
 
 
 <p align="center">
-  <img src="images/register-screenshot.jpeg" width="900"/>
+  <img src="images/register-page.jpeg" width="900"/>
 </p>
 
 <p align="center">
   <em>Figure 3.2. Register Page</em>
 </p>
 
+<p align="center">
+  <img src="images/login-page.jpeg" width="900"/>
+</p>
+
+<p align="center">
+  <em>Figure 3.1. Login Page</em>
+</p>
+
+
+<p align="center">
+  <img src="images/verification-page.jpeg" width="900"/>
+</p>
+
+<p align="center">
+  <em>Figure 3.2. Email Verification Page</em>
+</p>
+
 #### 3.1.2. Key Functionalities
 - User registration by email and password
+- Email OTP verification
 - User login using emal and password
-- Automatic account registration for first-time Microsoft OAuth users
-- User login using Microsoft OAuth
 - Secure session management by Auth.js
 
 #### 3.1.3. Technical Implementation
@@ -225,31 +243,23 @@ The credentials authentication workflow is implemented using Auth.js, PostgreSQL
 
 * Users provide a display name, email address, and password through the registration form.
 * Input validation is performed to ensure all required fields are present and satisfy security requirements.
+* Email is restricted to be NUS email, ending with @u.nus.edu
 * Passwords must:
-
   * Contain at least 8 characters
   * Include at least one uppercase letter
   * Include at least one lowercase letter
   * Include at least one numeric character
   * Include at least one special character
+* The registration request is submitted to the `/auth/register` endpoint.
 * The backend verifies that the email address is not already associated with an existing account.
-* The password is hashed before being persisted to the database.
-* A new user record is created in the `users` table through Prisma.
-* Upon successful registration, users are redirected to the login page to authenticate using their newly created credentials.
+* The password is securely hashed before any user data is persisted.
+* A One-Time Password (OTP) is generated for email verification.
+* The OTP is sent to the user's email address, while the registration information is temporarily stored in the `pending users` table through Prisma.
+* Users are redirected to the verification page and must provide the received OTP.
+* The verification request is submitted to the `/auth/verify` endpoint.
+* The backend validates the submitted OTP against the corresponding verification record stored in the database.
+* Upon successful verification, the pending registration record is promoted to a permanent account by creating a new entry in the `users` table.
+* If verification fails or the OTP has expired, the account creation process is not completed and the user must request a new verification code.
 
-##### Microsoft OAuth Authentication
 
-In addition to credentials-based authentication, the platform supports Microsoft OAuth through Auth.js. This provides a passwordless authentication mechanism and simplifies account onboarding for NUS students.
 
-**OAuth Authentication Flow**
-
-* Users may initiate authentication through the **Continue with Microsoft** option available on both the login and registration pages.
-* Auth.js redirects users to Microsoft's OAuth authorization endpoint.
-* User identity verification is delegated to Microsoft's authentication infrastructure.
-* After successful authorization, Microsoft returns the user's profile information to Auth.js.
-* The system checks whether an account associated with the authenticated email already exists in the database.
-* If an account exists, a new session is established immediately.
-* If no account is found, the system automatically provisions a new user record in the `users` table before creating a session.
-* Users are then redirected to the application dashboard.
-
-This hybrid authentication architecture combines traditional credentials-based authentication with modern OAuth-based authentication, providing both flexibility and convenience while maintaining a consistent session management workflow across the platform.
