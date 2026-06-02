@@ -1,6 +1,8 @@
 import { Inter, Poppins } from "next/font/google";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "NUS Savnac",
@@ -15,7 +17,10 @@ export default function RootLayout({ children, }: Readonly<{ children: React.Rea
   return (
     <html lang="en">
       <body className={`${inter.variable} ${poppins.variable} min-h-full flex flex-col`}>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
+        <Toaster position="top-center" />
       </body>
     </html>
   );
