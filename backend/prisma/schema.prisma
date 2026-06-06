@@ -14,19 +14,65 @@ datasource db {
 
 // AUTHENTICATION SCHEMAS
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid()) @db.Uuid
   email     String   @unique
   password  String
   name      String?
   createdAt DateTime @default(now())
+
+  courses Course[]
 }
 
 model PendingUser {
-  id         String   @id @default(cuid())
-  email      String   @unique
-  password   String
-  name       String?
-  otp        String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
+  id        String   @id @default(uuid()) @db.Uuid
+  email     String   @unique
+  password  String
+  name      String?
+  otp       String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+// COURSE SCHEMAS
+enum CourseType {
+  CUSTOM
+  NUS
+}
+
+model Course {
+  courseId    String     @id @default(uuid()) @db.Uuid
+  courseCode  String?
+  courseTitle String
+  courseType  CourseType
+  createdAt   DateTime   @default(now())
+  userId      String     @db.Uuid
+  user        User       @relation(fields: [userId], references: [id])
+
+  folders Folder[]
+
+  @@unique([userId, courseCode])
+}
+
+model Folder {
+  folderId    String   @id @default(uuid()) @db.Uuid
+  courseId    String   @db.Uuid
+  course      Course   @relation(fields: [courseId], references: [courseId])
+  name        String
+  description String
+  createdAt   DateTime @default(now())
+
+  links Link[]
+
+  @@unique([courseId, name])
+}
+
+model Link {
+  linkId    String   @id @default(uuid()) @db.Uuid
+  folderId  String   @db.Uuid
+  folder    Folder   @relation(fields: [folderId], references: [folderId])
+  title     String
+  url       String
+  createdAt DateTime @default(now())
+
+  @@unique([folderId, title])
 }
