@@ -27,7 +27,6 @@ const Timer = () => {
         <div className="text-sm text-gray-500">Sessions: {sessions}</div>
       </div>
 
-      {/**Planning to add a circular progress bar here */}
       <div
         className={`text-center text-6xl font-bold mb-7 
       ${mode === "focus" ? "text-red-500" : "text-green-500"}`}

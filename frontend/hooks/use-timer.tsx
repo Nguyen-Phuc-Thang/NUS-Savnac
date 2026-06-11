@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 
 type TimerMode = "focus" | "break";
 
-const focusTime = 0.1;
-const breakTime = 0.1;
+const focusTime = 25;
+const breakTime = 5;
 
 interface TimerState {
   mode: TimerMode;
@@ -63,7 +63,11 @@ const useTimer = () => {
           };
         }
 
-        return { ...prev, timeLeft: prev.timeLeft - 1 };
+        // Normal run for each seconds
+        return {
+          ...prev,
+          timeLeft: prev.timeLeft - 1,
+        };
       });
     }, 1000);
 
