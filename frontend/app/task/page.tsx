@@ -17,7 +17,7 @@ const sampleTasks = [
   },
 ];
 
-const TaskListPage = () => {
+const TaskPage = () => {
   return (
     <div className="min-h-screen bg-white px-6 pt-3">
       {/*Top bar*/}
@@ -67,4 +67,4 @@ const TaskListPage = () => {
   );
 };
 
-export default TaskListPage;
+export default TaskPage;
