@@ -21,6 +21,8 @@ model User {
   createdAt DateTime @default(now())
 
   courses Course[]
+  events  Event[]
+  tasks   Task[]
 }
 
 model PendingUser {
@@ -49,6 +51,8 @@ model Course {
   user        User       @relation(fields: [userId], references: [id])
 
   folders Folder[]
+  events  Event[]
+  tasks   Task[]
 
   @@unique([userId, courseCode])
 }
@@ -75,4 +79,43 @@ model Link {
   createdAt DateTime @default(now())
 
   @@unique([folderId, title])
+}
+
+enum EventType {
+  CLASS
+  DEADLINE
+  EXAM
+  OTHERS
+}
+
+model Event {
+  eventId   String    @id @default(uuid()) @db.Uuid
+  eventType EventType
+  courseId  String?   @db.Uuid
+  course    Course?   @relation(fields: [courseId], references: [courseId])
+  userId    String    @db.Uuid
+  user      User?     @relation(fields: [userId], references: [id])
+  title     String
+  week      String
+  day       String
+  startTime String
+  endTime   String?
+  venue     String?
+}
+
+enum TaskType {
+  WEEKLY
+  TODAY
+}
+
+model Task {
+  taskId    String   @id @default(uuid()) @db.Uuid
+  name      String
+  taskType  TaskType
+  createdAt DateTime @default(now())
+  completed Boolean  @default(false)
+  courseId  String?  @db.Uuid
+  course    Course?  @relation(fields: [courseId], references: [courseId])
+  userId    String   @db.Uuid
+  user      User?    @relation(fields: [userId], references: [id])
 }

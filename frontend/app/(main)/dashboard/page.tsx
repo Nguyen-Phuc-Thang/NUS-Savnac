@@ -32,7 +32,7 @@ export default function DashboardPage() {
     const [courseCodeQuery, setCourseCodeQuery] = useState("");
 
     // Data states
-    const [courses, setCourses] = useState<UserCourse[]>([]);
+    const [courses, setCourses] = useState<UserCourse[]>([{ courseCode: "Loading...", courseTitle: "Loading..." }]);
     const [nusCourses, setNUSCourses] = useState<NUSCourse[]>([]);
 
     // Handlers
@@ -123,13 +123,14 @@ export default function DashboardPage() {
 
     const getAllCourses = async () => {
         try {
-            const courses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/user-courses?userId=${session?.user?.id}`, {
+            const fetchCourses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/user-courses?userId=${session?.user?.id}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             }).then((res) => res.json());
-            setCourses(courses);
+            console.log("Fetched courses: ", fetchCourses);
+            setCourses(fetchCourses);
 
         } catch (error: any) {
             toast.error(error.message || "Failed to fetch courses. Please try again later.");
@@ -137,6 +138,9 @@ export default function DashboardPage() {
     }
 
     useEffect(() => {
+        if (!session?.user?.id) {
+            return;
+        }
         getAllCourses();
         toast.success("Welcome back " + session?.user?.name + "!");
     }, [session?.user?.id]);
