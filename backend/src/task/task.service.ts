@@ -1,0 +1,77 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+
+@Injectable()
+export class TaskService {
+    constructor(private prisma: PrismaService) { }
+
+    async getAllTasksByCourseId(courseId: string) {
+        return this.prisma.client.task.findMany({
+            where: {
+                courseId: courseId,
+            },
+        });
+    }
+
+    async getAllTaskByUserId(userId: string) {
+        return this.prisma.client.task.findMany({
+            where: {
+                userId: userId,
+            },
+        });
+    }
+
+    async createTask(userId: string, name: string, taskType: "WEEKLY" | "TODAY", courseId?: string) {
+        return this.prisma.client.task.create({
+            data: {
+                userId: userId,
+                name: name,
+                taskType: taskType,
+                courseId: courseId,
+            },
+        });
+    }
+
+    async markTaskAsCompleted(taskId: string) {
+        return this.prisma.client.task.update({
+            where: {
+                taskId: taskId,
+            },
+            data: {
+                completed: true,
+            },
+        });
+    }
+
+    async markTaskAsUncompleted(taskId: string) {
+        return this.prisma.client.task.update({
+            where: {
+                taskId: taskId,
+            },
+            data: {
+                completed: false,
+            },
+        });
+    }
+
+    async toggleTaskCompletion(taskId: string) {
+        const task = await this.prisma.client.task.findUnique({
+            where: {
+                taskId: taskId,
+            },
+        });
+
+        if (!task) {
+            throw new Error('Task not found');
+        }
+
+        return this.prisma.client.task.update({
+            where: {
+                taskId: taskId,
+            },
+            data: {
+                completed: !task.completed,
+            },
+        });
+    }
+}
