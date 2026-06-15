@@ -1,21 +1,20 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
-} from "@/components/ui/collapsible"
+} from "@/components/ui/collapsible";
 import { ChevronDown } from "lucide-react";
 
-
 interface Props {
-    title: string;
-    children: ReactNode;
+  title: string;
+  children: ReactNode;
 }
 
-const CollapsibleTaskList = ({title, children}: Props) => {
+const CollapsibleSection = ({ title, children }: Props) => {
   return (
     <Collapsible className="group" defaultOpen={true}>
-      <div className="flex">
+      <div className="flex gap-0.5">
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
           {title}
         </h4>
@@ -32,4 +31,4 @@ const CollapsibleTaskList = ({title, children}: Props) => {
   );
 };
 
-export default CollapsibleTaskList;
+export default CollapsibleSection;

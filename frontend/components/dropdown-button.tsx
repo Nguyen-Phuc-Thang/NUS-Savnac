@@ -1,34 +1,33 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu"
 
-interface Props {
+export type DropdownItem = {
   label: string;
-  items: string[];
+  value: string;
 }
 
-const DropdownButton = ({ label, items }: Props) => {
+interface DropdownButtonProps {
+  label: string;
+  items: DropdownItem[]
+}
+
+export default function DropdownButton({ label, items }: DropdownButtonProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline">{label}</Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          {items.map((item) => (
-            <DropdownMenuItem key={item}>{item}</DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
+      <DropdownMenuContent className="w-40" align="end">
+        {items.map(item => (
+          <DropdownMenuItem key={item.value}>{item.label}</DropdownMenuItem>
+        ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default DropdownButton;
