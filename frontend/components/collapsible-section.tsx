@@ -24,7 +24,6 @@ const CollapsibleSection = ({ title, children }: Props) => {
       </div>
 
       <CollapsibleContent>
-        {/*Today's tasks here*/}
         {children}
       </CollapsibleContent>
     </Collapsible>

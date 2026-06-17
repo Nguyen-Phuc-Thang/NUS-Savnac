@@ -17,6 +17,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
+
 function formatDate(date: Date | undefined) {
   if (!date) {
     return "";
@@ -36,9 +37,17 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime());
 }
 
-export default function DatePickerInput() {
+interface Props {
+  dueDate?: string;
+  onDateChange: (selectedDate?: string) => void;
+}
+
+export default function DatePickerInput({ dueDate, onDateChange }: Props) {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [date, setDate] = React.useState<Date | undefined>(
+    // If new Date(undefined) it gives Invalid Date
+    dueDate ? new Date(dueDate) : undefined,
+  );
   const [month, setMonth] = React.useState<Date | undefined>(date);
   const [value, setValue] = React.useState(formatDate(date));
 
@@ -56,6 +65,8 @@ export default function DatePickerInput() {
             if (isValidDate(date)) {
               setDate(date);
               setMonth(date);
+              // From 2026-06-16T... to 2026-06-16
+              onDateChange(date?.toISOString().split("T")[0]);
             }
           }}
           onKeyDown={(e) => {
@@ -93,6 +104,7 @@ export default function DatePickerInput() {
                   setDate(date);
                   setValue(formatDate(date));
                   setOpen(false);
+                  onDateChange(date?.toISOString().split("T")[0]);
                 }}
               />
             </PopoverContent>
