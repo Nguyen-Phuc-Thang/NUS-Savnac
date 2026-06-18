@@ -11,6 +11,9 @@ export class EventService {
             where: {
                 userId: userId,
             },
+            include: {
+                course: true,
+            }
         });
     }
 
@@ -34,6 +37,14 @@ export class EventService {
                 startTime: eventStartTime,
                 endTime: eventEndTime,
                 venue: eventVenue,
+            }
+        });
+    }
+
+    async deleteEvent(eventId: string) {
+        return this.prisma.client.event.delete({
+            where: {
+                eventId: eventId,
             }
         });
     }

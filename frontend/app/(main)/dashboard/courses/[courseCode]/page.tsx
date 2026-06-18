@@ -439,11 +439,14 @@ export default function CoursePage() {
 
     const toggleTaskCompletion = async (taskId: string) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/toggle-task?taskId=${taskId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/toggle-task`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                body: JSON.stringify({
+                    taskId: taskId
+                })
             });
             const updatedTask = await response.json();
             await getAllTasks(courseData.courseId);

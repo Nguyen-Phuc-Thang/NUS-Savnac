@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Query, Body } from '@nestjs/common';
+import { Controller, Get, Post, Query, Body, Delete, Put } from '@nestjs/common';
 import { TaskService } from './task.service';
 
 @Controller('task')
@@ -32,7 +32,12 @@ export class TaskController {
   }
 
   @Post('toggle-task')
-  async toggleTask(@Query('taskId') taskId: string) {
-    return this.taskService.toggleTaskCompletion(taskId);
+  async toggleTask(@Body() body: any) {
+    return this.taskService.toggleTaskCompletion(body.taskId);
+  }
+
+  @Delete('delete-task')
+  async deleteTask(@Query('taskId') taskId: string) {
+    return this.taskService.deleteTask(taskId);
   }
 }

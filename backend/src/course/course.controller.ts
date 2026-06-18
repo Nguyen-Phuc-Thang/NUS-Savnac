@@ -22,6 +22,11 @@ export class CourseController {
     return this.courseService.getUserCourses(userId);
   }
 
+  @Get('all-courses-with-tasks')
+  async getAllCoursesWithTasksByUserId(@Query('userId') userId: string) {
+    return this.courseService.getAllCoursesWithTasksByUserId(userId);
+  }
+
   @Get('user-course')
   async getUserCourse(@Query('courseCode') courseCode: string, @Query('userId') userId: string) {
     return this.courseService.getUserCourse(courseCode, userId);

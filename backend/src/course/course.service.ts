@@ -42,6 +42,17 @@ export class CourseService {
         });
     }
 
+    async getAllCoursesWithTasksByUserId(userId: string) {
+        return await this.prisma.client.course.findMany({
+            where: {
+                userId: userId
+            },
+            include: {
+                tasks: true,
+            }
+        });
+    }
+
     async getUserCourse(courseCode: string, userId: string) {
         return await this.prisma.client.course.findFirst({
             where: {
