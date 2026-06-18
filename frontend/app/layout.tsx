@@ -1,8 +1,8 @@
 import { Inter, Poppins } from "next/font/google";
 import type { Metadata } from "next";
+import { Toaster } from "@/components/ui/sonner"
 import "./globals.css";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "NUS Savnac",
@@ -21,14 +21,11 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${poppins.variable} min-h-full flex flex-col`}
-      >
-
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="flex-1">{children}</main>
-        </SidebarProvider>
+      <body className={`${inter.variable} ${poppins.variable} min-h-full flex flex-col`}>
+        <Providers>
+          {children}
+        </Providers>
+        <Toaster position="top-center" />
       </body>
     </html>
   );
