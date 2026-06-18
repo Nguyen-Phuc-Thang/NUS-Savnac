@@ -17,7 +17,6 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-
 function formatDate(date: Date | undefined) {
   if (!date) {
     return "";
@@ -58,15 +57,14 @@ export default function DatePickerInput({ dueDate, onDateChange }: Props) {
         <InputGroupInput
           id="date-required"
           value={value}
-          placeholder="May 01, 2026"
+          placeholder={"YYYY-MM-DD"}
           onChange={(e) => {
             const date = new Date(e.target.value);
             setValue(e.target.value);
             if (isValidDate(date)) {
               setDate(date);
               setMonth(date);
-              // From 2026-06-16T... to 2026-06-16
-              onDateChange(date?.toISOString().split("T")[0]);
+              onDateChange(date ? date.toLocaleDateString("en-CA") : undefined);
             }
           }}
           onKeyDown={(e) => {
@@ -104,7 +102,9 @@ export default function DatePickerInput({ dueDate, onDateChange }: Props) {
                   setDate(date);
                   setValue(formatDate(date));
                   setOpen(false);
-                  onDateChange(date?.toISOString().split("T")[0]);
+                  onDateChange(
+                    date ? date.toLocaleDateString("en-CA") : undefined,
+                  );
                 }}
               />
             </PopoverContent>

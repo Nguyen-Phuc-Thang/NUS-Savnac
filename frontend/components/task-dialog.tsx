@@ -69,7 +69,11 @@ export default function TaskDialog({ action, task, onTaskSubmit }: Props) {
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild onClick={() => setDialogOpen(true)}>
-        <Button variant="outline" size="icon">
+        <Button
+          title={action === "addTask" ? "Add Task" : "Edit Task"}
+          variant="outline"
+          size="icon"
+        >
           {action === "addTask" ? <Plus /> : <SquarePen />}
         </Button>
       </DialogTrigger>
