@@ -33,7 +33,7 @@ const TaskListPage = () => {
       : filter === "completed"
         ? task.completed
         : filter === "bookmarked"
-          ? task.bookmarked
+          ? task.bookmarked && !task.completed
           : true,
   );
 
