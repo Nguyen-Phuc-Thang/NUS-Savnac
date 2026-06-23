@@ -5,6 +5,13 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class LinkService {
     constructor(private prisma: PrismaService) { }
 
+    async getLinks(folderId: string) {
+        return await this.prisma.client.link.findMany({
+            where: {
+                folderId: folderId
+            }
+        });
+    }
 
     async createLink(folderId: string, linkTitle: string, linkUrl: string) {
         return await this.prisma.client.link.create({
@@ -17,10 +24,23 @@ export class LinkService {
         });
     }
 
-    async getLinksByFolder(folderId: string) {
-        return await this.prisma.client.link.findMany({
+
+    async deleteLink(linkId: string) {
+        return await this.prisma.client.link.delete({
             where: {
-                folderId: folderId
+                linkId: linkId
+            }
+        });
+    }
+
+    async updateLink(linkId: string, newTitle: string, newUrl: string) {
+        return await this.prisma.client.link.update({
+            where: {
+                linkId: linkId
+            },
+            data: {
+                title: newTitle,
+                url: newUrl,
             }
         });
     }

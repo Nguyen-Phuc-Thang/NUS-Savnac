@@ -60,7 +60,7 @@ model Course {
 model Folder {
   folderId    String   @id @default(uuid()) @db.Uuid
   courseId    String   @db.Uuid
-  course      Course   @relation(fields: [courseId], references: [courseId])
+  course      Course   @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
   name        String
   description String
   createdAt   DateTime @default(now())
@@ -73,7 +73,7 @@ model Folder {
 model Link {
   linkId    String   @id @default(uuid()) @db.Uuid
   folderId  String   @db.Uuid
-  folder    Folder   @relation(fields: [folderId], references: [folderId])
+  folder    Folder   @relation(fields: [folderId], references: [folderId], onDelete: Cascade)
   title     String
   url       String
   createdAt DateTime @default(now())
@@ -92,7 +92,7 @@ model Event {
   eventId   String    @id @default(uuid()) @db.Uuid
   eventType EventType
   courseId  String?   @db.Uuid
-  course    Course?   @relation(fields: [courseId], references: [courseId])
+  course    Course?   @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
   userId    String    @db.Uuid
   user      User?     @relation(fields: [userId], references: [id])
   title     String
@@ -115,7 +115,7 @@ model Task {
   createdAt DateTime @default(now())
   completed Boolean  @default(false)
   courseId  String?  @db.Uuid
-  course    Course?  @relation(fields: [courseId], references: [courseId])
+  course    Course?  @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
   userId    String   @db.Uuid
   user      User?    @relation(fields: [userId], references: [id])
 }

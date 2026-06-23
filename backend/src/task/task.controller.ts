@@ -36,6 +36,11 @@ export class TaskController {
     return this.taskService.toggleTaskCompletion(body.taskId);
   }
 
+  @Post('update-task-name')
+  async updateTaskName(@Body() body: any) {
+    return this.taskService.updateTaskName(body.taskId, body.name);
+  }
+
   @Delete('delete-task')
   async deleteTask(@Query('taskId') taskId: string) {
     return this.taskService.deleteTask(taskId);

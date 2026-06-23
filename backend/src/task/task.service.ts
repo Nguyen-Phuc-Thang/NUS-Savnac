@@ -78,6 +78,17 @@ export class TaskService {
         });
     }
 
+    async updateTaskName(taskId: string, name: string) {
+        return this.prisma.client.task.update({
+            where: {
+                taskId: taskId,
+            },
+            data: {
+                name: name,
+            },
+        });
+    }
+
     async deleteTask(taskId: string) {
         return this.prisma.client.task.delete({
             where: {

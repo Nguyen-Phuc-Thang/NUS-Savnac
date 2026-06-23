@@ -1,49 +1,45 @@
 "use client";
+
+// React Hooks
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+
+// UI Components
 import { toast } from "sonner";
+import { Plus, SquarePen, Trash2 } from "lucide-react";
+import CourseGrid from "@/components/course/CourseGrid";
+import EditCourseDialog from "@/components/course/EditCourseDialog";
+import DeleteCourseDialog from "@/components/course/DeleteCourseDialog";
+import AddNUSCourseDialog from "@/components/course/AddNUSCourseDialog";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuContent } from "@/components/ui/dropdown-menu";
-import { Plus } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import CourseCard from "@/components/course-card";
 
-interface NUSCourse {
-    moduleCode: string;
-    title: string;
-}
+// API Calls
+import { addFolder } from "@/lib/api/folder";
+import { getAllCourses, getAllNUSCourses, addCourse, deleteCourse } from "@/lib/api/course";
 
-interface UserCourse {
-    courseCode: string;
-    courseTitle: string;
-}
+// Utils
+import { Button } from "@/components/ui/button";
+import { modeStyle, switchMode } from "@/lib/utils/mode";
+import { generateDefaultFolders } from "@/lib/utils/folder";
 
 export default function DashboardPage() {
     const { data: session } = useSession();
 
-    const router = useRouter();
-
     // UI states
-    const [AddNUSCourseDialogOpen, setAddNUSCourseDialogOpen] = useState(false);
-
-    // Form states
-    const [courseCodeQuery, setCourseCodeQuery] = useState("");
+    const [addNUSCourseDialogOpen, setAddNUSCourseDialogOpen] = useState(false);
+    const [gridMode, setGridMode] = useState<"NORMAL" | "EDIT" | "DELETE">("NORMAL");
+    const [editDialogOpen, setEditDialogOpen] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
     // Data states
-    const [courses, setCourses] = useState<UserCourse[]>([{ courseCode: "Loading...", courseTitle: "Loading..." }]);
-    const [nusCourses, setNUSCourses] = useState<NUSCourse[]>([]);
+    const [nusCourses, setNUSCourses] = useState<any[]>([]);
+    const [courses, setCourses] = useState<any[]>([]);
+    const [selectedCourse, setSelectedCourse] = useState<any | null>(null);
 
     // Handlers
-    const handleAddNUSCourseDialogOpen = async () => {
+    const handleOpenAddNUSCourseDialog = async () => {
         try {
-            const courses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/all-nus-courses`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json());
+            const courses = await getAllNUSCourses();
             setNUSCourses(courses);
             setAddNUSCourseDialogOpen(true);
         } catch (error: any) {
@@ -51,67 +47,13 @@ export default function DashboardPage() {
         }
     }
 
-    const handleAddNUSCourse = (course: NUSCourse) => {
+    const handleAddNUSCourse = (course: any) => {
         setAddNUSCourseDialogOpen(false);
         toast.promise(
             (async () => {
-                const response = await fetch(
-                    `${process.env.NEXT_PUBLIC_API_URL}/course/add-nus-course`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            userId: session?.user?.id,
-                            courseCode: course.moduleCode,
-                        }),
-                    }
-                );
-
-                const data = await response.json();
-
-                const foldersToCreate = [
-                    {
-                        folderName: "Lecture",
-                        folderDescription: `${course.moduleCode} lecture folder`,
-                    },
-                    {
-                        folderName: "Tutorial",
-                        folderDescription: `${course.moduleCode} tutorial folder`,
-                    },
-                    {
-                        folderName: "Lab",
-                        folderDescription: `${course.moduleCode} lab folder`,
-                    }, {
-                        folderName: "__general__",
-                        folderDescription: `${course.moduleCode} general folder`,
-                    }
-                ]
-
-                for (const folder of foldersToCreate) {
-                    console.log("Creating folder: ", folder);
-                    const folderResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/folder/create-folder`, {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            courseId: data.courseId,
-                            ...folder
-                        }),
-                    });
-
-                    if (!folderResponse.ok) break;
-                }
-
-                if (!response.ok) {
-                    throw new Error(data.message || "Failed to add course");
-                }
-
-                if (response.ok) {
-                    getAllCourses();
-                }
+                const newCourse = await addCourse(session?.user?.id || "", course.moduleCode, course.title, "NUS");
+                const defaultFolders = generateDefaultFolders(course.moduleCode);
+                for (const folder of defaultFolders) await addFolder(newCourse.courseId, folder.folderName, folder.folderDescription);
             })(),
             {
                 loading: `Adding ${course.moduleCode}...`,
@@ -121,85 +63,99 @@ export default function DashboardPage() {
         );
     }
 
-    const getAllCourses = async () => {
-        try {
-            const fetchCourses = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/user-courses?userId=${session?.user?.id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json());
-            console.log("Fetched courses: ", fetchCourses);
-            setCourses(fetchCourses);
+    const handleDeleteCourse = async () => {
+        toast.promise(
+            (async () => {
+                await deleteCourse(selectedCourse?.courseId || "");
+            })(),
+            {
+                loading: `Deleting ${selectedCourse?.moduleCode}...`,
+                success: `${selectedCourse?.moduleCode} deleted successfully!`,
+                error: (err) => err.message
+            }
+        );
+    }
 
+
+    const handleFetchCourses = async () => {
+        try {
+            const courses = await getAllCourses(session?.user?.id || "");
+            setCourses(courses);
         } catch (error: any) {
-            toast.error(error.message || "Failed to fetch courses. Please try again later.");
+            toast.error(error.message || "Failed to fetch courses");
         }
     }
 
-    useEffect(() => {
-        if (!session?.user?.id) {
+    const onPageLoad = async () => {
+        if (!session?.user?.id)
             return;
-        }
-        getAllCourses();
+        handleFetchCourses();
         toast.success("Welcome back " + session?.user?.name + "!");
+    }
+
+    useEffect(() => {
+        onPageLoad();
     }, [session?.user?.id]);
 
     return (
         <div className="flex flex-col width-full min-h-screen gap-4 ml-6 mt-6">
             <div className="font-heading text-4xl font-bold">Dashboard</div>
-            <div className='font-sans mt-15'>
+            <div className='font-sans mt-15 flex flex-row items-center gap-4'>
                 <DropdownMenu>
-                    <DropdownMenuTrigger className="flex flex-row items-center justify-center font-sans px-4 py-2 rounded-md border hover:bg-primary hover:text-white shadow-sm transition-colors">
-                        <Plus className="w-4 h-4 mr-2" />
-                        Add new course
+                    <DropdownMenuTrigger className="flex flex-row items-center justify-center font-sans px-2 py-1 rounded-md border hover:bg-primary hover:text-white shadow-sm transition-colors">
+                        <Plus className="w-4 h-4 mr-1" />
+                        Course
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                        <DropdownMenuItem className="font-sans mt-1" onClick={handleAddNUSCourseDialogOpen}>
+                        <DropdownMenuItem className="font-sans mt-1" onClick={handleOpenAddNUSCourseDialog}>
                             NUS Course
                         </DropdownMenuItem>
                         <DropdownMenuItem className="font-sans mt-2 mb-1">Custom Course</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
+
+                <Button onClick={() => setGridMode(switchMode(gridMode, "EDIT"))} className={`flex items-center justify-center font-sans p-2 rounded-md ${modeStyle(gridMode, "EDIT")} border shadow-sm transition-colors`}>
+                    <SquarePen className="w-4 h-4" />
+                </Button>
+
+                <Button onClick={() => setGridMode(switchMode(gridMode, "DELETE"))} className={`flex items-center justify-center font-sans p-2 rounded-md ${modeStyle(gridMode, "DELETE")} border shadow-sm transition-colors`}>
+                    <Trash2 className="w-4 h-4" />
+                </Button>
             </div>
 
-            <div className="w-full mt-10 grid grid-cols-[repeat(auto-fill,minmax(15rem,15rem))] justify-start gap-x-8 gap-y-8">
-                {courses.map((course) => (
-                    <CourseCard
-                        key={course.courseCode}
-                        courseCode={course.courseCode}
-                        title={course.courseTitle}
-                        onClick={() => router.push(`/dashboard/courses/${course.courseCode}`)}
-                    />
-                ))}
-            </div>
+            <p className='text-sm text-muted-foreground italic'>
+                {gridMode === "EDIT" && "You are in Edit mode. Click on a course to edit its details."}
+                {gridMode === "DELETE" && "You are in Delete mode. Click on a course to delete it."}
+            </p>
+
+            <CourseGrid
+                courses={courses}
+                mode={gridMode}
+                onCourseClick={setSelectedCourse}
+                onEditModeCardClick={() => setEditDialogOpen(true)}
+                onDeleteModeCardClick={() => setDeleteDialogOpen(true)}
+            />
 
 
-            <Dialog open={AddNUSCourseDialogOpen} onOpenChange={setAddNUSCourseDialogOpen}>
-                <DialogContent className="w-[50vw] max-w-none">
-                    <DialogHeader>
-                        <DialogTitle className="font-heading text-2xl">Add NUS Course</DialogTitle>
-                    </DialogHeader>
-                    <div>
-                        <Field className="w-full">
-                            <Input
-                                type="text"
-                                placeholder="Search by course code (e.g. CS1010)"
-                                className="w-full font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
-                                value={courseCodeQuery}
-                                onChange={(e) => setCourseCodeQuery(e.target.value)}
-                            />
-                        </Field>
-                        <div className="h-[60vh] overflow-y-auto mt-4">
-                            {nusCourses.filter((course) => course.moduleCode.toLowerCase().includes(courseCodeQuery.toLowerCase())).map((course) => (
-                                <button key={course.moduleCode} className="p-4 w-full text-left border-b hover:bg-muted cursor-pointer" onClick={() => handleAddNUSCourse(course)}>
-                                    <div className="font-sans font-medium">{course.moduleCode} {course.title}</div>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            <AddNUSCourseDialog
+                open={addNUSCourseDialogOpen}
+                onOpenChange={setAddNUSCourseDialogOpen}
+                nusCourses={nusCourses}
+                onCourseClick={handleAddNUSCourse}
+            />
+
+            <EditCourseDialog
+                open={editDialogOpen}
+                onOpenChange={setEditDialogOpen}
+            />
+
+            <DeleteCourseDialog
+                open={deleteDialogOpen}
+                onOpenChange={setDeleteDialogOpen}
+                course={selectedCourse}
+                onDeleteCourse={handleDeleteCourse}
+            />
+
         </div>
     );
 }

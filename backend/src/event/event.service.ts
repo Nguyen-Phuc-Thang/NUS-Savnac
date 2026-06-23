@@ -41,6 +41,23 @@ export class EventService {
         });
     }
 
+    async updateEvent(eventId: string, eventType: "CLASS" | "DEADLINE" | "EXAM" | "OTHERS", eventTitle: string, eventWeek: string, eventDay: string, eventStartTime: string, eventEndTime: string, eventVenue?: string) {
+        return this.prisma.client.event.update({
+            where: {
+                eventId: eventId,
+            },
+            data: {
+                eventType: eventType,
+                title: eventTitle,
+                week: eventWeek,
+                day: eventDay,
+                startTime: eventStartTime,
+                endTime: eventEndTime,
+                venue: eventVenue,
+            }
+        });
+    }
+
     async deleteEvent(eventId: string) {
         return this.prisma.client.event.delete({
             where: {
