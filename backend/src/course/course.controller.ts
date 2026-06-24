@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Query, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Query, Body, Delete } from '@nestjs/common';
 import { CourseService } from './course.service';
 
 @Controller('course')
@@ -11,25 +11,36 @@ export class CourseController {
     return this.courseService.getAllNUSCourses();
   }
 
-  @Get('course-data/:courseCode')
-  async getCourseData(@Param('courseCode') courseCode: string) {
-    return this.courseService.getCourseData(courseCode);
+  @Get('nus-course-data/:courseCode')
+  async getNUSCourseData(@Param('courseCode') courseCode: string) {
+    return this.courseService.getNUSCourseData(courseCode);
   }
 
   // Course table database endpoints
-  @Get('user-courses')
+  @Get('all-courses')
   async getUserCourses(@Query('userId') userId: string) {
-    return this.courseService.getUserCourses(userId);
+    return this.courseService.getAllCourses(userId);
   }
 
-  @Get('user-course')
+  @Get('all-courses-with-tasks')
+  async getAllCoursesWithTasks(@Query('userId') userId: string) {
+    return this.courseService.getAllCoursesWithTasks(userId);
+  }
+
+  @Get('course-info')
   async getUserCourse(@Query('courseCode') courseCode: string, @Query('userId') userId: string) {
-    return this.courseService.getUserCourse(courseCode, userId);
+    return this.courseService.getCourseInfo(userId, courseCode);
   }
 
-  @Post('add-nus-course')
+  @Post('add-course')
   async addNUSCourse(@Body() body: any) {
-    return this.courseService.addNUSCourseToUser(body.userId, body.courseCode);
+    return this.courseService.addCourse(body.userId, body.courseCode, body.courseTitle, body.courseType);
+  }
+
+
+  @Delete('delete-course')
+  async deleteCourse(@Body() body: any) {
+    return this.courseService.deleteCourse(body.courseId);
   }
 
 }

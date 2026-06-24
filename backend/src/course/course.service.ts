@@ -20,7 +20,7 @@ export class CourseService {
         return modifiedData;
     }
 
-    async getCourseData(courseCode: string) {
+    async getNUSCourseData(courseCode: string) {
         const response = await fetch(`https://api.nusmods.com/v2/2025-2026/modules/${courseCode}.json`);
         const data = await response.json();
         return {
@@ -34,7 +34,7 @@ export class CourseService {
 
 
     // Course table database operations
-    async getUserCourses(userId: string) {
+    async getAllCourses(userId: string) {
         return await this.prisma.client.course.findMany({
             where: {
                 userId: userId
@@ -42,7 +42,18 @@ export class CourseService {
         });
     }
 
-    async getUserCourse(courseCode: string, userId: string) {
+    async getAllCoursesWithTasks(userId: string) {
+        return await this.prisma.client.course.findMany({
+            where: {
+                userId: userId
+            },
+            include: {
+                tasks: true,
+            }
+        });
+    }
+
+    async getCourseInfo(userId: string, courseCode: string) {
         return await this.prisma.client.course.findFirst({
             where: {
                 courseCode: courseCode,
@@ -51,15 +62,13 @@ export class CourseService {
         });
     }
 
-    async addNUSCourseToUser(userId: string, courseCode: string) {
+    async addCourse(userId: string, courseCode: string, courseTitle: string, courseType: "NUS" | "CUSTOM") {
         try {
-            const courseData = await this.getCourseData(courseCode);
             return await this.prisma.client.course.create({
                 data: {
-                    courseCode: courseData.moduleCode,
-                    courseTitle: courseData.title,
-                    courseType: "NUS",
-                    createdAt: new Date(),
+                    courseCode: courseCode,
+                    courseTitle: courseTitle,
+                    courseType: courseType,
                     userId: userId
                 }
             });
@@ -70,4 +79,13 @@ export class CourseService {
             throw error;
         }
     }
+
+    async deleteCourse(courseId: string) {
+        return await this.prisma.client.course.delete({
+            where: {
+                courseId: courseId
+            }
+        });
+    }
+
 }

@@ -18,6 +18,9 @@ export class TaskService {
             where: {
                 userId: userId,
             },
+            include: {
+                course: true,
+            }
         });
     }
 
@@ -71,6 +74,25 @@ export class TaskService {
             },
             data: {
                 completed: !task.completed,
+            },
+        });
+    }
+
+    async updateTaskName(taskId: string, name: string) {
+        return this.prisma.client.task.update({
+            where: {
+                taskId: taskId,
+            },
+            data: {
+                name: name,
+            },
+        });
+    }
+
+    async deleteTask(taskId: string) {
+        return this.prisma.client.task.delete({
+            where: {
+                taskId: taskId,
             },
         });
     }

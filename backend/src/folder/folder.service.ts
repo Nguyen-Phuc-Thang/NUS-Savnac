@@ -10,17 +10,19 @@ export class FolderService {
         return await this.prisma.client.folder.findMany({
             where: {
                 courseId: courseId
+            },
+            include: {
+                links: true
             }
         });
     }
 
-    async createFolder(courseId: string, folderName: string, folderDescription: string) {
+    async addFolder(courseId: string, folderName: string, folderDescription: string) {
         return await this.prisma.client.folder.create({
             data: {
                 courseId: courseId,
                 name: folderName,
                 description: folderDescription,
-                createdAt: new Date(),
             }
         });
     }

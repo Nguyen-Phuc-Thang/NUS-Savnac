@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Delete } from '@nestjs/common';
 import { EventService } from './event.service';
 
 @Controller('event')
@@ -28,5 +28,24 @@ export class EventController {
       body.eventVenue,
       body.courseId
     );
+  }
+
+  @Post('update-event')
+  async updateEvent(@Body() body: any) {
+    return this.eventService.updateEvent(
+      body.eventId,
+      body.eventType,
+      body.eventTitle,
+      body.eventWeek,
+      body.eventDay,
+      body.eventStartTime,
+      body.eventEndTime,
+      body.eventVenue
+    );
+  }
+
+  @Delete('delete-event')
+  async deleteEvent(@Body() body: any) {
+    return this.eventService.deleteEvent(body.eventId);
   }
 }
