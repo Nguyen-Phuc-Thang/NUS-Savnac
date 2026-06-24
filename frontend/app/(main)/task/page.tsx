@@ -1,115 +1,80 @@
 "use client";
+
+// React hooks
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
-import CourseCard from "@/components/course/CourseCard";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { Dialog, DialogHeader, DialogTitle, DialogContent, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+
+// UI Components
+import { toast } from "sonner";
+import TaskList from "@/components/task/TaskList";
+
+// API calls
+import { createTask, toggleTaskCompletion, updateTaskName, deleteTask } from "@/lib/api/task";
+import { getAllCoursesWithTasks } from "@/lib/api/course";
 
 export default function TaskPage() {
     const { data: session } = useSession();
 
-
-    const [tasks, setTasks] = useState<any[]>([]);
-    const [weeklyTasks, setWeeklyTasks] = useState<any[]>([]);
-    const [todayTasks, setTodayTasks] = useState<any[]>([]);
-
     const [courseTasks, setCourseTasks] = useState<any[]>([]);
-    const [taskCompleteStatus, setTaskCompleteStatus] = useState<{ [key: string]: boolean }>({});
 
-    const [taskNameInput, setTaskNameInput] = useState<string>("");
-    const [isNewTaskDialogOpen, setIsNewTaskDialogOpen] = useState<boolean>(false);
-    const [targetCourse, setTargetCourse] = useState<any>(null);
-
-    const saveTaskStatus = async (tasks: any[]) => {
-        for (const task of tasks) {
-            taskCompleteStatus[task.taskId] = task.completed;
+    const getAllCourses = async () => {
+        try {
+            const courses = await getAllCoursesWithTasks(session?.user?.id || "");
+            setCourseTasks(courses);
+        } catch (error: any) {
+            toast.error(error.message || "Failed to fetch tasks. Please try again later.");
         }
     }
 
-    const getAllTasks = async () => {
+    const addNewTask = async (taskType: "WEEKLY" | "TODAY", taskName: string, courseId?: string) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/get-all-tasks-by-user?userId=${session?.user?.id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json());
-            setTasks(response);
-            await saveTaskStatus(response);
+            const newTask = await createTask(session?.user.id || "", taskName, taskType, courseId || "");
+            setCourseTasks(courseTasks.map((course) => (course.courseId === courseId) ? { ...course, tasks: [...course.tasks, newTask] } : course));
+        } catch (error: any) {
+            toast.error(error.message || "Failed to create task. Please try again later.");
+        }
+    }
+
+    const toggleTask = async (taskId: string, courseId?: string) => {
+        try {
+            setCourseTasks(courseTasks.map((course) => (course.courseId === courseId) ? {
+                ...course,
+                tasks: course.tasks.map((task: any) => (task.taskId === taskId) ? { ...task, completed: !task.completed } : task)
+            } : course));
+            await toggleTaskCompletion(taskId);
         } catch (error) {
-            console.error("Error fetching tasks:", error);
+            toast.error("Failed to update task completion status. Please try again later.");
         }
     }
 
-    const getAllCoursesWithTasks = async () => {
-        try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/all-courses-with-tasks?userId=${session?.user?.id}`, {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }).then((res) => res.json());
-            setCourseTasks(response);
-        }
-        catch (error) {
-            console.error("Error fetching courses:", error);
-            return [];
-        }
-    }
 
-    const addNewTask = async () => {
+    const handleUpdateTask = async (taskId: string, newName: string, courseId?: string) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/create-task`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    userId: targetCourse?.userId,
-                    name: taskNameInput,
-                    taskType: targetCourse?.taskType,
-                    courseId: targetCourse?.courseId,
-                }),
-            }).then((res) => res.json());
-
-            await getAllCoursesWithTasks();
-            setIsNewTaskDialogOpen(false);
-            setTaskNameInput("");
+            await updateTaskName(taskId, newName);
+            setCourseTasks(courseTasks.map((course) => (course.courseId === courseId) ? {
+                ...course,
+                tasks: course.tasks.map((task: any) => (task.taskId === taskId) ? { ...task, name: newName } : task)
+            } : course));
         } catch (error) {
-            console.error("Error adding new task:", error);
+            toast.error("Failed to update task name. Please try again later.");
         }
     }
 
-    const toggleTaskCompletion = (taskId: string) => {
-        setTaskCompleteStatus((prevStatus) => ({
-            ...prevStatus,
-            [taskId]: !prevStatus[taskId],
-        }));
-        console.log("Toggling task completion for taskId:", taskId);
+    const handleDeleteTask = async (taskId: string, courseId?: string) => {
         try {
-            const response = fetch(`${process.env.NEXT_PUBLIC_API_URL}/task/toggle-task`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    taskId: taskId,
-                }),
-            }).then((res) => res.json());
-            console.log("Task toggled:", response);
+            setCourseTasks(courseTasks.map((course) => (course.courseId === courseId) ? {
+                ...course,
+                tasks: course.tasks.filter((task: any) => task.taskId !== taskId)
+            } : course));
+            await deleteTask(taskId);
         } catch (error) {
-            console.error("Error toggling task completion:", error);
+            toast.error("Failed to delete task. Please try again later.");
         }
     }
 
     const onPageStart = async () => {
         if (session?.user?.id) {
-            await getAllTasks();
-            await getAllCoursesWithTasks();
+            await getAllCourses();
         }
     }
 
@@ -130,25 +95,15 @@ export default function TaskPage() {
                         <div key={course.courseId} className="flex h-auto w-[20vw] flex-col">
                             <div className="flex flex-row items-center">
                                 <p className="font-bold font-sans text-lg">{course.courseCode}</p>
-                                <Button className='ml-2 rounded-md bg-white hover:bg-white text-black border shadow-sm transition-colors' onClick={() => {
-                                    setIsNewTaskDialogOpen(true);
-                                    setTargetCourse({
-                                        courseId: course.courseId,
-                                        userId: course.userId,
-                                        taskType: 'TODAY',
-                                    });
-                                }}>
-                                    <Plus />
-                                </Button>
                             </div>
-                            {course.tasks.filter((task: any) => task.taskType === 'TODAY').map((task: any) => {
-                                return (
-                                    <div key={task.taskId} className="flex flex-row items-center mt-2">
-                                        <Checkbox className="mr-2" checked={taskCompleteStatus[task.taskId]} onCheckedChange={() => toggleTaskCompletion(task.taskId)} />
-                                        <p>{task.name}</p>
-                                    </div>
-                                );
-                            })}
+                            <TaskList
+                                tasks={course?.tasks?.filter((task: any) => task.taskType === "TODAY")}
+                                type="TODAY"
+                                onAdd={(type, name) => addNewTask(type, name, course.courseId)}
+                                onToggle={(taskId) => toggleTask(taskId, course.courseId)}
+                                onUpdate={(taskId, newName) => handleUpdateTask(taskId, newName, course.courseId)}
+                                onDelete={(taskId) => handleDeleteTask(taskId, course.courseId)}
+                            />
                         </div>
                     ))}
                 </div>
@@ -162,49 +117,19 @@ export default function TaskPage() {
                         <div key={course.courseId} className="flex h-auto w-[20vw] flex-col">
                             <div className="flex flex-row items-center">
                                 <p className="font-bold font-sans text-lg">{course.courseCode}</p>
-                                <Button className='ml-2 rounded-md bg-white hover:bg-white text-black border shadow-sm transition-colors' onClick={() => {
-                                    setIsNewTaskDialogOpen(true);
-                                    setTargetCourse({
-                                        courseId: course.courseId,
-                                        userId: course.userId,
-                                        taskType: 'WEEKLY',
-                                    });
-                                }}>
-                                    <Plus />
-                                </Button>
                             </div>
-                            {course.tasks.filter((task: any) => task.taskType === 'WEEKLY').map((task: any) => {
-                                return (
-                                    <div key={task.taskId} className="flex flex-row items-center mt-2">
-                                        <Checkbox className="mr-2" checked={taskCompleteStatus[task.taskId]} onCheckedChange={() => toggleTaskCompletion(task.taskId)} />
-                                        <p>{task.name}</p>
-                                    </div>
-                                );
-                            })}
+                            <TaskList
+                                tasks={course?.tasks?.filter((task: any) => task.taskType === "WEEKLY")}
+                                type="WEEKLY"
+                                onAdd={(type, name) => addNewTask(type, name, course.courseId)}
+                                onToggle={(taskId) => toggleTask(taskId, course.courseId)}
+                                onUpdate={(taskId, newName) => handleUpdateTask(taskId, newName, course.courseId)}
+                                onDelete={(taskId) => handleDeleteTask(taskId, course.courseId)}
+                            />
                         </div>
                     ))}
                 </div>
             </section>
-
-            <Dialog open={isNewTaskDialogOpen} onOpenChange={setIsNewTaskDialogOpen}>
-                <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                        <DialogTitle>Add New Task</DialogTitle>
-                    </DialogHeader>
-                    <div>
-                        <Input
-                            type="text"
-                            placeholder="Enter task name"
-                            className="w-full font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
-                            value={taskNameInput}
-                            onChange={(e) => setTaskNameInput(e.target.value)}
-                        />
-                    </div>
-                    <DialogFooter>
-                        <Button onClick={addNewTask} className='font-sans px-4 py-3 bg-secondary hover:bg-primary' type="submit">Add</Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
         </div>
     );
 }

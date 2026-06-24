@@ -1,24 +1,24 @@
 "use client";
 
+// React hooks
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
-import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox";
-import { Button } from "@/components/ui/button";
 
-import ScheduleCalendar from "@/components/event/ScheduleCalendar";
-import { modifyEvent, sortEvents, filterUpcomingEvents } from "@/lib/utils/event";
-import { formatToDatabase } from "@/lib/utils/format";
-import { days, weeks } from "@/lib/constants/time";
-import { timeSettings } from "@/lib/system/timeSettings";
-import { getEventsByUserId, addEvent, updateEvent, deleteEvent } from "@/lib/api/event";
+// UI Components
+import { toast } from "sonner";
 import AddEventDialog from "@/components/event/AddEventDialog";
 import EditEventDialog from "@/components/event/EditEventDialog";
-import DeleteEventDialog from "@/components/event/DeleteEventDialog";
 import EventInfoDialog from "@/components/event/EventInfoDialog";
+import ScheduleCalendar from "@/components/event/ScheduleCalendar";
+import DeleteEventDialog from "@/components/event/DeleteEventDialog";
+
+// API calls
+import { getEventsByUserId, addEvent, updateEvent, deleteEvent } from "@/lib/api/event";
+
+
+// Utils
+import { formatToDatabase } from "@/lib/utils/format";
+import { sortEvents, filterUpcomingEvents } from "@/lib/utils/event";
 
 function EventList({ events }: { events: any[] }) {
     return (

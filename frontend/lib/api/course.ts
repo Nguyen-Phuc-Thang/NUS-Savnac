@@ -45,6 +45,21 @@ export async function getAllCourses(userId: string) {
     return response.json();
 }
 
+export async function getAllCoursesWithTasks(userId: string) {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/all-courses-with-tasks?userId=${userId}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error("Failed to fetch tasks");
+    }
+
+    return response.json();
+}
+
 export async function getCourseInfo(courseCode: string, userId: string) {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/course/course-info?courseCode=${courseCode}&userId=${userId}`, {
         method: "GET",
