@@ -1,6 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
+import AddCourseDto from './dto/add-course.dto';
+import DeleteCourseDto from './dto/delete-course.dto';
 
 @Injectable()
 export class CourseService {
@@ -62,28 +64,21 @@ export class CourseService {
         });
     }
 
-    async addCourse(userId: string, courseCode: string, courseTitle: string, courseType: "NUS" | "CUSTOM") {
+    async addCourse(dto: AddCourseDto) {
         try {
-            return await this.prisma.client.course.create({
-                data: {
-                    courseCode: courseCode,
-                    courseTitle: courseTitle,
-                    courseType: courseType,
-                    userId: userId
-                }
-            });
+            return await this.prisma.client.course.create({ data: dto });
         } catch (error: any) {
             if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new BadRequestException(`${courseCode} have already been added!`);
+                throw new BadRequestException(`${dto.courseCode} have already been added!`);
             }
             throw error;
         }
     }
 
-    async deleteCourse(courseId: string) {
+    async deleteCourse(dto: DeleteCourseDto) {
         return await this.prisma.client.course.delete({
             where: {
-                courseId: courseId
+                courseId: dto.courseId
             }
         });
     }
