@@ -252,107 +252,523 @@ The credentials authentication workflow is implemented using Auth.js, PostgreSQL
 * Upon successful verification, the pending registration record is promoted to a permanent account by creating a new entry in the `users` table.
 * If verification fails or the OTP has expired, the account creation process is not completed and the user must request a new verification code.
 
-### 3.2. Course Management
-#### 3.2.1. Feature Overview
-NUS Savnac offers course management, which is one of the main feature. With the help of NUS Mods API, NUS Savanac can fetch all courses from NUS Mods along with their datas. 
-- Users can add new NUS courses at the dashboard page, and manage them (edit and deleting the courses)
-- For each of the course, the course data, e.g. workloads, number of credits, exam dates, are fetched from NUS Mods API and displayed to users.
-- The use of NUS Mods API helps users adding their modules of semester directly to NUS Savnac, without having to customize everything on their own.
-#### 3.2.2. Key functionalities
-- User can add new NUS courses to their dashboard
-- User can view basic information of a course, including credits, workloads and exam dates
-- User can manage their courses by editing the course name or deleting them.
+### 3.2 Course Management
 
-#### 3.2.3. Technical implementation
-- The website contains items like courses, folders, links, and they are placed in a grids, and each grid has its own mode controller. There are 3 modes corresponding to how users can interact with the items: NORMAL mode, EDIT mode and DELETE mode. This design of grids and modes are used widely across the website.
+#### 3.2.1 Feature Overview
 
-- In NORMAL mode, clicking on the item allows users to access the content of the item.
-- In EDIT mode, clicking on the item allows users to make changes to the content of the item.
-- In DELETE mode, clicking on the item will delete it.
+Course Management is one of the core features of **NUS Savnac**, serving as the entry point for users to build and organize their academic workspace. Instead of manually creating course information, the system integrates with the **NUSMods API** to retrieve official module data directly from NUS. This allows students to quickly import their enrolled modules while ensuring that all course information remains accurate and up to date.
 
-- When the dashboard page is loaded, the course grid is in NORMAL mode and the system automatically fetches all courses via the endpoint `/api/course/all-courses`, which query all rows of the `Course` table that have the corresponding `userID`
+Each imported course acts as a central workspace where users can later organize study resources, manage course-specific tasks, and schedule academic events. By automatically synchronizing essential module information, Course Management significantly reduces the amount of manual setup required at the beginning of every semester.
 
-- For users to add NUS modules to their dashboard, the system needs to access to *NUS Mods API* and receive all the courses by fetching the endpoint `https://api.nusmods.com/v2/2025-2026/moduleList.json`
+**Key capabilities include:**
 
-- All the courses are then listed for users to choose for adding to the dashboard page. Users can also search for the module code for faster picking.
+* Import NUS modules directly from NUSMods.
+* Display official course information, including module credits, workload distribution, and examination dates.
+* Maintain a personalized dashboard containing all enrolled modules.
+* Allow users to rename or remove courses from their dashboard.
 
-- When adding the course, then **Course Module** in the backend would create a new course object, post a request to the endpoint `/api/course/add-course` and add a new entry to the `Course` table in Neon. The dashboard page would then be updated with the new course added.
+> **[Figure 6. Dashboard displaying imported NUS courses]**
 
-- When user click on the course, the system would navigate them to the course details page. This page is where the course information are displayed along with other management features. The page first fetching data from the endpoint (e.g. data for CS1101S) `https://api.nusmods.com/v2/2025-2026/modules/CS1101S.json` of NUS Mods API inorder to retrieve the course data.
-- The endpoint returns an object with lots of datas, however, only the following information are extrtacted for use:
-  - `moduleCode`: the course module code, e.g. *CS1101S*
-  - `title`: the title of the course, e.g. *Programming Methodology*
-  - `workload`: an array displaying the hours of workload
-  - `credit`: the number of credits students can earned for this module
-  - `semesterData`: contains the data of the classes in two semester
-- The `moduleCode`,`title`, `workload` and `credit` are displayed directly on the top part of the page, while the `semesterData` is reformatted and kept for the use of ***Scheduler***.
+---
 
-- When user delete a course, the corresponding `courseID` would be sent to endpoint `/api/course/delete-course` and the entry would be removed from the database
+#### 3.2.2 Key Functionalities
 
-### 3.3. Resources Manangement
-#### 3.3.1. Feature Overview
-- Resources management consists of folders and links
-- In each of the created course, users can create and manage resources that are related to the course via links. 
-- User can create links that allows instant access to external materials and resources.
-- User can also group links of the same topic together. To do this, user can create folder of a topic, e.g. *Tutorial* and add all the related links to this folder. 
-- One of a useful trick of folders and links is that stundents can create folders and link them directly to Canvas folders of the course. By this, they don't have to navigate around the folders in Canvas everytime they want to access a material. Also, students can organize the folders in a way that match their own convenience, instead of being limited by the concrete structure of the course on Canvas.
-- Folders and links are placed in grids that have modes, which means they can access, edit or delete the items easily.
+The Course Management module provides the following functionalities:
 
-#### 3.3.2. Key functionalities
-- User can create links to make instant access to external materials, resources, study platforms
-- User can group related links together using folders
-- User are also able to make changes to the names and urls of folders, links or remove them from the courses
+* **Import NUS Modules**
+  Users can search for and add official NUS modules directly from the NUSMods database without manually entering course information.
 
-#### 3.3.3. Technical implementation
-- When users access the detail page of a course, the system will query at the backend endpoint `/api/folder/all-folders` to get all rows of the left join between two tables `Folders` and `Links`
-- Every course has a special folder called `__general__`. This folder is not displayed on screen as an item in the grid, but is used to store the links that are non-related to any topics, while maintaining the consistency between all folders no matter their kind (i.e. no need to have another set of function to manipulate the non-topic links)
-- The **folders** and the **links** of `__general__` folder are placed in a grid with modes.
-- Other endpoints in the CRUD set of manipulating folders and links are:
-  - `/api/folder/add-folder`: For adding folder
-  - `/api/folder/update-folder`: For updating folder
-  - `/api/folder/delete-folder`: For deleting folder
-  - `/api/link/create-link`: For creating link, the `folderID` of the folder which this link belongs to need to be specified
-  - `/api/link/update-link`: For updating link title and url
-  - `/api/link/delete-link`: For deleting link from folders
+* **Course Information Display**
+  Each course displays essential academic information such as module code, module title, modular credits, workload distribution, and examination details.
 
-- When user clicks on the a folder, there will be a right panel opens and displays the selected folder's content. Thus, there is a `selectedFolder` variable which keep track of the current folder to be displayed, and by default, when no folder is selected, `selectedFolder` is the `__general__` folder.
+* **Course Navigation**
+  Selecting a course opens the course details page, which serves as the central workspace for managing resources, events, and tasks related to that module.
+
+* **Course Management**
+  Users may update the displayed course name or remove courses from their dashboard whenever necessary.
+
+> **[Figure 7. Course Details page showing module information]**
+
+---
+
+#### 3.2.3 Technical Implementation
+
+The Course Management module follows a client-server architecture, where the frontend communicates with the backend through RESTful APIs while course information is persisted in the PostgreSQL database.
+
+##### Grid-based Interaction System
+
+To provide a consistent user experience throughout the application, NUS Savnac adopts a reusable **grid-based interaction model**. Resources such as courses, folders, and links are displayed as interactive grid items that operate under three interaction modes:
+
+* **Normal Mode** – Selecting an item opens its corresponding content.
+* **Edit Mode** – Selecting an item allows users to modify its information.
+* **Delete Mode** – Selecting an item removes the corresponding resource after confirmation.
+
+This interaction model is reused across multiple features within the application, providing a consistent interface while reducing duplicated frontend logic.
+
+> **[Figure 8. Dashboard grid in Normal, Edit and Delete modes]**
+
+---
+
+##### Loading User Courses
+
+When the Dashboard page is initialized, the frontend automatically retrieves all courses associated with the authenticated user by sending a request to:
+
+```text
+GET /api/course/all-courses
+```
+
+The backend queries the **Course** table using the authenticated user's `userId` and returns all previously added courses. The returned dataset is then rendered as the course grid on the Dashboard.
+
+---
+
+##### Importing Modules from NUSMods
+
+Instead of maintaining a local catalogue of NUS modules, NUS Savnac retrieves official module information directly from the **NUSMods API**.
+
+To populate the module selection dialog, the frontend requests:
+
+```text
+https://api.nusmods.com/v2/2025-2026/moduleList.json
+```
+
+The returned module list is cached on the client and presented through a searchable interface, allowing users to quickly locate modules by typing their module codes.
+
+> **[Figure 9. Add Course dialog with searchable module list]**
+
+Once a module is selected, the frontend submits the request to:
+
+```text
+POST /api/course/add-course
+```
+
+The backend creates a new course record through Prisma and stores it in the **Course** table within the PostgreSQL database. After the operation completes successfully, the Dashboard is refreshed to display the newly added course.
+
+---
+
+##### Retrieving Course Information
+
+Selecting a course navigates users to the Course Details page. Upon loading the page, the frontend retrieves the latest module information from NUSMods using the module code.
+
+For example:
+
+```text
+https://api.nusmods.com/v2/2025-2026/modules/CS1101S.json
+```
+
+Although the endpoint returns comprehensive module information, NUS Savnac extracts only the fields required by the application:
+
+| Field          | Purpose                                               |
+| -------------- | ----------------------------------------------------- |
+| `moduleCode`   | Display the official module code                      |
+| `title`        | Display the module title                              |
+| `workload`     | Visualize weekly workload distribution                |
+| `moduleCredit` | Display the number of modular credits                 |
+| `semesterData` | Generate class schedules used by the Scheduler module |
+
+The first four fields are displayed directly on the Course Details page, while `semesterData` is transformed into the application's internal event format and later consumed by the **Scheduler** module when users choose to import course classes.
+
+> **[Figure 10. Course Details page displaying workload, credits and examination information]**
+
+---
+
+##### Course Deletion
+
+When a user removes a course, the frontend submits the corresponding `courseId` to:
+
+```text
+POST /api/course/delete-course
+```
+
+The backend deletes the corresponding record from the **Course** table. Associated course resources, including folders, links, events, and tasks, are also removed through database cascade relationships, ensuring data consistency throughout the system.
+
+> **[Figure 11. Course deletion confirmation dialog]**
 
 
-### 3.4. Scheduler
-#### 3.4.1. Feature Overview
-- This feature is the events and classes management. This consists of the event calendar that appears that every course detail page and the **Scheduler Page**
-- The unit of this feature is *event*. Every event consists of basic information like title, time, venue, etc. Every event also has a type, which categorize the event and give it a different color to be displayed on the calendar. There are 4 types of events defined:
-  - CLASSES: lectures, tutorial sessions, etc.
-  - DEADLINES: deadlines for projects, assignments
-  - EXAMS: the final exams are obvious. However, mid-term tests or continual assessments quizzes, tests have to be taken notes and managed by students themselves
-  - OTHERS: for other types of events such as meetings, conferences, workshops, etc.
 
-- The event calendar is placed at the end of every course details, displaying the events and classes of this course. This calendar is inspired from **Google Calendar**. However, it is reformatted to display the events in a manner that is specialized for NUS students. Instead of dates, the calendar consists of weeks and days. Weeks are the NUS Calendar weeks, from Week 1 to Week 13 and also includes the Recess Week, Reading Week and Exam Week.
-- The **Scheduler Page** also has the event calendar like the one in the course pages. But this calendar is bigger and consists all the events of all courses. This gives the users an overview of events and classes that they have across all courses. There are also lists that displayed the upcoming events of every type so that users will be able to know which deadlines or exams are coming.
-#### 3.4.2. Key functionalities
-- For each course, user can view its events
-- User can add classes to the course as well as adding new events by specifying week, day, and time
-- User can navigate around the calendar by jumping to a specific week
-- User can click on an event to view its details, make changes to it or delete the event
-- On the **Scheduler Page**, users can view the events of all courses, and the upcoming events of each category
+### 3.3 Resource Management
 
-#### 3.4.3. Technical implementation
+#### 3.3.1 Feature Overview
+
+The Resource Management module enables students to organize course-related learning resources in a structured and personalized manner. Instead of repeatedly navigating through multiple layers of folders in Canvas, users can create their own collection of shortcuts that provide instant access to frequently used learning materials.
+
+Resources are organized into **folders** and **links**, allowing users to categorize external resources according to their own study workflow. For example, users may create folders such as *Tutorials*, *Labs*, or *Assignments*, and group all relevant links under each category. This flexible organization allows students to structure course materials based on their personal preferences rather than the predefined folder hierarchy provided by Canvas.
+
+One practical use case is linking folders directly to the corresponding folders in Canvas. This significantly reduces the amount of navigation required when accessing lecture notes, tutorial sheets, or laboratory materials, thereby improving efficiency during daily study.
+
+The Resource Management module adopts the same grid-based interaction model introduced in the Course Management feature, allowing folders and links to be accessed, edited, and deleted through a consistent user interface.
+
+> **[Figure 12. Resource Management interface showing folders and links]**
+
+---
+
+#### 3.3.2 Key Functionalities
+
+The Resource Management module provides the following functionalities:
+
+- **External Resource Shortcuts**  
+  Users can create links that provide instant access to external learning resources such as Canvas folders, Coursemology, GitHub repositories, Google Drive documents, or other study platforms.
+
+- **Folder Organization**  
+  Related resources can be grouped into custom folders, enabling students to organize materials according to topics or learning activities.
+
+- **Resource Management**  
+  Both folders and links support complete CRUD (Create, Read, Update, Delete) operations, allowing users to continuously update their course resources throughout the semester.
+
+- **Personalized Resource Structure**  
+  Unlike Canvas, users are free to organize learning materials in a way that best matches their own study habits without being restricted by the original course folder hierarchy.
+
+> **[Figure 13. Example folder containing grouped learning resources]**
+
+---
+
+#### 3.3.3 Technical Implementation
+
+The Resource Management module is implemented using two relational database entities: **Folder** and **Link**. Each folder belongs to a specific course, while each link is associated with exactly one folder. This hierarchical relationship allows resources to be managed consistently while supporting flexible organization.
+
+---
+
+##### Loading Course Resources
+
+Whenever a user opens the Course Details page, the frontend retrieves all folders and their corresponding links by sending a request to:
+
+```text
+GET /api/folder/all-folders
+```
+
+Instead of issuing separate requests for folders and links, the backend performs a **LEFT JOIN** between the `Folder` and `Link` tables before returning the combined dataset. This allows the frontend to reconstruct the folder hierarchy in a single request, reducing unnecessary API calls and improving loading performance.
+
+---
+
+##### The `__general__` Folder
+
+Every course automatically contains a special folder named `__general__`.
+
+Unlike normal folders, this folder is **not displayed** in the user interface. Instead, it serves as the default container for links that are not assigned to any specific topic.
+
+This design offers several advantages:
+
+- Every link always belongs to a folder.
+- The same CRUD operations can be reused for all links regardless of whether they are categorized.
+- The frontend only needs to maintain a single resource management workflow, simplifying both implementation and future maintenance.
+
+Without this hidden folder, additional logic would be required to separately manage uncategorized links, increasing the complexity of both the frontend and backend.
+
+---
+
+##### Folder and Link Operations
+
+The module exposes a collection of RESTful endpoints that support complete CRUD operations.
+
+**Folder APIs**
+
+- `POST /api/folder/add-folder`
+- `PUT /api/folder/update-folder`
+- `DELETE /api/folder/delete-folder`
+
+**Link APIs**
+
+- `POST /api/link/create-link`
+- `PUT /api/link/update-link`
+- `DELETE /api/link/delete-link`
+
+When creating a new link, the frontend specifies the corresponding `folderId` so that the backend can correctly associate the link with its parent folder.
+
+---
+
+##### Master-Detail Resource View
+
+The Resource Management interface follows a **master-detail** layout.
+
+The left panel displays all folders belonging to the current course, while the right panel displays the links contained within the selected folder.
+
+A state variable named `selectedFolder` is maintained on the frontend to keep track of the currently active folder.
+
+- When no folder is selected, `selectedFolder` is automatically initialized to the hidden `__general__` folder.
+- Selecting another folder updates `selectedFolder` and refreshes the displayed resource list.
+- All CRUD operations performed on links are scoped to the currently selected folder.
+
+This design provides a clean and intuitive navigation experience while minimizing unnecessary page transitions.
+
+> **[Figure 14. Folder selection updating the resource panel]**
+
+> **[Figure 15. Creating a new link within a selected folder]**
 
 
-### 3.5. Task Management
-#### 3.5.1. Feature Overview
+### 3.4 Scheduler
 
-#### 3.5.2. Key functionalities
+#### 3.4.1 Feature Overview
+
+The Scheduler module serves as the central event management system of **NUS Savnac**, allowing students to organize both academic and personal activities throughout the semester. Unlike conventional calendar applications, the scheduler is specifically designed around the **NUS Academic Calendar**, providing a semester-oriented view that aligns with students' academic schedules.
+
+The fundamental unit of the scheduler is an **event**. Every event contains essential information such as its title, occurrence time, venue, and category. Events are visually distinguished using different colors according to their event types, enabling users to quickly identify different kinds of academic activities.
+
+Four event categories are currently supported:
+
+* **Classes** – Lectures, tutorials, laboratory sessions, recitations, and other scheduled teaching activities.
+* **Deadlines** – Assignment submissions, project milestones, and coursework deadlines.
+* **Exams** – Final examinations, mid-term tests, quizzes, and continual assessments.
+* **Others** – Personal events, meetings, workshops, seminars, or any activities outside the predefined categories.
+
+The Scheduler module consists of two calendar views.
+
+The first is the **Course Calendar**, located at the bottom of every Course Details page. It displays only the events belonging to the selected course and provides course-specific event management.
+
+The second is the standalone **Scheduler Page**, which aggregates events across all registered courses together with users' personal events. Besides the semester calendar, the page also provides categorized lists of upcoming events, allowing students to quickly identify approaching deadlines, examinations, and other important activities.
+
+Unlike traditional calendars that organize events using calendar dates, both calendars present events according to the official NUS semester structure, including **Week 1–13**, **Recess Week**, **Reading Week**, and **Examination Week**.
+
+> **[Figure 16. Course Calendar displayed on the Course Details page]**
+
+> **[Figure 17. Scheduler page displaying events from all courses]**
+
+---
+
+#### 3.4.2 Key Functionalities
+
+The Scheduler module provides the following functionalities:
+
+* **Course-specific Calendar**
+  Each course contains its own calendar for displaying classes and events related to that module.
+
+* **Semester-based Event Management**
+  Users can create academic or personal events by specifying the semester week, weekday, starting time, ending time, and venue.
+
+* **Event Categorization**
+  Events are categorized into Classes, Deadlines, Exams, and Others, with each category displayed using a distinct color for easier identification.
+
+* **Event Modification**
+  Existing events can be viewed, updated, or removed directly from the calendar interface.
+
+* **Global Scheduler**
+  The Scheduler page combines events from all registered courses into a single semester calendar, providing users with a comprehensive overview of their academic commitments.
+
+* **Upcoming Event Summary**
+  Upcoming events are grouped by category and displayed in chronological order to improve visibility of approaching deadlines and examinations.
+
+> **[Figure 18. Event details dialog]**
+
+---
+
+#### 3.4.3 Technical Implementation
+
+The Scheduler module is built around a unified **Event** entity that represents both course-related activities and user-created personal events. This common data model allows all calendar views within the application to reuse the same backend services and event manipulation logic.
+
+---
+
+##### Event Data Model
+
+Each event stores the following essential attributes:
+
+| Attribute   | Description                                        |
+| ----------- | -------------------------------------------------- |
+| `userId`    | Owner of the event                                 |
+| `eventType` | Event category (Classes, Deadlines, Exams, Others) |
+| `title`     | Display title shown on the calendar                |
+| `week`      | NUS Academic Calendar week                         |
+| `day`       | Day of the week                                    |
+| `startTime` | Event starting time                                |
+| `endTime`   | Event ending time                                  |
+| `venue`     | Event location (optional)                          |
+| `courseId`  | Associated course (optional)                       |
+
+Events associated with a course contain both `userId` and `courseId`, while personal events are linked only to the owning user through `userId`.
+
+The same Event Data Transfer Object (DTO) is reused across all create, update, and retrieval operations, ensuring a consistent API design throughout the scheduler subsystem.
+
+---
+
+##### Course Calendar
+
+When users enter the Course Details page, the frontend automatically retrieves all events belonging to the selected course through:
+
+```text
+GET /api/event/get-events-by-course-id
+```
+
+The backend queries all events associated with the specified `courseId` before returning them to the frontend.
+
+The Course Calendar is implemented using the **FullCalendar** library. However, the event objects stored in the database differ slightly from the data format required by FullCalendar.
+
+To bridge this difference, each retrieved event is transformed by a helper function named `modifyEvent`, which converts the application's internal event representation into the format expected by the calendar component.
+
+One important transformation involves the time representation. Events are stored using the compact **HHMM** format within the database, while FullCalendar requires timestamps in the **HH:MM:SS** format. Therefore, the helper function reformats the stored time before rendering the events on the calendar.
+
+> **[Figure 19. Course Calendar showing different event categories]**
+
+---
+
+##### Event CRUD Operations
+
+Creating a new event begins with collecting user inputs from the event creation dialog. After validation, the frontend constructs an Event DTO and submits it to:
+
+```text
+POST /api/event/add-event
+```
+
+Selecting an existing event opens a detailed dialog that allows users to inspect, modify, or remove the selected event.
+
+Updating an event sends the modified DTO to:
+
+```text
+PUT /api/event/update-event
+```
+
+while deleting an event sends the corresponding `eventId` to:
+
+```text
+DELETE /api/event/delete-event
+```
+
+After each operation, the calendar is refreshed to immediately reflect the updated event data.
+
+> **[Figure 20. Event creation dialog]**
+
+> **[Figure 21. Editing an existing event]**
+
+---
+
+##### Global Scheduler
+
+The Scheduler page shares the same calendar component and event manipulation workflow as the Course Calendar. The primary difference lies in the data retrieval process.
+
+Instead of querying events for a single course, the Scheduler retrieves every event associated with the authenticated user through:
+
+```text
+GET /api/event/get-events-by-user-id
+```
+
+The returned dataset includes events from all registered courses together with user-created personal events.
+
+After retrieval, the events undergo the same transformation process before being displayed on the calendar. The dataset is then grouped by event category, sorted chronologically, and truncated to the five nearest upcoming events for each category. These categorized summaries provide users with quick access to their most important upcoming academic commitments without requiring them to inspect the entire calendar.
+
+> **[Figure 22. Upcoming event lists on the Scheduler page]**
 
 
-#### 3.5.3. Technical implementation
+### 3.5 Task Management
 
+#### 3.5.1 Feature Overview
+
+The Task Management module enables students to organize and monitor their academic workload throughout the semester. Instead of relying on external to-do list applications, users can manage course-specific tasks directly within NUS Savnac, allowing task planning to be tightly integrated with course resources and schedules.
+
+Each course maintains its own collection of tasks, allowing students to record assignments, revision plans, tutorial preparation, and other academic activities. To better support different planning horizons, tasks are categorized into two distinct groups:
+
+- **Weekly Tasks** – Recurring tasks that are performed every week, such as completing tutorial worksheets, preparing for laboratory sessions, or reviewing lecture materials.
+
+- **Today Tasks** – Short-term tasks that users intend to complete on the current day, helping them focus on their immediate priorities.
+
+Besides the course-specific task lists, NUS Savnac also provides a dedicated **Task Page** that consolidates tasks from all registered courses into a single interface. This gives students a comprehensive overview of their academic workload without requiring them to navigate between individual course pages.
+
+> **[Figure 23. Task management section on the Course Details page]**
+
+> **[Figure 24. Task Page displaying tasks from multiple courses]**
+
+---
+
+#### 3.5.2 Key Functionalities
+
+The Task Management module provides the following functionalities:
+
+- **Course-specific Task Lists**  
+  Users can create and manage tasks independently for each course.
+
+- **Task Categorization**  
+  Tasks can be organized as either **Weekly Tasks** or **Today Tasks**, allowing users to distinguish between recurring responsibilities and daily objectives.
+
+- **Task Completion Tracking**  
+  Tasks can be marked as completed or incomplete through a single interaction, enabling users to monitor their study progress throughout the semester.
+
+- **Task Management**  
+  Users may create, edit, rename, or delete tasks whenever necessary.
+
+- **Centralized Task Overview**  
+  The Task Page aggregates tasks across all courses, allowing users to review their overall workload from a single interface.
+
+> **[Figure 25. Weekly Tasks and Today Tasks displayed separately]**
+
+---
+
+#### 3.5.3 Technical Implementation
+
+The Task Management module is built around a reusable **Task List** component that is shared across both the Course Details page and the standalone Task Page. This component encapsulates all task-related interactions, allowing task creation, modification, completion tracking, and deletion to be implemented once and reused throughout the application.
+
+---
+
+##### Reusable Task List Component
+
+Each course maintains two independent task collections:
+
+- **Weekly Tasks**
+- **Today Tasks**
+
+Although both task categories are displayed using the same `TaskList` component, each instance maintains its own state and event handlers independently. Consequently, operations performed on one task list do not affect the other, allowing both lists to coexist within the same page while remaining completely isolated.
+
+This component-based design improves code reusability and simplifies future maintenance.
+
+---
+
+##### Course Task Management
+
+Whenever a user opens a Course Details page, the frontend retrieves all tasks associated with the selected course through:
+
+```text
+GET /api/task/get-all-tasks-by-course
+```
+
+The returned task collection is separated into **Weekly Tasks** and **Today Tasks** according to each task's category. The two filtered datasets are then rendered using separate instances of the reusable `TaskList` component.
+
+> **[Figure 26. Course page showing two independent task lists]**
+
+---
+
+##### Task CRUD Operations
+
+The backend exposes a collection of RESTful APIs that support complete task management.
+
+**Task APIs**
+
+- `POST /api/task/create-task`
+- `PUT /api/task/update-task`
+- `PATCH /api/task/toggle-task`
+- `DELETE /api/task/delete-task`
+
+Creating or updating a task begins by constructing a Task DTO from the user's input before sending it to the corresponding backend endpoint.
+
+Task completion is implemented through a lightweight toggle endpoint that updates only the completion status, avoiding unnecessary modification of the remaining task attributes.
+
+After every successful operation, the corresponding Task List is refreshed to ensure that the user interface remains synchronized with the latest database state.
+
+> **[Figure 27. Creating a new task]**
+
+> **[Figure 28. Editing or completing a task]**
+
+---
+
+##### Global Task Overview
+
+The standalone **Task Page** provides an aggregated view of tasks from every registered course.
+
+Unlike the Course Details page, which retrieves tasks through the Task module, this page requests data from the Course module using:
+
+```text
+GET /api/course/all-courses-with-tasks
+```
+
+Instead of returning only task records, the backend performs a **LEFT JOIN** between the `Course` and `Task` tables, allowing each course to be returned together with its associated task collection.
+
+This response structure directly matches the layout required by the frontend, where tasks are grouped under their corresponding courses. As a result, additional grouping logic on the client side is minimized, reducing both processing complexity and unnecessary state transformations.
+
+Each course's task collection is rendered using an independent instance of the reusable `TaskList` component. Since the same component is shared with the Course Details page, all task operations—including creation, editing, completion tracking, and deletion—reuse the same backend APIs and interaction workflow.
+
+> **[Figure 29. Task Page grouping tasks by course]**
 
 ### 3.6. Pomodoro
 #### 3.6.1. Feature Overview
-
+- Pomodoro is a method of staying focus for high productive by splitting the time into segments of focuses and breaks. 
+- There are many websites and apps that implements this method. However, having another tab or another device to run a pomodoro is quite inconvenience. Seeing this, we integrate the pomodoro timer right inside **NUS Savnac** so that students don't have to open an external platform to be able to use this study method.
+- The integration of the pomodoro timer into the website follows our spirit of making every tools of students to be at one place.
 #### 3.6.2. Key functionalities
-
+- Users can set up the pomodoro timer, entering the focus time, break time
+- The timer will countdown and announce user when a phase is timed out
 
 #### 3.6.3. Technical implementation
 
