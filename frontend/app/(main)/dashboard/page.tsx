@@ -15,7 +15,7 @@ import { DropdownMenu, DropdownMenuTrigger, DropdownMenuItem, DropdownMenuConten
 
 // API Calls
 import { addFolder } from "@/lib/api/folder";
-import { getAllCourses, getAllNUSCourses, addCourse, deleteCourse } from "@/lib/api/course";
+import { getAllCourses, getAllNUSCourses, addCourse, deleteCourse, getAllCoursesWithTasks } from "@/lib/api/course";
 
 // Utils
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export default function DashboardPage() {
 
     const handleFetchCourses = async () => {
         try {
-            const courses = await getAllCourses(session?.user?.id || "");
+            const courses = await getAllCoursesWithTasks(session?.user?.id || "");
             setCourses(courses);
         } catch (error: any) {
             toast.error(error.message || "Failed to fetch courses");

@@ -33,6 +33,7 @@ export default function CourseGrid({ courses, mode, onCourseClick, onEditModeCar
                         key={course.courseCode}
                         courseCode={course.courseCode}
                         title={course.courseTitle}
+                        tasks={course.tasks}
                         onClick={() => handleCardClick(course)}
                     />
                 ))}
