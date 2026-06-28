@@ -52,6 +52,8 @@ export default function DashboardPage() {
         toast.promise(
             (async () => {
                 const newCourse = await addCourse(session?.user?.id || "", course.moduleCode, course.title, "NUS");
+                newCourse["tasks"] = [];
+                setCourses((prevCourses) => [...prevCourses, newCourse]);
                 const defaultFolders = generateDefaultFolders(course.moduleCode);
                 for (const folder of defaultFolders) await addFolder(newCourse.courseId, folder.folderName, folder.folderDescription);
             })(),
@@ -66,11 +68,13 @@ export default function DashboardPage() {
     const handleDeleteCourse = async () => {
         toast.promise(
             (async () => {
-                await deleteCourse(selectedCourse?.courseId || "");
+                const deletedCourse = await deleteCourse(selectedCourse?.courseId || "");
+                setCourses((prevCourses) => prevCourses.filter((c) => c.courseId !== deletedCourse.courseId));
+                setDeleteDialogOpen(false);
             })(),
             {
-                loading: `Deleting ${selectedCourse?.moduleCode}...`,
-                success: `${selectedCourse?.moduleCode} deleted successfully!`,
+                loading: `Deleting ${selectedCourse?.courseCode}...`,
+                success: `${selectedCourse?.courseCode} deleted successfully!`,
                 error: (err) => err.message
             }
         );

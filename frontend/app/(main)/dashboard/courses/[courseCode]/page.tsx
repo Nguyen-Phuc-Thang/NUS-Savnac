@@ -221,6 +221,7 @@ export default function CoursePage() {
     }
 
     const handleAddClass = async (classData: any) => {
+        console.log(classData);
         try {
             for (const week of classData.weeks) {
                 const newEvent = await addEvent(
@@ -234,7 +235,7 @@ export default function CoursePage() {
                     classData.venue,
                     courseData.courseId
                 );
-                setEvents([...events, newEvent]);
+                setEvents((prevEvents) => [...prevEvents, newEvent]);
             }
             toast.success("Class " + classData.classNo + " added successfully!");
         } catch (error) {
@@ -262,6 +263,8 @@ export default function CoursePage() {
             setEvents([...events, newEvent]);
         } catch (error: any) {
             toast.error(error.message || "Failed to create event. Please try again later.");
+        } finally {
+            setAddEventDialogOpen(false);
         }
     }
 

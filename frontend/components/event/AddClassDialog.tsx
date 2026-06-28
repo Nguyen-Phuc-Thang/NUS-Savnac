@@ -36,7 +36,7 @@ export default function AddClassDialog({ open, onOpenChange, timetable, onCreate
                     </Field>
                     <div className="h-[60vh] overflow-y-auto mt-4">
                         {timetable.filter((classData: any) => classData.classNo.toLowerCase().includes(classSearchQuery.toLowerCase())).map((classData: any) => (
-                            <button key={classData.classNo} className="p-4 w-full text-left border-b hover:bg-muted cursor-pointer" onClick={(classData) => { onCreate(classData) }}>
+                            <button key={classData.classNo} className="p-4 w-full text-left border-b hover:bg-muted cursor-pointer" onClick={() => { onCreate(classData) }}>
                                 <div className="font-sans font-medium flex flex-row justify-evenly">
                                     <p>{classData.classNo}</p>
                                     <p>{classData.startTime} - {classData.endTime}</p>

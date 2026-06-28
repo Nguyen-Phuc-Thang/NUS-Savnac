@@ -647,7 +647,6 @@ To bridge this difference, each retrieved event is transformed by a helper funct
 
 One important transformation involves the time representation. Events are stored using the compact **HHMM** format within the database, while FullCalendar requires timestamps in the **HH:MM:SS** format. Therefore, the helper function reformats the stored time before rendering the events on the calendar.
 
-> **[Figure 19. Course Calendar showing different event categories]**
 
 ---
 
@@ -737,7 +736,6 @@ The Task Management module provides the following functionalities:
 - **Centralized Task Overview**  
   The Task Page aggregates tasks across all courses, allowing users to review their overall workload from a single interface.
 
-> **[Figure 25. Weekly Tasks and Today Tasks displayed separately]**
 
 ---
 
@@ -813,7 +811,6 @@ This response structure directly matches the layout required by the frontend, wh
 
 Each course's task collection is rendered using an independent instance of the reusable `TaskList` component. Since the same component is shared with the Course Details page, all task operations—including creation, editing, completion tracking, and deletion—reuse the same backend APIs and interaction workflow.
 
-> **[Figure 29. Task Page grouping tasks by course]**
 
 ### 3.6. Pomodoro
 #### 3.6.1. Feature Overview
