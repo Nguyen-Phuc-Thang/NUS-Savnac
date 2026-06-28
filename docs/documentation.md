@@ -267,7 +267,12 @@ Each imported course acts as a central workspace where users can later organize 
 * Maintain a personalized dashboard containing all enrolled modules.
 * Allow users to rename or remove courses from their dashboard.
 
-> **[Figure 6. Dashboard displaying imported NUS courses]**
+<p align="center">
+  <img src="images/dashboard-imported-courses.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.1. Imported NUS Courses</em>
+</p>
 
 ---
 
@@ -287,7 +292,12 @@ The Course Management module provides the following functionalities:
 * **Course Management**
   Users may update the displayed course name or remove courses from their dashboard whenever necessary.
 
-> **[Figure 7. Course Details page showing module information]**
+<p align="center">
+  <img src="images/course-details.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.2. Course Details Page</em>
+</p>
 
 ---
 
@@ -305,7 +315,19 @@ To provide a consistent user experience throughout the application, NUS Savnac a
 
 This interaction model is reused across multiple features within the application, providing a consistent interface while reducing duplicated frontend logic.
 
-> **[Figure 8. Dashboard grid in Normal, Edit and Delete modes]**
+<p align="center">
+  <img src="images/course-grid-edit.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.3. Course Grid in Edit Mode</em>
+</p>
+
+<p align="center">
+  <img src="images/course-grid-delete.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.4. Course Grid in Delete Mode</em>
+</p>
 
 ---
 
@@ -333,7 +355,12 @@ https://api.nusmods.com/v2/2025-2026/moduleList.json
 
 The returned module list is cached on the client and presented through a searchable interface, allowing users to quickly locate modules by typing their module codes.
 
-> **[Figure 9. Add Course dialog with searchable module list]**
+<p align="center">
+  <img src="images/add-course-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.5. Adding NUS Courses Dialog</em>
+</p>
 
 Once a module is selected, the frontend submits the request to:
 
@@ -367,7 +394,12 @@ Although the endpoint returns comprehensive module information, NUS Savnac extra
 
 The first four fields are displayed directly on the Course Details page, while `semesterData` is transformed into the application's internal event format and later consumed by the **Scheduler** module when users choose to import course classes.
 
-> **[Figure 10. Course Details page displaying workload, credits and examination information]**
+<p align="center">
+  <img src="images/course-information.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.6. Course Information Section</em>
+</p>
 
 ---
 
@@ -381,9 +413,12 @@ POST /api/course/delete-course
 
 The backend deletes the corresponding record from the **Course** table. Associated course resources, including folders, links, events, and tasks, are also removed through database cascade relationships, ensuring data consistency throughout the system.
 
-> **[Figure 11. Course deletion confirmation dialog]**
-
-
+<p align="center">
+  <img src="images/delete-course-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 4.7. Deleting Course Dialog</em>
+</p>
 
 ### 3.3 Resource Management
 
@@ -397,7 +432,12 @@ One practical use case is linking folders directly to the corresponding folders 
 
 The Resource Management module adopts the same grid-based interaction model introduced in the Course Management feature, allowing folders and links to be accessed, edited, and deleted through a consistent user interface.
 
-> **[Figure 12. Resource Management interface showing folders and links]**
+<p align="center">
+  <img src="images/folders-and-links.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 5.1. Folders and Links Management</em>
+</p>
 
 ---
 
@@ -417,7 +457,12 @@ The Resource Management module provides the following functionalities:
 - **Personalized Resource Structure**  
   Unlike Canvas, users are free to organize learning materials in a way that best matches their own study habits without being restricted by the original course folder hierarchy.
 
-> **[Figure 13. Example folder containing grouped learning resources]**
+<p align="center">
+  <img src="images/folder-panel.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 5.2. Folder Panel</em>
+</p>
 
 ---
 
@@ -489,10 +534,19 @@ A state variable named `selectedFolder` is maintained on the frontend to keep tr
 
 This design provides a clean and intuitive navigation experience while minimizing unnecessary page transitions.
 
-> **[Figure 14. Folder selection updating the resource panel]**
+<p align="center">
+  <img src="images/folder-selected.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 5.3. Folder Selection</em>
+</p>
 
-> **[Figure 15. Creating a new link within a selected folder]**
-
+<p align="center">
+  <img src="images/add-link-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 5.4. Add New Link To Folder Dialog</em>
+</p>
 
 ### 3.4 Scheduler
 
