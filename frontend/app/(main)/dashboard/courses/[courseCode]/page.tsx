@@ -7,9 +7,7 @@ import { useEffect, useState } from "react";
 
 // UI Components
 import { toast } from "sonner";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Folder, Plus, Link, CalendarDays, Minus, SquarePen, Trash2 } from "lucide-react";
 import AddFolderDialog from "@/components/folder/AddFolderDialog";
@@ -31,16 +29,16 @@ import TaskList from "@/components/task/TaskList";
 
 // API Calls
 import { getNUSCourseData, getCourseInfo } from "@/lib/api/course";
-import { getLinks, createLink, updateLink, deleteLink } from "@/lib/api/link";
+import { createLink, updateLink, deleteLink } from "@/lib/api/link";
 import { getFolders, addFolder, updateFolder, deleteFolder } from "@/lib/api/folder";
 import { getEventsByCourseId, addEvent, updateEvent, deleteEvent } from "@/lib/api/event";
-import { getTasksByCourseId, getTasksByUserId, createTask, toggleTaskCompletion, updateTaskName, deleteTask } from "@/lib/api/task";
+import { getTasksByCourseId, createTask, toggleTaskCompletion, updateTaskName, deleteTask } from "@/lib/api/task";
 
 // Utils
 import { restructureClasses } from "@/lib/utils/scheduleManipulation";
-import { generateWorkload } from "@/lib/utils/course";
 import { modeStyle, switchMode } from "@/lib/utils/mode";
-import { formatToDatabase } from "@/lib/utils/format";
+import { generateWorkload } from "@/lib/utils/course";
+import { formatToDatabase, formatToMonthDayYear } from "@/lib/utils/format";
 
 
 
@@ -413,6 +411,9 @@ export default function CoursePage() {
                             <div className="font-heading text-lg font-bold">Course Details</div>
                             <div className="mt-2 font-sans text-muted-foreground">
                                 <p>Credit: {courseData?.credit} units</p>
+                            </div>
+                            <div className="mt-2 font-sans text-muted-foreground">
+                                <p>Exam Date: {formatToMonthDayYear(courseData?.semesterData[1].examDate)}</p>
                             </div>
                             <div className="mt-2 font-sans text-muted-foreground flex flex-col gap-3">
                                 <p className="font-sans text-muted-foreground">Workload</p>
