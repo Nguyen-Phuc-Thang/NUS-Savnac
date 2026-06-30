@@ -16,6 +16,28 @@ https://nus-savnac.vercel.app/
 *Email: test@gmail.com*
 *Password: 123456*
 
+# Table of Contents
+1. [Introduction](#1-introduction)
+  - [Motivation](#11-motivation)
+  - [Project Overview](#12-project-overview)
+  - [Expectations](#13-expectations)
+2. [System Design](#2-system-design)
+  - [Overall Architecture](#21-overall-architecture)
+  - [Technology Stack](#22-technology-stack)
+  - [Authentication Design](#23-authentication-design)
+3. [Feature Implementation](#3-feature-implementation)
+  - [User Authentication](#31-user-authentication)
+  - [Course Management](#32-course-management)
+  - [Resource Management](#33-resource-management)
+  - [Scheduler](#34-scheduler)
+  - [Task Management](#35-task-management)
+  - [Pomodoro Timer](#36-pomodoro-timer)
+4. [User Guide](#4-user-guide)
+5. [Testing](#5-testing)
+  - [Integration Testing](#51-integration-testing)
+  - [Component Testing](#52-component-testing)
+  - [End To End Testing](#53-end-to-end-testing)
+
 ## 1. Introduction
 
 ### 1.1 Motivation
@@ -44,11 +66,12 @@ The platform consists of four core features:
 
 * **Task Management** – A centralized task-tracking interface that consolidates assignments, deadlines, and personal tasks across all registered courses. Tasks are organized in a structured manner to help students monitor their academic progress and maintain productivity throughout the semester.
 
-* **Reminder System** – An automated notification system that monitors upcoming deadlines and events. Users can configure reminder intervals according to their preferences, and notifications are delivered through email to ensure important deadlines are not overlooked.
+* **Pomodoro Timer** – Enables users to create focused study sessions by allocating time blocks to specific tasks. This feature encourages effective time management and minimizes distractions during study periods.
+
 
 Beyond its core functionality, NUS Savnac also incorporates several productivity-enhancing features:
 
-* **Pomodoro Timer** – Enables users to create focused study sessions by allocating time blocks to specific tasks. This feature encourages effective time management and minimizes distractions during study periods.
+* **Reminder System** – An automated notification system that monitors upcoming deadlines and events. Users can configure reminder intervals according to their preferences, and notifications are delivered through email to ensure important deadlines are not overlooked.
 
 * **AI Advising System** – Assists students in planning their schedules and academic workload by generating personalized recommendations for study routines and task prioritization.
 
@@ -161,7 +184,7 @@ User data, tasks, events, folders, and course information are stored in a Postgr
   A library used for API and integration testing. Supertest allows backend endpoints to be tested in an automated and reproducible manner.
 
 
-### 2.4. Authentication design
+### 2.3. Authentication design
 The design for authentication system is shown as below.
 <p align="center">
   <img src="images/auth-design.jpg" width="900"/>
@@ -571,9 +594,19 @@ The second is the standalone **Scheduler Page**, which aggregates events across 
 
 Unlike traditional calendars that organize events using calendar dates, both calendars present events according to the official NUS semester structure, including **Week 1–13**, **Recess Week**, **Reading Week**, and **Examination Week**.
 
-> **[Figure 16. Course Calendar displayed on the Course Details page]**
+<p align="center">
+  <img src="images/course-scheduler-calendar.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.1. Course Scheduler</em>
+</p>
 
-> **[Figure 17. Scheduler page displaying events from all courses]**
+<p align="center">
+  <img src="images/scheduler-page-calendar.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.2. Scheduler Page Calendar</em>
+</p>
 
 ---
 
@@ -599,7 +632,12 @@ The Scheduler module provides the following functionalities:
 * **Upcoming Event Summary**
   Upcoming events are grouped by category and displayed in chronological order to improve visibility of approaching deadlines and examinations.
 
-> **[Figure 18. Event details dialog]**
+<p align="center">
+  <img src="images/event-info-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.3. Event Info Dialog</em>
+</p>
 
 ---
 
@@ -674,9 +712,19 @@ DELETE /api/event/delete-event
 
 After each operation, the calendar is refreshed to immediately reflect the updated event data.
 
-> **[Figure 20. Event creation dialog]**
+<p align="center">
+  <img src="images/add-event-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.4. Create New Event Dialog</em>
+</p>
 
-> **[Figure 21. Editing an existing event]**
+<p align="center">
+  <img src="images/edit-event-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.5. Edit Event Dialog</em>
+</p>
 
 ---
 
@@ -694,7 +742,12 @@ The returned dataset includes events from all registered courses together with u
 
 After retrieval, the events undergo the same transformation process before being displayed on the calendar. The dataset is then grouped by event category, sorted chronologically, and truncated to the five nearest upcoming events for each category. These categorized summaries provide users with quick access to their most important upcoming academic commitments without requiring them to inspect the entire calendar.
 
-> **[Figure 22. Upcoming event lists on the Scheduler page]**
+<p align="center">
+  <img src="images/upcoming-list.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 6.6. Upcoming Event By Categories</em>
+</p>
 
 
 ### 3.5 Task Management
@@ -711,9 +764,19 @@ Each course maintains its own collection of tasks, allowing students to record a
 
 Besides the course-specific task lists, NUS Savnac also provides a dedicated **Task Page** that consolidates tasks from all registered courses into a single interface. This gives students a comprehensive overview of their academic workload without requiring them to navigate between individual course pages.
 
-> **[Figure 23. Task management section on the Course Details page]**
+<p align="center">
+  <img src="images/course-tasks.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 7.1. Task Management Section</em>
+</p>
 
-> **[Figure 24. Task Page displaying tasks from multiple courses]**
+<p align="center">
+  <img src="images/task-page.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 7.2. Tasks Page</em>
+</p>
 
 ---
 
@@ -768,7 +831,12 @@ GET /api/task/get-all-tasks-by-course
 
 The returned task collection is separated into **Weekly Tasks** and **Today Tasks** according to each task's category. The two filtered datasets are then rendered using separate instances of the reusable `TaskList` component.
 
-> **[Figure 26. Course page showing two independent task lists]**
+<p align="center">
+  <img src="images/task-list.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 7.3. Task List Component</em>
+</p>
 
 ---
 
@@ -789,9 +857,19 @@ Task completion is implemented through a lightweight toggle endpoint that update
 
 After every successful operation, the corresponding Task List is refreshed to ensure that the user interface remains synchronized with the latest database state.
 
-> **[Figure 27. Creating a new task]**
+<p align="center">
+  <img src="images/create-new-task.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 7.4. Creating New Task</em>
+</p>
 
-> **[Figure 28. Editing or completing a task]**
+<p align="center">
+  <img src="images/edit-task.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 7.5. Edit a Task</em>
+</p>
 
 ---
 
@@ -812,16 +890,512 @@ This response structure directly matches the layout required by the frontend, wh
 Each course's task collection is rendered using an independent instance of the reusable `TaskList` component. Since the same component is shared with the Course Details page, all task operations—including creation, editing, completion tracking, and deletion—reuse the same backend APIs and interaction workflow.
 
 
-### 3.6. Pomodoro
-#### 3.6.1. Feature Overview
-- Pomodoro is a method of staying focus for high productive by splitting the time into segments of focuses and breaks. 
-- There are many websites and apps that implements this method. However, having another tab or another device to run a pomodoro is quite inconvenience. Seeing this, we integrate the pomodoro timer right inside **NUS Savnac** so that students don't have to open an external platform to be able to use this study method.
-- The integration of the pomodoro timer into the website follows our spirit of making every tools of students to be at one place.
-#### 3.6.2. Key functionalities
-- Users can set up the pomodoro timer, entering the focus time, break time
-- The timer will countdown and announce user when a phase is timed out
+### 3.6 Pomodoro Timer
 
-#### 3.6.3. Technical implementation
+#### 3.6.1 Feature Overview
+
+The Pomodoro Timer is a productivity tool integrated directly into **NUS Savnac** to encourage focused study sessions using the Pomodoro Technique. Rather than requiring students to switch to another website or application, the timer is built directly into the platform so that users can manage their study sessions alongside their academic resources and schedules.
+
+This integration aligns with the overall objective of NUS Savnac—providing a centralized academic workspace where students can access the tools they frequently use without leaving the application.
+
+The current implementation follows the traditional Pomodoro workflow, consisting of alternating **Focus** and **Break** sessions.
+
+<p align="center">
+  <img src="images/pomodoro-page.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.1. Pomodoro Timer Page</em>
+</p>
+
+---
+
+#### 3.6.2 Key Functionalities
+
+The Pomodoro module provides the following functionalities:
+
+- **Focus and Break Sessions**  
+  The timer alternates automatically between focus and break periods following the Pomodoro Technique.
+
+- **Countdown Timer**  
+  The remaining time is updated every second and displayed in a clear **MM:SS** format.
+
+- **Session Tracking**  
+  The system records the number of completed focus sessions, allowing users to monitor their study progress.
+
+- **Timer Controls**  
+  Users may start, pause, reset, or manually switch between focus and break modes at any time.
+
+- **Automatic Phase Transition**  
+  Once a countdown reaches zero, the timer automatically switches to the next study phase without requiring user intervention.
+
+<p align="center">
+  <img src="images/timer-focus.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.2. Focus Session</em>
+</p>
+
+<p align="center">
+  <img src="images/timer-break.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.3. Break Session</em>
+</p>
+
+---
+
+#### 3.6.3 Technical Implementation
+
+Unlike most modules in NUS Savnac, the Pomodoro Timer operates entirely on the client side and does not require backend communication. All countdown logic is encapsulated within a reusable custom React hook named `useTimer`, while the visual interface is implemented separately through a dedicated `Timer` component.
+
+This separation of concerns allows the timer logic to remain independent from the presentation layer, making future UI modifications possible without affecting the underlying countdown mechanism.
+
+---
+
+##### Timer State Management
+
+The timer maintains its internal state through a single `TimerState` object containing three attributes:
+
+| Attribute | Description |
+|----------|-------------|
+| `mode` | Current timer phase (`focus` or `break`) |
+| `timeLeft` | Remaining time in the current phase (seconds) |
+| `sessions` | Number of completed focus sessions |
+
+Rather than maintaining these values as multiple independent state variables, they are intentionally grouped into a single state object.
+
+Since all three values are updated simultaneously inside the same `setInterval` callback, storing them together ensures that every timer tick produces a single, consistent state transition. This design minimizes unnecessary re-renders while preventing stale-state issues that commonly occur when multiple interdependent `useState` variables are updated asynchronously.
+
+A separate boolean state, `isActive`, is maintained outside the `TimerState` object. Unlike the timer state, this variable changes only when users explicitly start or pause the timer, making it independent from the per-second countdown updates.
+
+---
+
+##### Countdown Mechanism
+
+The countdown is implemented using React's `useEffect` hook together with `setInterval`.
+
+Whenever `isActive` becomes `true`, an interval is created that decreases the remaining time by one second at every tick.
+
+When the remaining time reaches zero, the same interval callback automatically performs a phase transition:
+
+- Focus → Break
+- Break → Focus
+
+During the transition, the timer resets to the predefined duration of the next phase.
+
+The interval is automatically cleaned up whenever the timer is paused or the component is unmounted, preventing multiple intervals from executing simultaneously and avoiding potential memory leaks.
+
+---
+
+##### Mode Switching
+
+The timer supports both automatic and manual transitions between focus and break sessions.
+
+**Automatic Transition**
+
+When the countdown reaches zero, the timer immediately switches to the next study phase.
+
+**Manual Transition**
+
+Users may manually switch between focus and break sessions by pressing the **Switch Mode** button.
+
+Both transition paths reuse the same state transition logic, ensuring that mode switching behaves consistently regardless of how it is triggered.
+
+The session counter is incremented only when a complete focus session has finished and the timer enters the break phase, providing an accurate measure of completed Pomodoro cycles.
+
+---
+
+##### Timer Controls
+
+The `useTimer` hook exposes three control functions to the user interface:
+
+| Function | Purpose |
+|----------|---------|
+| `toggleTimer()` | Starts or pauses the timer |
+| `resetTimer()` | Restores the timer to its initial state |
+| `switchMode()` | Manually switches between focus and break modes |
+
+The `Timer` component consumes these functions to implement the **Start/Pause**, **Reset**, and **Switch Mode** buttons displayed in the user interface.
+
+---
+
+##### Time Formatting
+
+Internally, the remaining time is stored as the total number of seconds to simplify countdown calculations.
+
+Before rendering, the value is converted into the standard **MM:SS** format displayed on the timer interface. Separating the internal representation from the presentation format keeps the countdown logic straightforward while providing users with a familiar and easily readable display.
+
+---
+
+##### Future Improvements
+
+The current implementation uses fixed durations of **25 minutes** for focus sessions and **5 minutes** for break sessions.
+
+A future enhancement will allow users to configure these durations according to their personal preferences. This feature will require backend support for persisting timer settings in the database and restoring them whenever users access the Pomodoro module.
 
 ## 4. User Guide
 
+### 4.1. Account
+#### Login
+1. Enter your registered email
+2. Enter your registered password
+3. Click <kbd>Login</kbd> to login to your account
+4. Click on **Create one** to navigate to **Register Page** if you don't have an account
+
+<p align="center">
+  <img src="images/guide/login.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.1. Login Page</em>
+</p>
+
+---
+
+#### Create new account
+1. Enter your display name
+2. Enter your NUS email
+3. Enter your password. There are restrictions on the password that you need to satisfy
+4. Click <kbd>Register</kbd> and a verification code will be sent to your email
+5. Enter the verification code to verify your new account
+
+<p align="center">
+  <img src="images/guide/register.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.2. Register Page</em>
+</p>
+
+
+### 4.2. Dashboard
+
+#### Add a Course
+1. Click on <kbd>+ Course</kbd> and select **NUS Course** to open the **Add NUS Course** dialog
+<p align="center">
+  <img src="images/guide/add-course-button.png" width="800"/>
+</p>
+<p align="center">
+  <em>Figure 9.3. Add Course Button</em>
+</p>
+
+2. Search for the course by its module code
+<p align="center">
+  <img src="images/guide/search-code.jpeg" width="500"/>
+</p>
+<p align="center">
+  <em>Figure 9.4. Searching for a Course</em>
+</p>
+
+3. Click on the course to add it to dashboard
+---
+
+#### Delete a Course
+1. Click on <kbd>🗑️</kbd> to switch to **DELETE** mode
+<p align="center">
+  <img src="images/guide/delete-course-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.5. DELETE Mode button</em>
+</p>
+
+2. Select the course you want to delete
+<p align="center">
+  <img src="images/guide/course-delete-mode.png" width="500"/>
+</p>
+<p align="center">
+  <em>Figure 9.6. Courses in DELETE mode</em>
+</p>
+
+
+3. A dialog will pop up. Click <kbd>Delete</kbd> to delete the course
+<p align="center">
+  <img src="images/guide/delete-course-dialog.png" width="500"/>
+</p>
+<p align="center">
+  <em>Figure 9.7. Delete Course Dialog</em>
+</p>
+
+### 4.3. Resources Management
+
+#### Create a Folder
+1. Click on <kbd>+ Folder</kbd> to open the **Create New Folder** dialog
+<p align="center">
+  <img src="images/guide/add-folder-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.8. Add Folder Button</em>
+</p>
+
+2. Enter the **Folder Name** and **Folder Description**
+<p align="center">
+  <img src="images/guide/add-folder-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.9. Create New Folder Dialog</em>
+</p>
+
+3. Click <kbd>Create</kbd> to create the folder
+---
+#### Create a Link
+To create a new link in the **Links** section:
+1. Click <kbd>+ Link</kbd> to open the **Create New Link** dialog
+<p align="center">
+  <img src="images/guide/add-link-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.10. Create Link button</em>
+</p>
+
+2. Enter the **Link Title** and **Link URL**
+<p align="center">
+  <img src="images/guide/add-link-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.11. Create New Link Dialog</em>
+</p>
+
+3. Click <kbd>Create</kbd> to create the link
+
+To create a new link in a folder:
+1. Select the folder that you want to add a new link
+2. In the right panel, click on <kbd>+</kbd> to open the **Create New Link** dialog
+<p align="center">
+  <img src="images/guide/add-link-in-folder.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.12. Create Link Button</em>
+</p>
+
+3. Enter the **Link Title** and **Link URL**
+4. Click <kbd>Create</kbd> to create the link
+---
+#### Manage Folders and Links
+To edit or delete a folder:
+1. Click on <kbd>✏️</kbd> or <kbd>🗑️</kbd> to switch the **Folders** section to **EDIT** or **DELETE** mode
+
+<p align="center">
+  <img src="images/guide/folder-grid-toolbar.png" width="250"/>
+</p>
+<p align="center">
+  <em>Figure 9.13. EDIT and DELETE mode buttons</em>
+</p>
+
+2. Select the folder that you want to edit or delete
+3. In **EDIT** mode, the **Edit Folder** dialog will pop up. Make changes to the **folder name** or **folder description** and click on <kbd>Update</kbd>
+
+<p align="center">
+  <img src="images/guide/edit-folder-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.14. Edit Folder Dialog</em>
+</p>
+
+4. In **DELETE** mode, a dialog will pop up. Click on <kbd>Delete</kbd> to delete the folder
+
+<p align="center">
+  <img src="images/guide/delete-folder-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.15. Delete Folder Dialog</em>
+</p>
+
+To edit or delete a link in a folder:
+1. Hover your mouse on the link, and click on <kbd>✏️</kbd> or <kbd>🗑️</kbd> icons to edit or delete it
+
+<p align="center">
+  <img src="images/guide/link-hovered.png" width="250"/>
+</p>
+<p align="center">
+  <em>Figure 9.16. Link When Hovered</em>
+</p>
+
+2. When clicking on <kbd>✏️</kbd>, the **Edit Link** dialog will pop up. Make changes to the **title** and **URL** of the link and click <kbd>Update</kbd>
+
+<p align="center">
+  <img src="images/guide/edit-link-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.17. Edit Link Dialog</em>
+</p>
+
+3. When clicking on <kbd>🗑️</kbd>, a dialog will pop up. Click <kbd>Delete</kbd> to delete the link.
+
+<p align="center">
+  <img src="images/guide/delete-link-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.18. Delete Link Dialog</em>
+</p>
+
+### 4.4. Scheduler
+#### Add an Event
+To add a class of the course:
+1. Click on <kbd>+</kbd> and select **NUS Class**
+<p align="center">
+  <img src="images/guide/add-event-button.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.19. Add Event Button</em>
+</p>
+
+2. The **Add NUS Class** dialog will pop up. Click on the class to add it
+<p align="center">
+  <img src="images/guide/add-class-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.20. Add NUS Class Dialog</em>
+</p>
+
+To add a custom event:
+1. Click on <kbd>+</kbd> and select **Custom Event**
+2. The **Create New Event** dialog will pop up. Fill in the information for the new event
+<p align="center">
+  <img src="images/guide/add-event-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.21. Create New Event Dialog</em>
+</p> 
+
+3. Click on <kbd>Create</kbd> to create the event
+---
+#### Edit or Delete an Event
+1. On the calendar, click on the event that you want to edit or delete
+2. The **Event Info** dialog will pop up. Click on <kbd>Edit</kbd> or <kbd>Delete</kbd> to edit or delete the event
+<p align="center">
+  <img src="images/guide/event-info-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.22. Event Info Dialog</em>
+</p> 
+
+3. When clicking on <kbd>Edit</kbd>, the **Edit Event** dialog will pop up. Make changes to the event details and click on <kbd>Update</kbd> to save changes
+<p align="center">
+  <img src="images/guide/edit-event-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.23. Edit Event Dialog</em>
+</p> 
+
+4. When clicking on <kbd>Delete</kbd>, a dialog will pop up. Click on <kbd>Delete</kbd> to delete the event
+<p align="center">
+  <img src="images/guide/delete-event-dialog.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.24. Delete Event Dialog</em>
+</p> 
+
+---
+#### Navigating Between Weeks
+1. Use the navigation tool to navigate between the weeks of the semester
+<p align="center">
+  <img src="images/guide/week-nav.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.25. Week Navigation Toolbar</em>
+</p> 
+
+2. Click on the dropdown list and select the week that you want to display
+3. Click on <kbd><</kbd> to move to the previous week
+4. Click on <kbd>></kbd> to move to the next week
+
+---
+### 4.5. Task Management
+#### Add a task
+1. Click on <kbd>+</kbd> at the bottom of the task list
+<p align="center">
+  <img src="images/guide/add-task-button.png" width="250"/>
+</p>
+<p align="center">
+  <em>Figure 9.26. Add New Task Button</em>
+</p> 
+2. Enter the task name
+<p align="center">
+  <img src="images/guide/enter-task-name.png" width="250"/>
+</p>
+<p align="center">
+  <em>Figure 9.27. Entering Task Name</em>
+</p> 
+
+3. Press **Enter** key to add the new task to the list
+
+---
+#### Manage Tasks
+To edit or delete a task:
+1. Click on the task that you want to edit or delete
+2. Changing the task name and press **Enter** key will update the task name
+3. Click on <kbd>🗑️</kbd> will the delete the task
+
+<p align="center">
+  <img src="images/guide/edit-task.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.27. Edit or Delete a Task</em>
+</p> 
+
+To mark a task as completed:
+1. Click on the empty checkbox to mark the task as completed
+2. Click on the checked checkbox to mark the task uncompleted
+
+### 4.6. Pomodoro
+#### Using the Timer
+1. Click on <kbd>Start</kbd> to start the session. The Timer will be in **Focus** mode and start counting down
+2. To pause the Timer, click on <kbd>Pause</kbd>
+3. To resume the Timer, click on <kbd>Start</kbd> again
+4. To reset the Timer and sessions counter, click on <kbd>Reset</kbd>
+<p align="center">
+  <img src="images/guide/timer-controller.png" width="450"/>
+</p>
+<p align="center">
+  <em>Figure 9.28. Timer Controller</em>
+</p> 
+
+---
+#### Switching Between Focus and Break Sessions
+1. When in **Focus** session, click on <kbd>Switch to Break</kbd> will instantly switch the timer to **Break** session
+2. When in **Break** session, click on <kbd>Switch to Focus</kbd> will instantly switch the timer to **Focus** session
+
+<p align="center">
+  <img src="images/guide/switch-session.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.27. Switch to Break session</em>
+</p> 
+
+# 5. Testing
+
+To improve the reliability and maintainability of **NUS Savnac**, multiple levels of software testing were carried out throughout the development process. Rather than relying solely on manual verification, the project adopts a layered testing strategy to validate different parts of the system independently. Three complementary testing approaches are employed:
+
+* **Integration Testing** verifies the correctness of backend REST APIs and their interactions with the database.
+* **Component Testing** ensures that individual React components behave correctly when rendered in isolation.
+* **End-to-End (E2E) Testing** validates complete user workflows across both the frontend and backend, simulating real user interactions with the system.
+
+Together, these testing approaches provide confidence that individual components function correctly, APIs behave as expected, and the overall application operates reliably from the user's perspective.
+
+---
+
+## 5.1. Integration Testing
+
+Backend integration tests are implemented using **Supertest** together with **Jest**. These tests verify the behavior of REST API endpoints by sending HTTP requests to the backend application and validating the returned responses.
+
+The integration tests cover the communication between controllers, services, and the database layer, ensuring that API endpoints correctly process requests and return appropriate HTTP status codes and response bodies. Both successful scenarios and error cases are included, such as invalid requests, missing resources, and failed validations.
+
+This testing approach ensures that the backend behaves consistently when accessed by the frontend application.
+
+---
+
+## 5.2. Component Testing
+
+Frontend component testing is implemented using **React Testing Library**. Instead of testing the application as a whole, component tests focus on verifying the behavior of individual React components in isolation.
+
+The tests validate that components render the expected user interface, respond correctly to user interactions, update their states appropriately, and display the correct information according to the provided props and application state.
+
+By testing components independently, UI-related regressions can be detected early while keeping the tests fast and maintainable.
+
+---
+
+## 5.3. End-to-End Testing
+
+End-to-End (E2E) testing is implemented using **Playwright** to simulate real user interactions with the application.
+
+Unlike integration and component testing, E2E tests validate complete user workflows that span both the frontend and backend. Typical scenarios include user authentication, course management, resource management, scheduler operations, task management, and other major features available within the application.
+
+Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions.
