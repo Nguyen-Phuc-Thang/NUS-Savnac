@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Patch, Delete } from '@nestjs/common';
 import { FolderService } from './folder.service';
 
 @Controller('folder')
@@ -16,7 +16,7 @@ export class FolderController {
     return this.folderService.addFolder(body.courseId, body.folderName, body.folderDescription);
   }
 
-  @Post('update-folder')
+  @Patch('update-folder')
   async updateFolder(@Body() body: any) {
     return this.folderService.updateFolder(body.folderId, body.folderName, body.folderDescription);
   }
