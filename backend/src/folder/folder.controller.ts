@@ -1,5 +1,10 @@
 import { Body, Controller, Get, Post, Query, Patch, Delete } from '@nestjs/common';
 import { FolderService } from './folder.service';
+import GetFolderDto from './dto/get-folder.dto';
+import AddFolderDto from './dto/add-folder.dto';
+import UpdateFolderDto from './dto/update-folder.dto';
+import DeleteFolderDto from './dto/delete-folder.dto';
+
 
 @Controller('folder')
 export class FolderController {
@@ -7,22 +12,22 @@ export class FolderController {
 
 
   @Get('all-folders')
-  async getAllFolders(@Query('courseId') courseId: string) {
-    return this.folderService.getAllFolders(courseId);
+  async getAllFolders(@Query() dto: GetFolderDto) {
+    return this.folderService.getAllFolders(dto);
   }
 
   @Post('add-folder')
-  async addFolder(@Body() body: any) {
-    return this.folderService.addFolder(body.courseId, body.folderName, body.folderDescription);
+  async addFolder(@Body() dto: AddFolderDto) {
+    return this.folderService.addFolder(dto);
   }
 
   @Patch('update-folder')
-  async updateFolder(@Body() body: any) {
-    return this.folderService.updateFolder(body.folderId, body.folderName, body.folderDescription);
+  async updateFolder(@Body() dto: UpdateFolderDto) {
+    return this.folderService.updateFolder(dto);
   }
 
   @Delete('delete-folder')
-  async deleteFolder(@Body() body: any) {
-    return this.folderService.deleteFolder(body.folderId);
+  async deleteFolder(@Body() dto: DeleteFolderDto) {
+    return this.folderService.deleteFolder(dto);
   }
 }
