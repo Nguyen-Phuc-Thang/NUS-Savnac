@@ -38,7 +38,7 @@ describe('Folder Integration Tests', () => {
     beforeEach(async () => {
         await cleanDatabase();
         testUser = await createUser();
-        testCourse = await createCourse(testUser.id);
+        testCourse = await createCourse(testUser.id, 'CS1010', 'Programming Methodology');
     });
 
 
@@ -63,12 +63,12 @@ describe('Folder Integration Tests', () => {
         return user;
     }
 
-    const createCourse = async (userId: string) => {
+    const createCourse = async (userId: string, courseCode: string, courseTitle: string) => {
         const course = await prisma.client.course.create({
             data: {
                 userId: userId,
-                courseCode: 'CS1010',
-                courseTitle: 'Programming Methodology',
+                courseCode: courseCode,
+                courseTitle: courseTitle,
                 courseType: 'NUS',
             }
         });
@@ -151,7 +151,7 @@ describe('Folder Integration Tests', () => {
         });
 
         it('should not return folders from another course', async () => {
-            const anotherCourse = await createCourse(testUser.id);
+            const anotherCourse = await createCourse(testUser.id, 'CS2030S', 'Programming Methodology II');
             await createFolder(testCourse.courseId, 'Folder 1', 'Description 1');
             await createFolder(anotherCourse.courseId, 'Folder 2', 'Description 2');
 
