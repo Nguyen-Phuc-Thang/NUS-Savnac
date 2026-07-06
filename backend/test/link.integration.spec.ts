@@ -45,7 +45,7 @@ describe('Link Integration Tests', () => {
       'Programming Methodology',
     );
     testFolder = await createFolder(
-      testCourse.id,
+      testCourse.courseId,
       'Tutorial',
       'Tutorial folder',
     );
@@ -379,7 +379,6 @@ describe('Link Integration Tests', () => {
     it('should update link', async () => {
       const newLink = {
         linkId: oldLink.linkId,
-        folderId: oldLink.folderId,
         title: 'Updated Link',
         url: 'https://example.com/updated-link',
       };
@@ -392,7 +391,6 @@ describe('Link Integration Tests', () => {
       expect(response.body).toEqual(
         expect.objectContaining({
           linkId: newLink.linkId,
-          folderId: newLink.folderId,
           title: newLink.title,
           url: newLink.url,
         }),
@@ -405,7 +403,6 @@ describe('Link Integration Tests', () => {
       expect(linkInDb).toEqual(
         expect.objectContaining({
           linkId: newLink.linkId,
-          folderId: newLink.folderId,
           title: newLink.title,
           url: newLink.url,
         }),
