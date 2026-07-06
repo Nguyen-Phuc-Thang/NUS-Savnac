@@ -1,8 +1,8 @@
 import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
-export default class DeleteLinkDto {
+export default class GetLinkDto {
   @IsNotEmpty()
   @IsString()
   @IsUUID()
-  linkId!: string;
+  folderId!: string;
 }
