@@ -7,6 +7,8 @@ export interface TimerConfig {
 
 export type TimerInput = {
     name: string;
-    focusTime: number;
-    breakTime: number;
+    focusMinutes: number;
+    focusSeconds: number;
+    breakMinutes: number;
+    breakSeconds: number;
 };

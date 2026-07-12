@@ -7,20 +7,28 @@ import {
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog';
-import SetTimerDialog from './set-timer-dialog';
-import TimerCard from './timer-card';
-import { TimerConfig } from '@/types/timer';
+import SetTimerDialog from './SetTimerDialog';
+import TimerCard from './TimerCard';
+import { TimerConfig, TimerInput } from '@/types/timer';
 
 interface Props {
     timers: TimerConfig[];
     selectedTimer: TimerConfig;
     onSelectTimer: (timer: TimerConfig) => void;
+    onAddTimer: (timerInput: TimerInput) => void;
+    onEditTimer: (id: string, timerInput: TimerInput) => void;
+    onDeleteTimer: (id: string) => void;
+    canDeleteTimer: boolean;
 }
 
 export default function PickTimerDialog({
     timers,
     selectedTimer,
     onSelectTimer,
+    onAddTimer,
+    onEditTimer,
+    onDeleteTimer,
+    canDeleteTimer,
 }: Props) {
     return (
         <Dialog>
@@ -38,7 +46,7 @@ export default function PickTimerDialog({
                     <DialogDescription></DialogDescription>
                 </DialogHeader>
 
-                <SetTimerDialog mode="add" />
+                <SetTimerDialog mode="add" onTimerSubmit={onAddTimer} />
 
                 {timers.map((timer) => (
                     <TimerCard
@@ -46,6 +54,9 @@ export default function PickTimerDialog({
                         timer={timer}
                         selected={selectedTimer?.id === timer.id}
                         onClick={() => onSelectTimer(timer)}
+                        onEditTimer={onEditTimer}
+                        onDeleteTimer={onDeleteTimer}
+                        canDeleteTimer={canDeleteTimer}
                     />
                 ))}
             </DialogContent>

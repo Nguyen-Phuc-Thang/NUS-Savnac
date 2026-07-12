@@ -14,18 +14,20 @@ interface TimerState {
 const useTimer = (selectedTimer: TimerConfig) => {
     const [timerState, setTimerState] = useState<TimerState>({
         mode: 'focus',
-        timeLeft: selectedTimer.focusTime * 60,
+        timeLeft: selectedTimer.focusTime,
         sessions: 0,
     });
     const [isActive, setIsActive] = useState(false);
 
     const resetTimer = () => {
         setIsActive(false);
-        setTimerState(() => {
+        setTimerState((prev) => {
             return {
-                mode: 'focus',
-                timeLeft: selectedTimer.focusTime * 60,
-                sessions: 0,
+                ...prev,
+                timeLeft:
+                    prev.mode === 'focus'
+                        ? selectedTimer.focusTime
+                        : selectedTimer.breakTime,
             };
         });
     };
@@ -40,8 +42,8 @@ const useTimer = (selectedTimer: TimerConfig) => {
                 mode: nextMode,
                 timeLeft:
                     nextMode === 'focus'
-                        ? selectedTimer.focusTime * 60
-                        : selectedTimer.breakTime * 60,
+                        ? selectedTimer.focusTime
+                        : selectedTimer.breakTime,
                 sessions:
                     nextMode === 'break' ? prev.sessions + 1 : prev.sessions,
             };
@@ -62,8 +64,8 @@ const useTimer = (selectedTimer: TimerConfig) => {
                         mode: nextMode,
                         timeLeft:
                             nextMode === 'focus'
-                                ? selectedTimer.focusTime * 60
-                                : selectedTimer.breakTime * 60,
+                                ? selectedTimer.focusTime
+                                : selectedTimer.breakTime,
                         sessions:
                             nextMode === 'break'
                                 ? prev.sessions + 1
