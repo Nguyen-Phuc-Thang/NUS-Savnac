@@ -18,7 +18,23 @@ const Pomodoro = () => {
     const [selectedTimer, setSelectedTimer] =
         useState<TimerConfig>(defaultTimer);
 
+    const isInvalidTimerInput = (input: TimerInput) => {
+        return (
+            input.name.trim().length === 0 ||
+            input.focusSeconds < 0 ||
+            input.focusSeconds > 59 ||
+            input.breakSeconds < 0 ||
+            input.breakSeconds > 59 ||
+            input.focusMinutes * 60 + input.focusSeconds === 0 ||
+            input.breakMinutes * 60 + input.breakSeconds === 0
+        );
+    };
+
     const handleAddTimer = (input: TimerInput) => {
+        if (isInvalidTimerInput(input)) {
+            return;
+        }
+
         const newTimer: TimerConfig = {
             id: crypto.randomUUID(),
             name: input.name,
@@ -29,6 +45,10 @@ const Pomodoro = () => {
     };
 
     const handleEditTimer = (id: string, input: TimerInput) => {
+        if (isInvalidTimerInput(input)) {
+            return;
+        }
+
         const updatedTimer = {
             name: input.name,
             focusTime: input.focusMinutes * 60 + input.focusSeconds,
@@ -41,7 +61,7 @@ const Pomodoro = () => {
             ),
         );
 
-        // To ensure the timer updates after modifying
+        // To ensure the selected timer updates after modifying
         if (selectedTimer.id === id) {
             setSelectedTimer((prev) => ({
                 ...prev,
