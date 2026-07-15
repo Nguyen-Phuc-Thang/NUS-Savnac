@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   ValidationPipe,
 } from '@nestjs/common';
 import { PomodoroService } from './pomodoro.service';
@@ -17,30 +18,34 @@ export class PomodoroController {
   constructor(private readonly pomodoroService: PomodoroService) {}
 
   @Get()
-  findAll() {
-    return this.pomodoroService.findAll();
+  findAll(@Query('userId') userId: string) {
+    return this.pomodoroService.findAll(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.pomodoroService.findOne(id);
+  findOne(@Param('id') id: string, @Query('userId') userId: string) {
+    return this.pomodoroService.findOne(id, userId);
   }
 
   @Post()
-  create(@Body(ValidationPipe) createPomodoroDto: CreatePomodoroDto) {
-    return this.pomodoroService.create(createPomodoroDto);
+  create(
+    @Query('userId') userId: string,
+    @Body(ValidationPipe) createPomodoroDto: CreatePomodoroDto,
+  ) {
+    return this.pomodoroService.create(userId, createPomodoroDto);
   }
 
   @Patch(':id')
   update(
     @Param('id') id: string,
+    @Query('userId') userId: string,
     @Body() updatePomodoroDto: UpdatePomodoroDto,
   ) {
-    return this.pomodoroService.update(id, updatePomodoroDto);
+    return this.pomodoroService.update(id, userId, updatePomodoroDto);
   }
 
   @Delete(':id')
-  delete(@Param('id') id: string) {
-    return this.pomodoroService.delete(id);
+  delete(@Param('id') id: string, @Query('userId') userId: string) {
+    return this.pomodoroService.delete(id, userId);
   }
 }

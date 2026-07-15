@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsString, IsUUID, Min } from 'class-validator';
+import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator';
 
 export default class CreatePomodoroDto {
   @IsString()
@@ -12,9 +12,4 @@ export default class CreatePomodoroDto {
   @IsInt()
   @Min(1)
   breakTime!: number;
-
-  @IsNotEmpty()
-  @IsString()
-  @IsUUID()
-  userId!: string;
 }

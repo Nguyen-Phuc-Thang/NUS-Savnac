@@ -5,23 +5,29 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class PomodoroService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async findAll() {
-    return this.prisma.client.pomodoro.findMany();
-  }
-
-  async findOne(id: string) {
-    return this.prisma.client.pomodoro.findUnique({
+  async findAll(userId: string) {
+    return this.prisma.client.pomodoro.findMany({
       where: {
-        pomodoroId: id,
+        userId,
       },
     });
   }
 
-  async create(createPomodoroDto: CreatePomodoroDto) {
+  async findOne(id: string, userId: string) {
+    return this.prisma.client.pomodoro.findFirst({
+      where: {
+        pomodoroId: id,
+        userId,
+      },
+    });
+  }
+
+  async create(userId: string, createPomodoroDto: CreatePomodoroDto) {
     return this.prisma.client.pomodoro.create({
       data: {
+        userId,
         name: createPomodoroDto.name,
         focusTime: createPomodoroDto.focusTime,
         breakTime: createPomodoroDto.breakTime,
@@ -29,19 +35,25 @@ export class PomodoroService {
     });
   }
 
-  async update(id: string, updatePomodoroDto: UpdatePomodoroDto) {
-    return this.prisma.client.pomodoro.update({
+  async update(
+    id: string,
+    userId: string,
+    updatePomodoroDto: UpdatePomodoroDto,
+  ) {
+    return this.prisma.client.pomodoro.updateMany({
       where: {
         pomodoroId: id,
+        userId,
       },
       data: updatePomodoroDto,
     });
   }
 
-  async delete(id: string) {
-    return this.prisma.client.pomodoro.delete({
+  async delete(id: string, userId: string) {
+    return this.prisma.client.pomodoro.deleteMany({
       where: {
         pomodoroId: id,
+        userId,
       },
     });
   }
