@@ -8,13 +8,28 @@ export class PomodoroService {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(userId: string) {
-    return this.prisma.client.pomodoro.findMany({
+    let timers = await this.prisma.client.pomodoro.findMany({
       where: {
         userId,
       },
     });
-  }
 
+    // This ensures that user always have at least one pomodoro
+    if (timers.length === 0) {
+      const defaultTimer = await this.prisma.client.pomodoro.create({
+        data: {
+          userId,
+          name: 'Default',
+          focusTime: 25 * 60,
+          breakTime: 5 * 60,
+        },
+      });
+
+      timers = [defaultTimer];
+    }
+
+    return timers;
+  }
   async findOne(id: string, userId: string) {
     return this.prisma.client.pomodoro.findFirst({
       where: {

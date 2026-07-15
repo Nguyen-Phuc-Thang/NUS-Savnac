@@ -63,7 +63,7 @@ const TimerCard = ({
                             mode="edit"
                             timer={timer}
                             onTimerSubmit={(input) =>
-                                onEditTimer(timer.id, input)
+                                onEditTimer(timer.pomodoroId, input)
                             }
                         />
                         <AlertDialog>
@@ -96,7 +96,9 @@ const TimerCard = ({
                                     </AlertDialogCancel>
 
                                     <AlertDialogAction
-                                        onClick={() => onDeleteTimer(timer.id)}
+                                        onClick={() =>
+                                            onDeleteTimer(timer.pomodoroId)
+                                        }
                                     >
                                         Delete
                                     </AlertDialogAction>

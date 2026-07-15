@@ -64,7 +64,7 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-sm">
+            <DialogContent className="sm:max-w-sm" onClick={(e) => e.stopPropagation()}>
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();

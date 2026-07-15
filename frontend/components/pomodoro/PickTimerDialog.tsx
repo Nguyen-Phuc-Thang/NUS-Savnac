@@ -13,7 +13,7 @@ import { TimerConfig, TimerInput } from '@/types/timer';
 
 interface Props {
     timers: TimerConfig[];
-    selectedTimer: TimerConfig;
+    selectedTimer: TimerConfig | undefined;
     onSelectTimer: (timer: TimerConfig) => void;
     onAddTimer: (timerInput: TimerInput) => void;
     onEditTimer: (id: string, timerInput: TimerInput) => void;
@@ -50,9 +50,11 @@ export default function PickTimerDialog({
 
                 {timers.map((timer) => (
                     <TimerCard
-                        key={timer.id}
+                        key={timer.pomodoroId}
                         timer={timer}
-                        selected={selectedTimer?.id === timer.id}
+                        selected={
+                            selectedTimer?.pomodoroId === timer.pomodoroId
+                        }
                         onClick={() => onSelectTimer(timer)}
                         onEditTimer={onEditTimer}
                         onDeleteTimer={onDeleteTimer}

@@ -1,5 +1,5 @@
 export interface TimerConfig {
-    id: string;
+    pomodoroId: string;
     name: string;
     focusTime: number;
     breakTime: number;
