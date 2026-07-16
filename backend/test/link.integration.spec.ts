@@ -51,6 +51,10 @@ describe('Link Integration Tests', () => {
     );
   });
 
+  afterAll(async () => {
+    await app.close();
+  });
+
   // ==== Helper Functions ====
   const cleanDatabase = async () => {
     await prisma.client.link.deleteMany();
