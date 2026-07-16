@@ -6,6 +6,16 @@ node_modules/
 .env.local
 .env*.local
 
+# Python virtual environment
+agent/.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables
+agent/.env
+
 # Build outputs
 .next/
 dist/
