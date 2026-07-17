@@ -12,6 +12,8 @@ const Pomodoro = () => {
 
     const [timers, setTimers] = useState<TimerConfig[]>([]);
     const [selectedTimer, setSelectedTimer] = useState<TimerConfig>();
+    const [incompleteTasks, setIncompleteTasks] = useState<any[]>([]);
+    const [selectedTask, setSelectedTask] = useState<any>();
 
     useEffect(() => {
         if (!userId) return;
@@ -26,6 +28,18 @@ const Pomodoro = () => {
             }
         };
         fetchTimers();
+    }, [userId]);
+
+    useEffect(() => {
+        if (!userId) return;
+        const fetchIncompleteTasks = async () => {
+            const response = await fetch(
+                `${process.env.NEXT_PUBLIC_API_URL}/task/get-uncompleted-tasks-by-user?userId=${userId}`,
+            );
+            const data = await response.json();
+            setIncompleteTasks(data);
+        };
+        fetchIncompleteTasks();
     }, [userId]);
 
     const isInvalidTimerInput = (input: TimerInput) => {
@@ -125,6 +139,11 @@ const Pomodoro = () => {
         });
     };
 
+    const handleSelectTimer = (timer: TimerConfig) => {
+        setSelectedTimer(timer);
+        setSelectedTask(undefined);
+    };
+
     // This ensures the selected timer get update on UI
     // However this doesnt keep previous running timer state
     const timerKey = `${selectedTimer?.pomodoroId}-${selectedTimer?.focusTime}-${selectedTimer?.breakTime}`;
@@ -138,7 +157,7 @@ const Pomodoro = () => {
             <PickTimerDialog
                 timers={timers}
                 selectedTimer={selectedTimer}
-                onSelectTimer={setSelectedTimer}
+                onSelectTimer={handleSelectTimer}
                 onAddTimer={handleAddTimer}
                 onEditTimer={handleEditTimer}
                 onDeleteTimer={handleDeleteTimer}
@@ -146,7 +165,13 @@ const Pomodoro = () => {
             />
 
             {selectedTimer && (
-                <Timer key={timerKey} selectedTimer={selectedTimer} />
+                <Timer
+                    key={timerKey}
+                    selectedTimer={selectedTimer}
+                    incompleteTasks={incompleteTasks}
+                    selectedTask={selectedTask}
+                    onSelectTask={setSelectedTask}
+                />
             )}
         </div>
     );

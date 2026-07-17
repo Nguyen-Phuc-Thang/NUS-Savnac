@@ -2,12 +2,21 @@
 import { Button } from '@/components/ui/button';
 import useTimer from '@/hooks/use-timer';
 import { TimerConfig } from '@/types/timer';
+import PickTaskDialog from './PickTaskDialog';
 
 interface Props {
     selectedTimer: TimerConfig;
+    incompleteTasks: any[];
+    selectedTask: any | undefined;
+    onSelectTask: (task: any | undefined) => void;
 }
 
-const Timer = ({ selectedTimer }: Props) => {
+const Timer = ({
+    selectedTimer,
+    incompleteTasks,
+    selectedTask,
+    onSelectTask,
+}: Props) => {
     const {
         mode,
         timeLeft,
@@ -32,6 +41,14 @@ const Timer = ({ selectedTimer }: Props) => {
                 <div className="text-sm text-gray-500">
                     Sessions: {sessions}
                 </div>
+            </div>
+
+            <div className="flex justify-center mb-4">
+                <PickTaskDialog
+                    incompleteTasks={incompleteTasks}
+                    selectedTask={selectedTask}
+                    onSelectTask={onSelectTask}
+                />
             </div>
 
             <div

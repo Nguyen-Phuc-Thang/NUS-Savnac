@@ -2,7 +2,6 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -43,7 +42,6 @@ export default function PickTimerDialog({
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
                     <DialogTitle>Pick Your Timer</DialogTitle>
-                    <DialogDescription></DialogDescription>
                 </DialogHeader>
 
                 <SetTimerDialog mode="add" onTimerSubmit={onAddTimer} />
