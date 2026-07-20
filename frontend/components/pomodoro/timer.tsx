@@ -5,6 +5,7 @@ import { TimerConfig } from '@/types/timer';
 import PickTaskDialog from './PickTaskDialog';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import { motion } from 'framer-motion';
 
 interface Props {
     selectedTimer: TimerConfig;
@@ -67,25 +68,40 @@ const Timer = ({
             </div>
 
             <div className="flex justify-center space-x-4 mt-4 mb-4">
-                <Button
-                    onClick={toggleTimer}
-                    className="w-32 h-12 text-lg"
-                    size="lg"
-                    variant="secondary"
+                <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
-                    {isActive ? 'Pause' : 'Start'}
-                </Button>
-                <Button
-                    onClick={resetTimer}
-                    className="w-32 h-12 text-lg"
-                    size="lg"
-                    variant="destructive"
+                    <Button
+                        onClick={toggleTimer}
+                        className="w-32 h-12 text-lg"
+                        size="lg"
+                        variant="secondary"
+                    >
+                        {isActive ? 'Pause' : 'Start'}
+                    </Button>
+                </motion.div>
+
+                <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                 >
-                    Reset
-                </Button>
+                    <Button
+                        onClick={resetTimer}
+                        className="w-32 h-12 text-lg"
+                        size="lg"
+                        variant="destructive"
+                    >
+                        Reset
+                    </Button>
+                </motion.div>
             </div>
 
-            <div className="flex justify-center space-x-4 mb-4 py-2">
+            <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex justify-center space-x-4 mb-4 py-2"
+            >
                 <Button
                     onClick={switchMode}
                     className="w-full text-lg"
@@ -94,7 +110,7 @@ const Timer = ({
                 >
                     Switch to {mode === 'focus' ? 'Break' : 'Focus'}
                 </Button>
-            </div>
+            </motion.div>
         </div>
     );
 };

@@ -53,7 +53,9 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
         <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 {mode === 'add' ? (
-                    <Button className="text-lg">Add Timer</Button>
+                    <Button className="text-lg transition-transform">
+                        Add Timer
+                    </Button>
                 ) : (
                     <Button
                         variant="ghost"

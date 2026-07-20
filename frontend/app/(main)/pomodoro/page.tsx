@@ -5,6 +5,8 @@ import PickTimerDialog from '@/components/pomodoro/PickTimerDialog';
 import { TimerConfig, TimerInput } from '@/types/timer';
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
+import TimerSkeleton from '@/components/pomodoro/TimerSkeleton';
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Pomodoro = () => {
     const { data: session } = useSession();
@@ -15,9 +17,13 @@ const Pomodoro = () => {
     const [incompleteTasks, setIncompleteTasks] = useState<any[]>([]);
     const [selectedTask, setSelectedTask] = useState<any>();
 
+    const [timerLoading, setTimerLoading] = useState(true);
+
     useEffect(() => {
         if (!userId) return;
         const fetchTimers = async () => {
+            setTimerLoading(true);
+
             const response = await fetch(
                 `${process.env.NEXT_PUBLIC_API_URL}/pomodoro?userId=${userId}`,
             );
@@ -26,6 +32,8 @@ const Pomodoro = () => {
             if (data.length > 0) {
                 setSelectedTimer(data[0]);
             }
+
+            setTimerLoading(false);
         };
         fetchTimers();
     }, [userId]);
@@ -164,15 +172,36 @@ const Pomodoro = () => {
                 canDeleteTimer={timers.length > 1}
             />
 
-            {selectedTimer && (
-                <Timer
-                    key={timerKey}
-                    selectedTimer={selectedTimer}
-                    incompleteTasks={incompleteTasks}
-                    selectedTask={selectedTask}
-                    onSelectTask={setSelectedTask}
-                />
-            )}
+            <AnimatePresence mode="wait">
+                {timerLoading ? (
+                    <motion.div
+                        className="w-full max-w-md"
+                        key="skeleton"
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                    >
+                        <TimerSkeleton />
+                    </motion.div>
+                ) : (
+                    selectedTimer && (
+                        <motion.div
+                            className="w-full max-w-md"
+                            key="timer"
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                        >
+                            <Timer
+                                key={timerKey}
+                                selectedTimer={selectedTimer}
+                                incompleteTasks={incompleteTasks}
+                                selectedTask={selectedTask}
+                                onSelectTask={setSelectedTask}
+                            />
+                        </motion.div>
+                    )
+                )}
+            </AnimatePresence>
         </div>
     );
 };

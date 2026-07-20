@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dialog';
 import { X } from 'lucide-react';
 import { useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface Props {
     incompleteTasks: any[];
@@ -27,16 +28,19 @@ export default function PickTaskDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <div className="flex">
-                <DialogTrigger asChild>
-                    <Button
-                        variant={selectedTask ? 'default' : 'outline'}
-                        className="text-xl"
-                    >
-                        {selectedTask
-                            ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
-                            : 'Select Your Task'}
-                    </Button>
-                </DialogTrigger>
+                <motion.div whileHover={{ scale: 1.05 }}>
+                    <DialogTrigger asChild>
+                        <Button
+                            variant={selectedTask ? 'default' : 'outline'}
+                            className="text-xl"
+                        >
+                            {selectedTask
+                                ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
+                                : 'Select Your Task'}
+                        </Button>
+                    </DialogTrigger>
+                </motion.div>
+
                 {selectedTask && (
                     <Button
                         variant="ghost"
@@ -49,7 +53,9 @@ export default function PickTaskDialog({
             </div>
             <DialogContent className="sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle className="text-xl">Select Your Task</DialogTitle>
+                    <DialogTitle className="text-xl">
+                        Select Your Task
+                    </DialogTitle>
                     <DialogDescription className="text-base">
                         Choose a task to focus on during this session.
                     </DialogDescription>

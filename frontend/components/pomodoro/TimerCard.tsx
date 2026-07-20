@@ -14,6 +14,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { motion } from 'framer-motion';
 
 const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -42,80 +43,91 @@ const TimerCard = ({
     canDeleteTimer,
 }: Props) => {
     return (
-        <Card
-            className={`cursor-pointer transition hover:shadow-md ${
-                selected && 'border-primary border-2'
-            }`}
-            onClick={onClick}
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
         >
-            <CardContent className="">
-                {/**Top Row */}
-                <div className="flex justify-between">
-                    {/**Top Left */}
-                    <div className="flex items-center gap-1">
-                        {selected && <Check />}
-                        <h1 className="font-bold text-xl">{timer.name}</h1>
-                    </div>
+            <Card
+                className={`cursor-pointer transition hover:shadow-md ${
+                    selected && 'border-primary border-2'
+                }`}
+                onClick={onClick}
+            >
+                <CardContent className="">
+                    {/**Top Row */}
+                    <div className="flex justify-between">
+                        {/**Top Left */}
+                        <div className="flex items-center gap-1">
+                            {selected && <Check />}
+                            <h1 className="font-bold text-xl">{timer.name}</h1>
+                        </div>
 
-                    {/**Top Right */}
-                    <div className="flex items-center gap-0.5">
-                        <SetTimerDialog
-                            mode="edit"
-                            timer={timer}
-                            onTimerSubmit={(input) =>
-                                onEditTimer(timer.pomodoroId, input)
-                            }
-                        />
-                        <AlertDialog>
-                            <AlertDialogTrigger asChild>
-                                <Button
-                                    variant="ghost"
-                                    size="icon"
-                                    disabled={!canDeleteTimer}
-                                    className="h-8 w-8"
-                                    onClick={(e) => e.stopPropagation()}
-                                >
-                                    <Trash2 className="h-4 w-4" />
-                                </Button>
-                            </AlertDialogTrigger>
-
-                            <AlertDialogContent>
-                                <AlertDialogHeader>
-                                    <AlertDialogTitle>
-                                        Delete Timer?
-                                    </AlertDialogTitle>
-
-                                    <AlertDialogDescription>
-                                        This action cannot be undone. This will
-                                        permanently delete this timer.
-                                    </AlertDialogDescription>
-                                </AlertDialogHeader>
-
-                                <AlertDialogFooter>
-                                    <AlertDialogCancel>
-                                        Cancel
-                                    </AlertDialogCancel>
-
-                                    <AlertDialogAction
-                                        onClick={() =>
-                                            onDeleteTimer(timer.pomodoroId)
-                                        }
+                        {/**Top Right */}
+                        <div className="flex items-center gap-0.5">
+                            <SetTimerDialog
+                                mode="edit"
+                                timer={timer}
+                                onTimerSubmit={(input) =>
+                                    onEditTimer(timer.pomodoroId, input)
+                                }
+                            />
+                            <AlertDialog>
+                                <AlertDialogTrigger asChild>
+                                    <Button
+                                        variant="ghost"
+                                        size="icon"
+                                        disabled={!canDeleteTimer}
+                                        className="h-8 w-8"
+                                        onClick={(e) => e.stopPropagation()}
                                     >
-                                        Delete
-                                    </AlertDialogAction>
-                                </AlertDialogFooter>
-                            </AlertDialogContent>
-                        </AlertDialog>
-                    </div>
-                </div>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </AlertDialogTrigger>
 
-                {/**Bottom Row */}
-                <div className="flex gap-4">
-                    <span className="text-base">Focus: {formatTime(timer.focusTime)}</span>
-                    <span className="text-base">Break: {formatTime(timer.breakTime)}</span>
-                </div>
-            </CardContent>
-        </Card>
+                                <AlertDialogContent>
+                                    <AlertDialogHeader>
+                                        <AlertDialogTitle>
+                                            Delete Timer?
+                                        </AlertDialogTitle>
+
+                                        <AlertDialogDescription>
+                                            This action cannot be undone. This
+                                            will permanently delete this timer.
+                                        </AlertDialogDescription>
+                                    </AlertDialogHeader>
+
+                                    <AlertDialogFooter>
+                                        <AlertDialogCancel>
+                                            Cancel
+                                        </AlertDialogCancel>
+
+                                        <AlertDialogAction
+                                            onClick={() =>
+                                                onDeleteTimer(timer.pomodoroId)
+                                            }
+                                        >
+                                            Delete
+                                        </AlertDialogAction>
+                                    </AlertDialogFooter>
+                                </AlertDialogContent>
+                            </AlertDialog>
+                        </div>
+                    </div>
+
+                    {/**Bottom Row */}
+                    <div className="flex gap-4">
+                        <span className="text-base">
+                            Focus: {formatTime(timer.focusTime)}
+                        </span>
+                        <span className="text-base">
+                            Break: {formatTime(timer.breakTime)}
+                        </span>
+                    </div>
+                </CardContent>
+            </Card>
+        </motion.div>
     );
 };
 

@@ -9,6 +9,7 @@ import {
 import SetTimerDialog from './SetTimerDialog';
 import TimerCard from './TimerCard';
 import { TimerConfig, TimerInput } from '@/types/timer';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface Props {
     timers: TimerConfig[];
@@ -31,34 +32,41 @@ export default function PickTimerDialog({
 }: Props) {
     return (
         <Dialog>
-            <DialogTrigger asChild>
-                <Button
-                    variant="outline"
-                    className="h-11 px-5 rounded-xl text-lg"
-                >
-                    Pick Timer
-                </Button>
-            </DialogTrigger>
+            <motion.div whileHover={{ scale: 1.05 }}>
+                <DialogTrigger asChild>
+                    <Button
+                        variant="outline"
+                        className="h-11 px-5 rounded-xl text-lg"
+                    >
+                        Pick Timer
+                    </Button>
+                </DialogTrigger>
+            </motion.div>
+
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
-                    <DialogTitle className="text-xl">Pick Your Timer</DialogTitle>
+                    <DialogTitle className="text-xl">
+                        Pick Your Timer
+                    </DialogTitle>
                 </DialogHeader>
 
                 <SetTimerDialog mode="add" onTimerSubmit={onAddTimer} />
 
-                {timers.map((timer) => (
-                    <TimerCard
-                        key={timer.pomodoroId}
-                        timer={timer}
-                        selected={
-                            selectedTimer?.pomodoroId === timer.pomodoroId
-                        }
-                        onClick={() => onSelectTimer(timer)}
-                        onEditTimer={onEditTimer}
-                        onDeleteTimer={onDeleteTimer}
-                        canDeleteTimer={canDeleteTimer}
-                    />
-                ))}
+                <AnimatePresence>
+                    {timers.map((timer) => (
+                        <TimerCard
+                            key={timer.pomodoroId}
+                            timer={timer}
+                            selected={
+                                selectedTimer?.pomodoroId === timer.pomodoroId
+                            }
+                            onClick={() => onSelectTimer(timer)}
+                            onEditTimer={onEditTimer}
+                            onDeleteTimer={onDeleteTimer}
+                            canDeleteTimer={canDeleteTimer}
+                        />
+                    ))}
+                </AnimatePresence>
             </DialogContent>
         </Dialog>
     );
