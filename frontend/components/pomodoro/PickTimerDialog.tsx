@@ -34,14 +34,14 @@ export default function PickTimerDialog({
             <DialogTrigger asChild>
                 <Button
                     variant="outline"
-                    className="h-11 px-5 rounded-xl text-sm font-medium"
+                    className="h-11 px-5 rounded-xl text-lg"
                 >
                     Pick Timer
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
-                    <DialogTitle>Pick Your Timer</DialogTitle>
+                    <DialogTitle className="text-xl">Pick Your Timer</DialogTitle>
                 </DialogHeader>
 
                 <SetTimerDialog mode="add" onTimerSubmit={onAddTimer} />

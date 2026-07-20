@@ -1,6 +1,7 @@
 'use client';
 
 import { TimerConfig } from '@/types/timer';
+import { number } from 'framer-motion';
 import { useEffect, useState } from 'react';
 
 type TimerMode = 'focus' | 'break';
@@ -18,6 +19,11 @@ const useTimer = (selectedTimer: TimerConfig) => {
         sessions: 0,
     });
     const [isActive, setIsActive] = useState(false);
+
+    const progress =
+        timerState.mode === 'focus'
+            ? timerState.timeLeft / selectedTimer.focusTime * 100
+            : timerState.timeLeft / selectedTimer.breakTime * 100;
 
     const resetTimer = () => {
         setIsActive(false);
@@ -85,6 +91,7 @@ const useTimer = (selectedTimer: TimerConfig) => {
     }, [isActive, selectedTimer]);
 
     return {
+        progress,
         mode: timerState.mode,
         timeLeft: timerState.timeLeft,
         sessions: timerState.sessions,

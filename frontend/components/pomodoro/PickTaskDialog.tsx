@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
     Dialog,
     DialogContent,
+    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
@@ -27,7 +28,10 @@ export default function PickTaskDialog({
         <Dialog open={open} onOpenChange={setOpen}>
             <div className="flex">
                 <DialogTrigger asChild>
-                    <Button variant={selectedTask ? 'default' : 'outline'}>
+                    <Button
+                        variant={selectedTask ? 'default' : 'outline'}
+                        className="text-xl"
+                    >
                         {selectedTask
                             ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
                             : 'Select Your Task'}
@@ -45,9 +49,12 @@ export default function PickTaskDialog({
             </div>
             <DialogContent className="sm:max-w-xl">
                 <DialogHeader>
-                    <DialogTitle>Select Your Task</DialogTitle>
+                    <DialogTitle className="text-xl">Select Your Task</DialogTitle>
+                    <DialogDescription className="text-base">
+                        Choose a task to focus on during this session.
+                    </DialogDescription>
                 </DialogHeader>
-                <div className="h-[60vh] overflow-y-auto mt-4">
+                <div className="max-h-[60vh] overflow-y-auto space-y-3 pr-2">
                     {incompleteTasks.map((task) => (
                         <div key={task.taskId}>
                             <Button
@@ -56,7 +63,7 @@ export default function PickTaskDialog({
                                         ? 'default'
                                         : 'outline'
                                 }
-                                className="p-4 w-full justify-start"
+                                className="p-4 w-full justify-start text-lg"
                                 onClick={() => {
                                     onSelectTask(task);
                                     setOpen(false);

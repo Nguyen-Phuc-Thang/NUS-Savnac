@@ -53,18 +53,22 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
         <Dialog open={isDialogOpen} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
                 {mode === 'add' ? (
-                    <Button>Add Timer</Button>
+                    <Button className="text-lg">Add Timer</Button>
                 ) : (
                     <Button
                         variant="ghost"
                         size="icon"
+                        className="h-8 w-8"
                         onClick={(e) => e.stopPropagation()}
                     >
                         <Pencil className="h-4 w-4" />
                     </Button>
                 )}
             </DialogTrigger>
-            <DialogContent className="sm:max-w-sm" onClick={(e) => e.stopPropagation()}>
+            <DialogContent
+                className="sm:max-w-sm"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <form
                     onSubmit={(e) => {
                         e.preventDefault();
@@ -73,13 +77,15 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
                     }}
                 >
                     <DialogHeader>
-                        <DialogTitle className="pb-2">
+                        <DialogTitle className="pb-2 text-xl">
                             {mode == 'add' ? 'Add' : 'Edit'} Timer
                         </DialogTitle>
                     </DialogHeader>
                     <FieldGroup>
                         <Field>
-                            <Label htmlFor="name">Name</Label>
+                            <Label htmlFor="name" className="text-lg">
+                                Name
+                            </Label>
                             <Input
                                 required
                                 id="name"
@@ -96,7 +102,10 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
 
                         <div className="flex gap-4">
                             <Field className="flex-1">
-                                <Label htmlFor="focus-minutes">
+                                <Label
+                                    htmlFor="focus-minutes"
+                                    className="text-lg"
+                                >
                                     Focus Time
                                 </Label>
 
@@ -146,7 +155,10 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
                             </Field>
 
                             <Field className="flex-1">
-                                <Label htmlFor="break-minutes">
+                                <Label
+                                    htmlFor="break-minutes"
+                                    className="text-lg"
+                                >
                                     Break Time
                                 </Label>
 

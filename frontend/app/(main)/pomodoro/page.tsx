@@ -149,8 +149,8 @@ const Pomodoro = () => {
     const timerKey = `${selectedTimer?.pomodoroId}-${selectedTimer?.focusTime}-${selectedTimer?.breakTime}`;
 
     return (
-        <div className="flex flex-col width-full min-h-screen gap-4 ml-6 mt-6 items-center">
-            <h1 className="text-3xl font-bold mb-4 text-gray-800">
+        <div className="flex flex-col width-full min-h-screen gap-4 ml-6 items-center">
+            <h1 className="text-3xl font-bold mb-2 text-gray-800">
                 Pomodoro Timer
             </h1>
 

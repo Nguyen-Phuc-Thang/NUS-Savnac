@@ -19,9 +19,9 @@ const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
     if (seconds === 0) {
-        return `${minutes} min`;
+        return `${minutes}m`;
     }
-    return `${minutes} min ${seconds} sec`;
+    return `${minutes}m ${seconds}s`;
 };
 
 interface Props {
@@ -48,11 +48,11 @@ const TimerCard = ({
             }`}
             onClick={onClick}
         >
-            <CardContent className="py-0.5">
+            <CardContent className="">
                 {/**Top Row */}
                 <div className="flex justify-between">
                     {/**Top Left */}
-                    <div className="flex items-center gap-0.5">
+                    <div className="flex items-center gap-1">
                         {selected && <Check />}
                         <h1 className="font-bold text-xl">{timer.name}</h1>
                     </div>
@@ -72,6 +72,7 @@ const TimerCard = ({
                                     variant="ghost"
                                     size="icon"
                                     disabled={!canDeleteTimer}
+                                    className="h-8 w-8"
                                     onClick={(e) => e.stopPropagation()}
                                 >
                                     <Trash2 className="h-4 w-4" />
@@ -110,8 +111,8 @@ const TimerCard = ({
 
                 {/**Bottom Row */}
                 <div className="flex gap-4">
-                    <span>Focus: {formatTime(timer.focusTime)}</span>
-                    <span>Break: {formatTime(timer.breakTime)}</span>
+                    <span className="text-base">Focus: {formatTime(timer.focusTime)}</span>
+                    <span className="text-base">Break: {formatTime(timer.breakTime)}</span>
                 </div>
             </CardContent>
         </Card>
