@@ -31,8 +31,12 @@ export default function PickTaskDialog({
                 <motion.div whileHover={{ scale: 1.05 }}>
                     <DialogTrigger asChild>
                         <Button
-                            variant={selectedTask ? 'default' : 'outline'}
-                            className="text-xl"
+                            variant="outline"
+                            className={`text-xl ${
+                                selectedTask
+                                    ? 'border-primary bg-primary/5'
+                                    : ''
+                            }`}
                         >
                             {selectedTask
                                 ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
@@ -62,7 +66,10 @@ export default function PickTaskDialog({
                 </DialogHeader>
                 <div className="max-h-[60vh] overflow-y-auto space-y-3 pr-2">
                     {incompleteTasks.map((task) => (
-                        <div key={task.taskId}>
+                        <motion.div
+                            whileHover={{ scale: 1.02 }}
+                            key={task.taskId}
+                        >
                             <Button
                                 variant={
                                     selectedTask?.taskId === task.taskId
@@ -78,7 +85,7 @@ export default function PickTaskDialog({
                                 {task.course?.courseCode ?? 'Other'} -{' '}
                                 {task.name}
                             </Button>
-                        </div>
+                        </motion.div>
                     ))}
                 </div>
             </DialogContent>

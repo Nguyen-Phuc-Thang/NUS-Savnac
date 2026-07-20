@@ -39,9 +39,16 @@ const Timer = ({
     return (
         <div className="max-w-md bg-white shadow-xl w-full p-8 rounded-xl">
             <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-medium capitalize">
+                <motion.h2
+                    key={mode}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="text-2xl font-medium"
+                >
                     {mode === 'focus' ? 'Focus Time' : 'Break Time'}
-                </h2>
+                </motion.h2>
+
                 <div className="text-md text-gray-500">
                     Sessions: {sessions}
                 </div>
@@ -55,7 +62,12 @@ const Timer = ({
                 />
             </div>
 
-            <div className="w-72 h-72 mx-auto mb-8">
+            <motion.div
+                animate={{
+                    scale: isActive ? 1.025 : 1,
+                }}
+                className="w-72 h-72 mx-auto mb-8"
+            >
                 <CircularProgressbar
                     value={progress}
                     text={formattedTime}
@@ -65,7 +77,7 @@ const Timer = ({
                         textColor: '#111827',
                     })}
                 />
-            </div>
+            </motion.div>
 
             <div className="flex justify-center space-x-4 mt-4 mb-4">
                 <motion.div
