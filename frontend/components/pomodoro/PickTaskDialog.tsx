@@ -28,19 +28,26 @@ export default function PickTaskDialog({
     return (
         <Dialog open={open} onOpenChange={setOpen}>
             <div className="flex">
-                <motion.div whileHover={{ scale: 1.05 }}>
+                <motion.div whileHover={{ scale: 1.025 }}>
                     <DialogTrigger asChild>
                         <Button
                             variant="outline"
-                            className={`text-xl ${
+                            className={`text-xl w-96 ${
                                 selectedTask
                                     ? 'border-primary bg-primary/5'
                                     : ''
                             }`}
+                            title={
+                                selectedTask
+                                    ? `Selected Task: ${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
+                                    : 'Select Your Task'
+                            }
                         >
-                            {selectedTask
-                                ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
-                                : 'Select Your Task'}
+                            <span className="truncate">
+                                {selectedTask
+                                    ? `${selectedTask.course?.courseCode ?? 'Other'} - ${selectedTask.name}`
+                                    : 'Select Your Task'}
+                            </span>
                         </Button>
                     </DialogTrigger>
                 </motion.div>

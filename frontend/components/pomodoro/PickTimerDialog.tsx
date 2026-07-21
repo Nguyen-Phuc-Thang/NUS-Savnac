@@ -36,14 +36,23 @@ export default function PickTimerDialog({
                 <DialogTrigger asChild>
                     <Button
                         variant="outline"
-                        className="h-11 px-5 rounded-xl text-lg"
+                        className={`text-xl w-96 ${
+                            selectedTimer ? 'border-primary bg-primary/5' : ''
+                        }`}
+                        title={
+                            selectedTimer
+                                ? `Selected timer: ${selectedTimer.name}`
+                                : 'Select a timer'
+                        }
                     >
-                        Pick Timer
+                        <span className="truncate">
+                            {selectedTimer ? selectedTimer.name : 'Pick Timer'}
+                        </span>
                     </Button>
                 </DialogTrigger>
             </motion.div>
 
-            <DialogContent className="sm:max-w-sm">
+            <DialogContent className="sm:max-w-lg overflow-hidden">
                 <DialogHeader>
                     <DialogTitle className="text-xl">
                         Pick Your Timer

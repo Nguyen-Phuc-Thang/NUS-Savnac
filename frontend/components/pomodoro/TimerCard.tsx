@@ -44,6 +44,7 @@ const TimerCard = ({
 }: Props) => {
     return (
         <motion.div
+            className="w-full min-w-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -52,22 +53,24 @@ const TimerCard = ({
             transition={{ duration: 0.2 }}
         >
             <Card
-                className={`cursor-pointer transition hover:shadow-md ${
+                className={`w-full min-w-0 cursor-pointer transition hover:shadow-md ${
                     selected && 'border-primary border-2'
                 }`}
                 onClick={onClick}
             >
-                <CardContent className="">
+                <CardContent>
                     {/**Top Row */}
-                    <div className="flex justify-between">
+                    <div className="flex w-full items-center justify-between">
                         {/**Top Left */}
-                        <div className="flex items-center gap-1">
-                            {selected && <Check />}
-                            <h1 className="font-bold text-xl">{timer.name}</h1>
+                        <div className="flex flex-1 min-w-0 items-center gap-1">
+                            {selected && <Check className="shrink-0"/>}
+                            <h1 className="truncate font-bold text-xl">
+                                {timer.name}
+                            </h1>
                         </div>
 
                         {/**Top Right */}
-                        <div className="flex items-center gap-0.5">
+                        <div className="flex items-center gap-0.5 shrink-0">
                             <SetTimerDialog
                                 mode="edit"
                                 timer={timer}
