@@ -11,6 +11,7 @@ import { LinkModule } from './link/link.module';
 import { EventModule } from './event/event.module';
 import { TaskModule } from './task/task.module';
 import { PomodoroModule } from './pomodoro/pomodoro.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { PomodoroModule } from './pomodoro/pomodoro.module';
     EventModule,
     TaskModule,
     PomodoroModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
