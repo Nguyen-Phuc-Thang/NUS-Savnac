@@ -10,6 +10,7 @@ import { FolderModule } from './folder/folder.module';
 import { LinkModule } from './link/link.module';
 import { EventModule } from './event/event.module';
 import { TaskModule } from './task/task.module';
+import { AgentModule } from './agent/agent.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TaskModule } from './task/task.module';
     LinkModule,
     EventModule,
     TaskModule,
+    AgentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
