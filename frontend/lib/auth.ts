@@ -11,6 +11,7 @@ export const authOptions = {
                 password: { label: 'password', type: 'password' },
             },
             async authorize(credentials) {
+                console.log(process.env.NEXT_PUBLIC_API_URL);
                 const res = await fetch(
                     `${process.env.NEXT_PUBLIC_API_URL}/auth/login`,
                     {
@@ -54,7 +55,7 @@ export const authOptions = {
                 token.id = user.id;
                 token.name = user.name;
             }
-            
+
             if (trigger === 'update' && session?.name) {
                 token.name = session.name;
             }
