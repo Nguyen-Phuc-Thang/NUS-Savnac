@@ -1806,7 +1806,7 @@ Each test interacts with the application through the browser in the same manner 
 - Used Pull Requests (PRs) for code review and integration, allowing team members to review changes before merging.
 - Maintained clear commit messages and organized commits to improve code maintainability and traceability.
 
-## 6.2. Continuous Integration Discipline
+## 6.2. Testing & Quality Assurance
 
 - Maintained the `main` branch as a stable and deployment-ready branch.
 - Tested new features locally before merging changes into shared branches.
