@@ -8,6 +8,7 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL,
     credentials: true,
   });
+  console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
