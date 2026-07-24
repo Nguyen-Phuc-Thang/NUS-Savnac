@@ -10,6 +10,8 @@ import { FolderModule } from './folder/folder.module';
 import { LinkModule } from './link/link.module';
 import { EventModule } from './event/event.module';
 import { TaskModule } from './task/task.module';
+import { PomodoroModule } from './pomodoro/pomodoro.module';
+import { UserModule } from './user/user.module';
 import { AgentModule } from './agent/agent.module';
 
 @Module({
@@ -26,6 +28,8 @@ import { AgentModule } from './agent/agent.module';
     LinkModule,
     EventModule,
     TaskModule,
+    PomodoroModule,
+    UserModule,
     AgentModule,
   ],
   controllers: [AppController],

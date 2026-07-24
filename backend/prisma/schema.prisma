@@ -20,9 +20,10 @@ model User {
   name      String?
   createdAt DateTime @default(now())
 
-  courses Course[]
-  events  Event[]
-  tasks   Task[]
+  courses   Course[]
+  events    Event[]
+  tasks     Task[]
+  pomodoros Pomodoro[]
 }
 
 model PendingUser {
@@ -118,4 +119,14 @@ model Task {
   course    Course?  @relation(fields: [courseId], references: [courseId], onDelete: Cascade)
   userId    String   @db.Uuid
   user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Pomodoro {
+  pomodoroId String   @id @default(uuid()) @db.Uuid
+  name       String
+  focusTime  Int
+  breakTime  Int
+  createdAt  DateTime @default(now())
+  userId     String   @db.Uuid
+  user       User?    @relation(fields: [userId], references: [id])
 }

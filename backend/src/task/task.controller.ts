@@ -1,10 +1,17 @@
-import { Controller, Get, Post, Query, Body, Delete, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Query,
+  Body,
+  Delete,
+  Put,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 
 @Controller('task')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) { }
-
+  constructor(private readonly taskService: TaskService) {}
 
   @Get('get-all-tasks-by-course')
   async getAllTasksByCourseId(@Query('courseId') courseId: string) {
@@ -16,9 +23,19 @@ export class TaskController {
     return this.taskService.getAllTaskByUserId(userId);
   }
 
+  @Get('get-uncompleted-tasks-by-user')
+  async getUncompletedTasksByUserId(@Query('userId') userId: string) {
+    return this.taskService.getUncompletedTasksByUserId(userId);
+  }
+
   @Post('create-task')
   async createTask(@Body() body: any) {
-    return this.taskService.createTask(body.userId, body.name, body.taskType, body.courseId);
+    return this.taskService.createTask(
+      body.userId,
+      body.name,
+      body.taskType,
+      body.courseId,
+    );
   }
 
   @Post('complete-task')
