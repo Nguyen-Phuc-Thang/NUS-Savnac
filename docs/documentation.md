@@ -41,6 +41,7 @@ _Password: 123456_
 - [Scheduler](#34-scheduler)
 - [Task Management](#35-task-management)
 - [Pomodoro Timer](#36-pomodoro-timer)
+- [Settings](#37-settings)
 
 4. [User Guide](#4-user-guide)
 
@@ -1143,6 +1144,43 @@ Possible future improvements for the Pomodoro module include:
 - Saving selected tasks together with Pomodoro sessions.
 - Recording completed Pomodoro sessions to provide productivity history and statistics.
 
+### 3.7 Settings
+
+#### Feature overview
+
+The Settings module allows authenticated users to manage their profile information within NUS Savnac. Currently, users may update their display name, which is reflected throughout the application after the change is saved.
+
+The module also includes a password management section. However, password modification is currently unavailable due to backend limitations and is reserved for future development.
+
+<p align="center">
+<img src="images/settings-page.png" width="900"/>
+</p> 
+<p align="center"> 
+<em>Figure 9.1. Settings Page</em> 
+</p>
+
+#### Key Functionalities
+
+The Settings module provides the following functionalities:
+
+- **Display Name Update**
+
+    Users may change the display name associated with their account.
+
+- **Profile Information**
+
+    The user's registered email address is displayed as read-only information.
+
+- **Password Management**
+
+    A placeholder interface is provided for future password change functionality.
+
+#### Technical Implementation
+
+The Settings module follows a client-server architecture. User profile information is stored in PostgreSQL and updated through RESTful APIs implemented using NestJS. The frontend communicates with the backend through HTTP requests, while NextAuth manages authentication and maintains the user's session state.
+
+When a user updates their display name, the backend validates the request and persists the change to the database through Prisma. After the update succeeds, the frontend invokes NextAuth's `update()` function to refresh the current session, ensuring that the updated display name is immediately reflected throughout the application without requiring the user to sign out and sign back in.
+
 ## 4. User Guide
 
 ### 4.1. Account
@@ -1620,19 +1658,38 @@ To mark a task as completed:
   <em>Figure 9.41. Switch to Break session</em>
 </p>
 
+### 4.7 Settings
+
+#### Update Display Name
+
+1. Open the Settings page from the sidebar.
+2. Under Profile tab, enter your new display name in the Display Name field.
+3. Click <kbd>Save Changes</kbd>.
+4. A success notification will appear, and your updated display name will be reflected throughout the application.
+
+<p align="center">
+  <img src="images/settings-page.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.xx. Settings Page</em>
+</p>
+
 # 5. Testing
 
-To improve the reliability and maintainability of **NUS Savnac**, multiple levels of software testing were carried out throughout the development process. Rather than relying solely on manual verification, the project adopts a layered testing strategy to validate different parts of the system independently. Three complementary testing approaches are employed:
+To improve the reliability and maintainability of **NUS Savnac**, a multi-level testing strategy was planned covering automated testing and user validation. Due to project timeline constraints, the implemented automated testing focuses on backend integration testing, while other testing levels are considered future improvements.
 
-- **Integration Testing** verifies the correctness of backend REST APIs and their interactions with the database.
-- **Component Testing** ensures that individual React components behave correctly when rendered in isolation.
-- **End-to-End (E2E) Testing** validates complete user workflows across both the frontend and backend, simulating real user interactions with the system.
+| Testing Level       | Purpose                                                                      | Status             |
+| ------------------- | ---------------------------------------------------------------------------- | ------------------ |
+| Unit Testing        | Verify individual functions and modules independently                        | Not implemented    |
+| Integration Testing | Verify correctness of backend REST APIs and their interactions with database | Implemented        |
+| System Testing      | Validate complete application workflows                                      | Manually performed |
+| User Testing        | Gather feedback from target users                                            | Not performed      |
 
 Together, these testing approaches provide confidence that individual components function correctly, APIs behave as expected, and the overall application operates reliably from the user's perspective.
 
 ---
 
-## 5.1. Integration Testing
+## 5.1. Integration Testing (Automated)
 
 Backend integration tests are implemented using **Supertest** together with **Jest**. These tests verify the behavior of REST API endpoints by sending HTTP requests to the backend application and validating the returned responses.
 
@@ -1640,9 +1697,89 @@ The integration tests cover the communication between controllers, services, and
 
 This testing approach ensures that the backend behaves consistently when accessed by the frontend application.
 
+Below are some test cases:
+
+### Authentication
+
+| Test Case                                  | Expected Result                           |
+| ------------------------------------------ | ----------------------------------------- |
+| Register a new user with valid information | User is created and HTTP 201 is returned  |
+| Register with existing email               | Registration fails with error response    |
+| Login with valid credentials               | User information is returned successfully |
+| Login with incorrect password              | Authentication fails with HTTP 401        |
+| Login with non-existent email              | Authentication fails with HTTP 401        |
+
+### Course Management
+
+| Test Case                                           | Expected Result                                 |
+| --------------------------------------------------- | ----------------------------------------------- |
+| Retrieve all available NUS courses                  | Returns course list successfully                |
+| Retrieve course information using valid course code | Returns corresponding course details            |
+| Add a new course                                    | Course is stored in database                    |
+| Retrieve user's courses                             | Only courses belonging to the user are returned |
+| Add duplicate course                                | Request is rejected                             |
+| Add course with missing fields                      | Validation error is returned                    |
+| Delete existing course                              | Course is removed from database                 |
+
+### Resource Management (Folder and Link)
+
+| Test Case                       | Expected Result                        |
+| ------------------------------- | -------------------------------------- |
+| Retrieve folders under a course | Returns associated folders             |
+| Create new folder               | Folder is stored successfully          |
+| Update folder details           | Existing folder information is updated |
+| Delete folder                   | Folder and related links are removed   |
+| Create resource link            | Link is stored successfully            |
+| Update resource link            | Link information is updated            |
+| Delete resource link            | Link is removed                        |
+| Submit invalid resource data    | Validation error is returned           |
+
+### Task Management
+
+| Test Case                     | Expected Result                          |
+| ----------------------------- | ---------------------------------------- |
+| Retrieve tasks by course      | Returns tasks associated with the course |
+| Retrieve tasks by user        | Returns only user's tasks                |
+| Create course-related task    | Task is stored with course relation      |
+| Create personal task          | Task is stored without course relation   |
+| Toggle task completion status | Completion state changes correctly       |
+| Update task name              | Task name is updated                     |
+| Delete task                   | Task is removed from database            |
+| Access another user's task    | Request is rejected                      |
+
+### Pomodoro Timer
+
+| Test Case                                       | Expected Result                                |
+| ----------------------------------------------- | ---------------------------------------------- |
+| Retrieve timers for user without existing timer | Default Pomodoro timer is created and returned |
+| Retrieve existing timers                        | User timers are returned                       |
+| Retrieve another user's timer                   | Timer is not exposed                           |
+| Create custom timer                             | Timer is stored successfully                   |
+| Update timer configuration                      | Timer values are updated                       |
+| Delete timer                                    | Timer is removed from database                 |
+
 ---
 
-## 5.2. Component Testing
+## 5.2 System Testing (Manual)
+
+System testing was performed manually during development to verify that major user workflows function correctly across the frontend and backend.
+
+Below are some test cases:
+
+| Feature             | Test Case                                  | Expected Result                                                      |
+| ------------------- | ------------------------------------------ | -------------------------------------------------------------------- | --- |
+| Authentication      | Login with valid credentials               | User is successfully authenticated and redirected to the application |
+| Authentication      | Login with invalid credentials             | Error message is displayed and access is denied                      |
+| Course Management   | Add a new course                           | Course is added and displayed in user's course list                  |
+| Course Management   | Remove an existing course                  | Course is removed successfully                                       |
+| Resource Management | Create, update, and delete folders/links   | Resources are correctly managed and displayed                        |
+| Task Management     | Create, update, complete, and delete tasks | Task changes are reflected correctly                                 |
+| Task Management     | Access another user's data                 | User cannot access other users' tasks                                |
+| Pomodoro Timer      | Create and configure custom timer          | Timer settings are saved and loaded correctly                        |
+| Pomodoro Timer      | Start and complete a Pomodoro session      | Timer counts down and changes session correctly                      |
+| Navigation          | Navigate between pages                     | Pages load correctly without errors                                  |     |
+
+<!-- ## 5.2. Component Testing
 
 Frontend component testing is implemented using **React Testing Library**. Instead of testing the application as a whole, component tests focus on verifying the behavior of individual React components in isolation.
 
@@ -1658,7 +1795,7 @@ End-to-End (E2E) testing is implemented using **Playwright** to simulate real us
 
 Unlike integration and component testing, E2E tests validate complete user workflows that span both the frontend and backend. Typical scenarios include user authentication, course management, resource management, scheduler operations, task management, and other major features available within the application.
 
-Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions.
+Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions. -->
 
 # 6. SWE Practices
 
