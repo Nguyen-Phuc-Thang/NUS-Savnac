@@ -149,7 +149,6 @@ const Pomodoro = () => {
 
     const handleSelectTimer = (timer: TimerConfig) => {
         setSelectedTimer(timer);
-        setSelectedTask(undefined);
     };
 
     // This ensures the selected timer get update on UI
