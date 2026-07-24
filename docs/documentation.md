@@ -1,52 +1,69 @@
 # NUS SAVNAC DOCUMENTATION
+
 <p align="center">
   <img src="./images/logo.png" width="200">
 </p>
 
-*Team name*
+_Team name:_
 **SchedWarden**
 
-*Project name*
+_Project name:_
 **NUS Savnac**
 
-*Production*
+_Production:_
 https://nus-savnac.vercel.app/
 
-*For testing purposes, please use the below account*
-*Email: test@gmail.com*
-*Password: 123456*
+**Due to limitations on backend deployment, signing up a new account might not work where user might not able to receive verification code.**
+**Kindly use the account below for testing purposes.**
+
+_Email: test@gmail.com_
+_Password: 123456_
 
 # Table of Contents
+
 1. [Introduction](#1-introduction)
-  - [Motivation](#11-motivation)
-  - [Project Overview](#12-project-overview)
-  - [Expectations](#13-expectations)
+
+- [Motivation](#11-motivation)
+- [Project Overview](#12-project-overview)
+- [Expectations](#13-expectations)
+
 2. [System Design](#2-system-design)
-  - [Overall Architecture](#21-overall-architecture)
-  - [Technology Stack](#22-technology-stack)
-  - [Authentication Design](#23-authentication-design)
+
+- [Overall Architecture](#21-overall-architecture)
+- [Technology Stack](#22-technology-stack)
+- [Authentication Design](#23-authentication-design)
+
 3. [Feature Implementation](#3-feature-implementation)
-  - [User Authentication](#31-user-authentication)
-  - [Course Management](#32-course-management)
-  - [Resource Management](#33-resource-management)
-  - [Scheduler](#34-scheduler)
-  - [Task Management](#35-task-management)
-  - [Pomodoro Timer](#36-pomodoro-timer)
+
+- [User Authentication](#31-user-authentication)
+- [Course Management](#32-course-management)
+- [Resource Management](#33-resource-management)
+- [Scheduler](#34-scheduler)
+- [Task Management](#35-task-management)
+- [Pomodoro Timer](#36-pomodoro-timer)
+
 4. [User Guide](#4-user-guide)
+
 5. [Testing](#5-testing)
-  - [Integration Testing](#51-integration-testing)
-  - [Component Testing](#52-component-testing)
-  - [End To End Testing](#53-end-to-end-testing)
+
+- [Integration Testing](#51-integration-testing)
+- [Component Testing](#52-component-testing)
+- [End To End Testing](#53-end-to-end-testing)
+
+6. [SWE Practices](#6-swe-practices)
+
+- [Version Control & Collaboration](#61-version-control--collaboration)
+- [Continuous Integration Discipline](#62-continuous-integration-discipline)
 
 ## 1. Introduction
 
 ### 1.1 Motivation
 
-The current learning ecosystem at the **National University of Singapore (NUS)** relies heavily on platforms such as ***Canvas*** and external systems such as ***Coursemology***. While these platforms provide essential functionality for course administration and content delivery, their usage often varies significantly across modules due to differences in teaching styles and course requirements. As a result, students are frequently required to navigate multiple platforms in order to access learning materials, submit assignments, complete quizzes, and track academic progress.
+The current learning ecosystem at the **National University of Singapore (NUS)** relies heavily on platforms such as **_Canvas_** and external systems such as **_Coursemology_**. While these platforms provide essential functionality for course administration and content delivery, their usage often varies significantly across modules due to differences in teaching styles and course requirements. As a result, students are frequently required to navigate multiple platforms in order to access learning materials, submit assignments, complete quizzes, and track academic progress.
 
-Furthermore, ***Canvas*** does not provide a centralized view of a student's overall academic workload. Important responsibilities such as tutorial preparation, revision sessions, project milestones, and self-directed study are often managed separately by students. This challenge is especially apparent for freshmen, who are still adapting to the increased independence and workload associated with university education.
+Furthermore, **_Canvas_** does not provide a centralized view of a student's overall academic workload. Important responsibilities such as tutorial preparation, revision sessions, project milestones, and self-directed study are often managed separately by students. This challenge is especially apparent for freshmen, who are still adapting to the increased independence and workload associated with university education.
 
-Another limitation lies in the organization of learning resources. Although Canvas provides a *Files* section for course materials, resources are often stored within deeply nested folder structures. Students may need to repeatedly navigate through multiple layers of folders to access frequently used documents, resulting in an inefficient and repetitive workflow.
+Another limitation lies in the organization of learning resources. Although Canvas provides a _Files_ section for course materials, resources are often stored within deeply nested folder structures. Students may need to repeatedly navigate through multiple layers of folders to access frequently used documents, resulting in an inefficient and repetitive workflow.
 
 In addition, Canvas lacks integrated tools for long-term study planning, task management, and productivity tracking. Students are therefore required to rely on external applications such as calendars, task managers, and productivity tools to organize their academic commitments. The use of multiple disconnected systems creates fragmented workflows and increases the cognitive effort required to manage university life effectively.
 
@@ -54,28 +71,25 @@ These limitations motivated the development of **NUS Savnac**, a centralized aca
 
 ### 1.2 Project Overview
 
-***NUS Savnac*** is an academic management platform designed specifically for students of the **National University of Singapore**. The platform aims to centralize course information, study resources, schedules, and task management tools within a single application, reducing the need for students to switch between multiple systems throughout their daily academic activities.
+**_NUS Savnac_** is an academic management platform designed specifically for students of the **National University of Singapore**. The platform aims to centralize course information, study resources, schedules, and task management tools within a single application, reducing the need for students to switch between multiple systems throughout their daily academic activities.
 
-The name *Savnac* is derived from the reverse spelling of *Canvas*, reflecting the project's goal of complementing and extending the functionality provided by the university's primary learning management system. Rather than replacing Canvas, NUS Savnac acts as a productivity-focused companion platform that helps students organize their academic responsibilities more efficiently.
+The name _Savnac_ is derived from the reverse spelling of _Canvas_, reflecting the project's goal of complementing and extending the functionality provided by the university's primary learning management system. Rather than replacing Canvas, NUS Savnac acts as a productivity-focused companion platform that helps students organize their academic responsibilities more efficiently.
 
 The platform consists of four core features:
 
-* **Dashboard** – Serves as the central hub of the application. Students can add NUS modules, organize course-specific resources, create custom folders containing external links, and access module information retrieved from NUSMods. The dashboard also provides a consolidated view of upcoming academic activities and course-related tasks.
+- **Dashboard** – Serves as the central hub of the application. It encompasses both the **Course Management** and **Resource Management** modules, allowing students to add NUS modules, organize course-specific resources, create custom folders containing external links, and access module information retrieved from NUSMods. The dashboard also provides a consolidated view of upcoming academic activities and course-related tasks.
 
-* **Scheduler** – A semester-based scheduling system aligned with the NUS Academic Calendar. The scheduler aggregates module schedules and user-created events into a unified timeline, allowing students to plan their study routines and monitor upcoming commitments.
+- **Scheduler** – A semester-based scheduling system aligned with the NUS Academic Calendar. The scheduler aggregates module schedules and user-created events into a unified timeline, allowing students to plan their study routines and monitor upcoming commitments.
 
-* **Task Management** – A centralized task-tracking interface that consolidates assignments, deadlines, and personal tasks across all registered courses. Tasks are organized in a structured manner to help students monitor their academic progress and maintain productivity throughout the semester.
+- **Task Management** – A centralized task-tracking interface that consolidates assignments, deadlines, and personal tasks across all registered courses. Tasks are organized in a structured manner to help students monitor their academic progress and maintain productivity throughout the semester.
 
-* **Pomodoro Timer** – Enables users to create focused study sessions by allocating time blocks to specific tasks. This feature encourages effective time management and minimizes distractions during study periods.
-
+- **Pomodoro Timer** – Enables users to create focused study sessions by allocating time blocks to specific tasks. This feature encourages effective time management and minimizes distractions during study periods.
 
 Beyond its core functionality, NUS Savnac also incorporates several productivity-enhancing features:
 
-* **Reminder System** – An automated notification system that monitors upcoming deadlines and events. Users can configure reminder intervals according to their preferences, and notifications are delivered through email to ensure important deadlines are not overlooked.
+- **Reminder System** – An automated notification system that monitors upcoming deadlines and events. Users can configure reminder intervals according to their preferences, and notifications are delivered through email to ensure important deadlines are not overlooked.
 
-* **AI Advising System** – Assists students in planning their schedules and academic workload by generating personalized recommendations for study routines and task prioritization.
-
-* **Voice Command System** – Provides a collection of predefined voice commands that allow users to interact with selected system functionalities through voice-based input, improving accessibility and convenience.
+- **AI Advising System** – Assists students in planning their schedules and academic workload by generating personalized recommendations for study routines and task prioritization.
 
 By combining academic management, scheduling, productivity tools, and intelligent assistance within a single platform, NUS Savnac aims to reduce administrative overhead and allow students to focus more effectively on learning.
 
@@ -85,18 +99,20 @@ NUS Savnac is designed to serve as a comprehensive academic companion for NUS st
 
 The system is expected to:
 
-* Provide a centralized platform for managing courses, schedules, tasks, and study resources.
-* Reduce the effort required to navigate between multiple academic systems and applications.
-* Improve visibility of upcoming deadlines, events, and academic commitments.
-* Encourage productive study habits through integrated productivity tools such as the Pomodoro Timer and Reminder System.
-* Assist students in planning and prioritizing their workload through intelligent scheduling recommendations.
-* Minimize the likelihood of missed deadlines and overlooked academic responsibilities.
-* Deliver a more organized and efficient academic experience for students throughout their university journey.
+- Provide a centralized platform for managing courses, schedules, tasks, and study resources.
+- Reduce the effort required to navigate between multiple academic systems and applications.
+- Improve visibility of upcoming deadlines, events, and academic commitments.
+- Encourage productive study habits through integrated productivity tools such as the Pomodoro Timer and Reminder System.
+- Assist students in planning and prioritizing their workload through intelligent scheduling recommendations.
+- Minimize the likelihood of missed deadlines and overlooked academic responsibilities.
+- Deliver a more organized and efficient academic experience for students throughout their university journey.
 
 Ultimately, the project seeks to reduce cognitive load associated with academic management and enable students to dedicate more time and attention to meaningful learning activities.
 
 ## 2. System Design
+
 ### 2.1. Overall Architecture
+
 The overall architecture of the system is shown below.
 
 <p align="center">
@@ -111,81 +127,79 @@ The NUS Savnac system consists of four main components: the frontend application
 
 User data, tasks, events, folders, and course information are stored in a PostgreSQL database hosted on Neon. To support automated reminders, BullMQ and Redis are used to process background jobs and deliver scheduled email notifications. This architecture provides a clear separation between user interaction, data management, and asynchronous processing, ensuring maintainability and scalability.
 
-
 ### 2.2. Technology Stack
 
 #### Frontend
 
-* ***Next.js***
+- **_Next.js_**
   A React-based framework used to build the frontend application. Next.js was chosen for its modern routing system, server-side rendering capabilities, and seamless integration with the React ecosystem.
 
-* ***Tailwind CSS***
+- **_Tailwind CSS_**
   A utility-first CSS framework used for styling the application. Tailwind CSS enables rapid UI development while maintaining a consistent and scalable design system.
 
-* ***shadcn/ui***
+- **_shadcn/ui_**
   A collection of reusable and customizable UI components built on top of Radix UI and Tailwind CSS. It was selected to accelerate development while maintaining full control over component styling and behavior.
 
-* ***Framer Motion***
+- **_Framer Motion_**
   An animation library used to create smooth transitions and interactive user experiences. Framer Motion helps improve the overall usability and visual appeal of the application.
 
 #### Backend
 
-* ***NestJS***
+- **_NestJS_**
   A progressive Node.js framework used to build the backend services. NestJS was chosen for its modular architecture, strong TypeScript support, and maintainable project structure.
 
-* ***NUSMods API***
+- **_NUSMods API_**
   An external API that provides module, timetable, and academic information from NUS. It serves as the primary source of module-related data within the application.
 
 #### Database
 
-* ***PostgreSQL***
+- **_PostgreSQL_**
   A relational database management system used for persistent data storage. PostgreSQL was selected for its reliability, performance, and strong support for complex relational data.
 
-* ***Prisma***
+- **_Prisma_**
   A type-safe ORM used to interact with the PostgreSQL database. Prisma simplifies database operations while improving developer productivity and reducing the likelihood of runtime errors.
 
 #### Background Jobs
 
-* ***BullMQ***
+- **_BullMQ_**
   A Redis-based job queue used for scheduling and processing asynchronous tasks. BullMQ enables the application to handle background operations without affecting user-facing performance.
 
-* ***Redis***
+- **_Redis_**
   An in-memory data store used by BullMQ for queue management and job persistence. Redis provides high performance and low latency for background task processing.
 
 #### Authentication
 
-* ***Auth.js***
+- **_Auth.js_**
   An authentication framework used to manage user authentication and session handling. Auth.js was chosen for its seamless integration with Next.js and support for multiple authentication providers.
-
-  * *Credentials (Username and Password)*
-    Provides traditional account-based authentication, allowing users to securely register and log in using their email and password.
-
+    - _Credentials (Username and Password)_
+      Provides traditional account-based authentication, allowing users to securely register and log in using their email and password.
 
 #### Deployment
 
-* ***Vercel***
+- **_Vercel_**
   The hosting platform used for deploying the frontend application. Vercel offers optimized support for Next.js applications and provides a streamlined deployment workflow.
 
-* ***Railway***
+- **_Railway_**
   A cloud platform used to host backend services and supporting infrastructure. Railway simplifies service deployment and environment management.
 
-* ***Neon***
+- **_Neon_**
   A serverless PostgreSQL platform used to host the application's database. Neon was selected for its scalability, ease of management, and seamless integration with modern cloud workflows.
 
 #### Developer Tools
 
-* ***Git/GitHub***
+- **_Git/GitHub_**
   Used for version control and collaborative development. Git and GitHub facilitate code management, feature branching, and team collaboration throughout the project lifecycle.
 
-* ***Jest***
+- **_Jest_**
   A testing framework used for writing and executing unit tests. Jest helps ensure the correctness and reliability of application logic.
 
-* ***Supertest***
+- **_Supertest_**
   A library used for API and integration testing. Supertest allows backend endpoints to be tested in an automated and reproducible manner.
 
-
 ### 2.3. Authentication design
+
 The design for authentication system is shown as below.
+
 <p align="center">
   <img src="images/auth-design.jpg" width="900"/>
 </p>
@@ -199,11 +213,14 @@ This authentication design implements a secure credentials (email and password) 
 For new registrations, user information is validated, the password is encrypted, and a one-time password (OTP) is generated and sent via email. Registration data is temporarily stored in a `pending users` table until OTP verification is completed. Once verified, a new user record is created in the main `users` table. The system separates responsibilities across frontend, authentication middleware, controller, service, and database layers, improving maintainability, scalability, and security.
 
 ## 3. Feature Implementation
-### 3.1. User Authentication
-#### 3.1.1. Feature Overview
-The **User Authentication** feature enables users to securely access and manage their accounts within ***NUS Savnac***. The system is built on a credentials-based authentication mechanism, allowing users to sign up and log in using their email and password.
 
-To enhance security and ensure the validity of user accounts, the registration process includes email-based *One-Time Password (OTP)* verification. Users are required to verify their email address before completing the account creation process.
+### 3.1. User Authentication
+
+#### 3.1.1. Feature Overview
+
+The **User Authentication** feature enables users to securely access and manage their accounts within **_NUS Savnac_**. The system is built on a credentials-based authentication mechanism, allowing users to sign up and log in using their email and password.
+
+To enhance security and ensure the validity of user accounts, the registration process includes email-based _One-Time Password (OTP)_ verification. Users are required to verify their email address before completing the account creation process.
 
 Authentication is a prerequisite for accessing protected features within the system, including the course management dashboard, scheduling tools, and task tracking functionalities.
 
@@ -214,7 +231,6 @@ Authentication is a prerequisite for accessing protected features within the sys
 <p align="center">
   <em>Figure 3.1. Login Page</em>
 </p>
-
 
 <p align="center">
   <img src="images/register-page.jpeg" width="900"/>
@@ -233,47 +249,49 @@ Authentication is a prerequisite for accessing protected features within the sys
 </p>
 
 #### 3.1.2. Key Functionalities
+
 - User registration by email and password
 - Email OTP verification
 - User login using emal and password
 - Secure session management by Auth.js
 
 #### 3.1.3. Technical Implementation
+
 ##### Credentials-Based Authentication
 
 The credentials authentication workflow is implemented using Auth.js, PostgreSQL, and Prisma. This authentication method allows users to create and access accounts using an email-password combination.
 
 **Login Flow**
 
-* Users submit their email and password through the login form.
-* The frontend performs basic input validation before forwarding the authentication request to Auth.js.
-* Auth.js invokes the custom credentials provider, which communicates with the backend authentication service.
-* The backend queries the `users` table through Prisma to retrieve the corresponding user record.
-* The submitted password is compared against the stored password hash using a secure password verification algorithm.
-* Upon successful verification, Auth.js creates a user session and grants access to protected application routes.
-* Invalid credentials result in an authentication failure response and the user remains on the login page.
+- Users submit their email and password through the login form.
+- The frontend performs basic input validation before forwarding the authentication request to Auth.js.
+- Auth.js invokes the custom credentials provider, which communicates with the backend authentication service.
+- The backend queries the `users` table through Prisma to retrieve the corresponding user record.
+- The submitted password is compared against the stored password hash using a secure password verification algorithm.
+- Upon successful verification, Auth.js creates a user session and grants access to protected application routes.
+- Invalid credentials result in an authentication failure response and the user remains on the login page.
 
 **Registration Flow**
 
-* Users provide a display name, email address, and password through the registration form.
-* Input validation is performed to ensure all required fields are present and satisfy security requirements.
-* Email is restricted to be NUS email, ending with @u.nus.edu
-* Passwords must:
-  * Contain at least 8 characters
-  * Include at least one uppercase letter
-  * Include at least one lowercase letter
-  * Include at least one numeric character
-  * Include at least one special character
-* The registration request is submitted to the `/auth/register` endpoint.
-* The backend verifies that the email address is not already associated with an existing account.
-* The password is securely hashed before any user data is persisted.
-* A One-Time Password (OTP) is generated for email verification.
-* The OTP is sent to the user's email address, while the registration information is temporarily stored in the `pending users` table through Prisma.
-* Users are redirected to the verification page and must provide the received OTP.
-* The verification request is submitted to the `/auth/verify` endpoint.
-* The backend validates the submitted OTP against the corresponding verification record stored in the database.
-* Upon successful verification, the pending registration record is promoted to a permanent account by creating a new entry in the `users` table.
-* If verification fails or the OTP has expired, the account creation process is not completed and the user must request a new verification code.
+- Users provide a display name, email address, and password through the registration form.
+- Input validation is performed to ensure all required fields are present and satisfy security requirements.
+- Email is restricted to be NUS email, ending with @u.nus.edu
+- Passwords must:
+    - Contain at least 8 characters
+    - Include at least one uppercase letter
+    - Include at least one lowercase letter
+    - Include at least one numeric character
+    - Include at least one special character
+- The registration request is submitted to the `/auth/register` endpoint.
+- The backend verifies that the email address is not already associated with an existing account.
+- The password is securely hashed before any user data is persisted.
+- A One-Time Password (OTP) is generated for email verification.
+- The OTP is sent to the user's email address, while the registration information is temporarily stored in the `pending users` table through Prisma.
+- Users are redirected to the verification page and must provide the received OTP.
+- The verification request is submitted to the `/auth/verify` endpoint.
+- The backend validates the submitted OTP against the corresponding verification record stored in the database.
+- Upon successful verification, the pending registration record is promoted to a permanent account by creating a new entry in the `users` table.
+- If verification fails or the OTP has expired, the account creation process is not completed and the user must request a new verification code.
 
 ### 3.2 Course Management
 
@@ -285,10 +303,10 @@ Each imported course acts as a central workspace where users can later organize 
 
 **Key capabilities include:**
 
-* Import NUS modules directly from NUSMods.
-* Display official course information, including module credits, workload distribution, and examination dates.
-* Maintain a personalized dashboard containing all enrolled modules.
-* Allow users to rename or remove courses from their dashboard.
+- Import NUS modules directly from NUSMods.
+- Display official course information, including module credits, workload distribution, and examination dates.
+- Maintain a personalized dashboard containing all enrolled modules.
+- Allow users to rename or remove courses from their dashboard.
 
 <p align="center">
   <img src="images/dashboard-imported-courses.png" width="900"/>
@@ -303,16 +321,16 @@ Each imported course acts as a central workspace where users can later organize 
 
 The Course Management module provides the following functionalities:
 
-* **Import NUS Modules**
+- **Import NUS Modules**
   Users can search for and add official NUS modules directly from the NUSMods database without manually entering course information.
 
-* **Course Information Display**
+- **Course Information Display**
   Each course displays essential academic information such as module code, module title, modular credits, workload distribution, and examination details.
 
-* **Course Navigation**
+- **Course Navigation**
   Selecting a course opens the course details page, which serves as the central workspace for managing resources, events, and tasks related to that module.
 
-* **Course Management**
+- **Course Management**
   Users may update the displayed course name or remove courses from their dashboard whenever necessary.
 
 <p align="center">
@@ -332,9 +350,9 @@ The Course Management module follows a client-server architecture, where the fro
 
 To provide a consistent user experience throughout the application, NUS Savnac adopts a reusable **grid-based interaction model**. Resources such as courses, folders, and links are displayed as interactive grid items that operate under three interaction modes:
 
-* **Normal Mode** – Selecting an item opens its corresponding content.
-* **Edit Mode** – Selecting an item allows users to modify its information.
-* **Delete Mode** – Selecting an item removes the corresponding resource after confirmation.
+- **Normal Mode** – Selecting an item opens its corresponding content.
+- **Edit Mode** – Selecting an item allows users to modify its information.
+- **Delete Mode** – Selecting an item removes the corresponding resource after confirmation.
 
 This interaction model is reused across multiple features within the application, providing a consistent interface while reducing duplicated frontend logic.
 
@@ -449,7 +467,7 @@ The backend deletes the corresponding record from the **Course** table. Associat
 
 The Resource Management module enables students to organize course-related learning resources in a structured and personalized manner. Instead of repeatedly navigating through multiple layers of folders in Canvas, users can create their own collection of shortcuts that provide instant access to frequently used learning materials.
 
-Resources are organized into **folders** and **links**, allowing users to categorize external resources according to their own study workflow. For example, users may create folders such as *Tutorials*, *Labs*, or *Assignments*, and group all relevant links under each category. This flexible organization allows students to structure course materials based on their personal preferences rather than the predefined folder hierarchy provided by Canvas.
+Resources are organized into **folders** and **links**, allowing users to categorize external resources according to their own study workflow. For example, users may create folders such as _Tutorials_, _Labs_, or _Assignments_, and group all relevant links under each category. This flexible organization allows students to structure course materials based on their personal preferences rather than the predefined folder hierarchy provided by Canvas.
 
 One practical use case is linking folders directly to the corresponding folders in Canvas. This significantly reduces the amount of navigation required when accessing lecture notes, tutorial sheets, or laboratory materials, thereby improving efficiency during daily study.
 
@@ -581,10 +599,10 @@ The fundamental unit of the scheduler is an **event**. Every event contains esse
 
 Four event categories are currently supported:
 
-* **Classes** – Lectures, tutorials, laboratory sessions, recitations, and other scheduled teaching activities.
-* **Deadlines** – Assignment submissions, project milestones, and coursework deadlines.
-* **Exams** – Final examinations, mid-term tests, quizzes, and continual assessments.
-* **Others** – Personal events, meetings, workshops, seminars, or any activities outside the predefined categories.
+- **Classes** – Lectures, tutorials, laboratory sessions, recitations, and other scheduled teaching activities.
+- **Deadlines** – Assignment submissions, project milestones, and coursework deadlines.
+- **Exams** – Final examinations, mid-term tests, quizzes, and continual assessments.
+- **Others** – Personal events, meetings, workshops, seminars, or any activities outside the predefined categories.
 
 The Scheduler module consists of two calendar views.
 
@@ -614,22 +632,22 @@ Unlike traditional calendars that organize events using calendar dates, both cal
 
 The Scheduler module provides the following functionalities:
 
-* **Course-specific Calendar**
+- **Course-specific Calendar**
   Each course contains its own calendar for displaying classes and events related to that module.
 
-* **Semester-based Event Management**
+- **Semester-based Event Management**
   Users can create academic or personal events by specifying the semester week, weekday, starting time, ending time, and venue.
 
-* **Event Categorization**
+- **Event Categorization**
   Events are categorized into Classes, Deadlines, Exams, and Others, with each category displayed using a distinct color for easier identification.
 
-* **Event Modification**
+- **Event Modification**
   Existing events can be viewed, updated, or removed directly from the calendar interface.
 
-* **Global Scheduler**
+- **Global Scheduler**
   The Scheduler page combines events from all registered courses into a single semester calendar, providing users with a comprehensive overview of their academic commitments.
 
-* **Upcoming Event Summary**
+- **Upcoming Event Summary**
   Upcoming events are grouped by category and displayed in chronological order to improve visibility of approaching deadlines and examinations.
 
 <p align="center">
@@ -684,7 +702,6 @@ The Course Calendar is implemented using the **FullCalendar** library. However, 
 To bridge this difference, each retrieved event is transformed by a helper function named `modifyEvent`, which converts the application's internal event representation into the format expected by the calendar component.
 
 One important transformation involves the time representation. Events are stored using the compact **HHMM** format within the database, while FullCalendar requires timestamps in the **HH:MM:SS** format. Therefore, the helper function reformats the stored time before rendering the events on the calendar.
-
 
 ---
 
@@ -749,7 +766,6 @@ After retrieval, the events undergo the same transformation process before being
   <em>Figure 6.6. Upcoming Event By Categories</em>
 </p>
 
-
 ### 3.5 Task Management
 
 #### 3.5.1 Feature Overview
@@ -798,7 +814,6 @@ The Task Management module provides the following functionalities:
 
 - **Centralized Task Overview**  
   The Task Page aggregates tasks across all courses, allowing users to review their overall workload from a single interface.
-
 
 ---
 
@@ -889,7 +904,6 @@ This response structure directly matches the layout required by the frontend, wh
 
 Each course's task collection is rendered using an independent instance of the reusable `TaskList` component. Since the same component is shared with the Course Details page, all task operations—including creation, editing, completion tracking, and deletion—reuse the same backend APIs and interaction workflow.
 
-
 ### 3.6 Pomodoro Timer
 
 #### 3.6.1 Feature Overview
@@ -898,7 +912,7 @@ The Pomodoro Timer is a productivity tool integrated directly into **NUS Savnac*
 
 This integration aligns with the overall objective of NUS Savnac—providing a centralized academic workspace where students can access the tools they frequently use without leaving the application.
 
-The current implementation follows the traditional Pomodoro workflow, consisting of alternating **Focus** and **Break** sessions.
+The implementation follows the traditional Pomodoro workflow, consisting of alternating **Focus** and **Break** sessions.
 
 <p align="center">
   <img src="images/pomodoro-page.png" width="900"/>
@@ -913,20 +927,26 @@ The current implementation follows the traditional Pomodoro workflow, consisting
 
 The Pomodoro module provides the following functionalities:
 
+- **Custom Timer Presets**  
+  Users can create personalized timer configurations by specifying the timer name, focus duration, and break duration.
+
+- **Timer Preset Management**  
+  Users can view, edit, and delete their saved timer presets. Each user is provided with a default timer configuration when accessing the Pomodoro module for the first time.
+
 - **Focus and Break Sessions**  
   The timer alternates automatically between focus and break periods following the Pomodoro Technique.
-
-- **Countdown Timer**  
-  The remaining time is updated every second and displayed in a clear **MM:SS** format.
-
-- **Session Tracking**  
-  The system records the number of completed focus sessions, allowing users to monitor their study progress.
 
 - **Timer Controls**  
   Users may start, pause, reset, or manually switch between focus and break modes at any time.
 
-- **Automatic Phase Transition**  
-  Once a countdown reaches zero, the timer automatically switches to the next study phase without requiring user intervention.
+- **Countdown Timer**  
+  The remaining time is updated every second and displayed in a clear **MM:SS** format.
+
+- **Task Association**  
+  Users can optionally select an incomplete task to focus on during a Pomodoro session, helping them connect their productivity session with their academic workload.
+
+- **Session Tracking**  
+  Completed focus sessions are counted and displayed, allowing users to monitor the number of completed Pomodoro cycles.
 
 <p align="center">
   <img src="images/timer-focus.png" width="900"/>
@@ -946,21 +966,107 @@ The Pomodoro module provides the following functionalities:
 
 #### 3.6.3 Technical Implementation
 
-Unlike most modules in NUS Savnac, the Pomodoro Timer operates entirely on the client side and does not require backend communication. All countdown logic is encapsulated within a reusable custom React hook named `useTimer`, while the visual interface is implemented separately through a dedicated `Timer` component.
+The Pomodoro module follows a client-server architecture. Timer preset configurations are persisted in PostgreSQL through the backend service, while the active countdown execution is managed on the frontend through a reusable React hook `useTimer`. The visual presentation and user interactions are handled through dedicated components including `Timer`, `TimerCard`, and dialog components for timer and task selection. This allows persistent user preferences to be stored independently from the temporary timer execution state.
 
-This separation of concerns allows the timer logic to remain independent from the presentation layer, making future UI modifications possible without affecting the underlying countdown mechanism.
+---
+
+##### Pomodoro Data Model
+
+Timer configurations are stored using the `Pomodoro` database entity.
+
+| Attribute    | Description                           |
+| ------------ | ------------------------------------- |
+| `pomodoroId` | Unique identifier of the timer preset |
+| `name`       | User-defined timer name               |
+| `focusTime`  | Focus duration stored in seconds      |
+| `breakTime`  | Break duration stored in seconds      |
+| `userId`     | Owner of the timer configuration      |
+| `createdAt`  | Timestamp when the timer was created  |
+
+Each timer configuration belongs to a specific user, ensuring that users can only access and manage their own presets.
+
+---
+
+##### Timer Preset Management
+
+The Pomodoro module provides RESTful APIs to manage user-specific timer configurations.
+
+**Pomodoro APIs**
+
+```text
+GET /api/pomodoro
+POST /api/pomodoro
+PATCH /api/pomodoro/:id
+DELETE /api/pomodoro/:id
+```
+
+When the Pomodoro page is loaded, the frontend retrieves all timer presets associated with the authenticated user. If no timer exists, the backend automatically creates a default Pomodoro configuration with a 25-minute focus session and a 5-minute break session. Users may subsequently create, update, or delete timer presets, with all operations scoped to the authenticated user's account.
+
+One design consideration is ensuring that every user always has at least one available timer configuration. To prevent situations where no timer presets exist, the frontend disables the delete button when only a single timer remains. As an additional safeguard, the backend automatically creates a default timer if no timer configurations are found when the Pomodoro page is loaded. This guarantees that the Pomodoro module always has a valid timer configuration available.
+
+<p align="center">
+  <img src="images/pick-timer.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.4. Pick Timer</em>
+</p>
+
+---
+
+##### Task Integration
+
+The Pomodoro Timer can optionally be associated with an incomplete task from the Task Management module.
+
+When the Pomodoro page is loaded, the frontend retrieves the user's incomplete tasks and displays them through a task selection dialog. Users can select a task before starting a Pomodoro session, allowing them to identify the activity they intend to focus on.
+
+<p align="center">
+  <img src="images/pomodoro-task-select.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.5. Pick Incomplete Task</em>
+</p>
+
+The selected task is maintained as frontend state during the current session and is displayed above the timer interface.
+
+Currently, task associations are temporary and are not persisted to the database. Therefore, the selected task is cleared when the page is refreshed or when the user leaves the Pomodoro page.
+
+<p align="center">
+  <img src="images/pomodoro-task-selected.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 8.6. Picked Incomplete Task</em>
+</p>
+
+---
+
+##### Component Architecture
+
+The frontend implementation separates timer logic, configuration management, and user interaction into reusable React components.
+
+| Component         | Responsibility                                                        |
+| ----------------- | --------------------------------------------------------------------- |
+| `Timer`           | Displays countdown, progress indicator, and timer controls            |
+| `useTimer`        | Encapsulates countdown logic and timer state management               |
+| `TimerCard`       | Displays individual timer presets and provides edit/delete actions    |
+| `PickTimerDialog` | Allows users to select existing timers or create new presets          |
+| `SetTimerDialog`  | Handles creation and modification of timer configurations             |
+| `PickTaskDialog`  | Allows users to associate an incomplete task with the current session |
+
+This separation improves maintainability by isolating business logic from UI components.
 
 ---
 
 ##### Timer State Management
 
+Users select one preset as the active timer before starting a Pomodoro session. The selected configuration determines the durations used by the countdown logic.
+
 The timer maintains its internal state through a single `TimerState` object containing three attributes:
 
-| Attribute | Description |
-|----------|-------------|
-| `mode` | Current timer phase (`focus` or `break`) |
+| Attribute  | Description                                   |
+| ---------- | --------------------------------------------- |
+| `mode`     | Current timer phase (`focus` or `break`)      |
 | `timeLeft` | Remaining time in the current phase (seconds) |
-| `sessions` | Number of completed focus sessions |
+| `sessions` | Number of completed focus sessions            |
 
 Rather than maintaining these values as multiple independent state variables, they are intentionally grouped into a single state object.
 
@@ -1009,11 +1115,11 @@ The session counter is incremented only when a complete focus session has finish
 
 The `useTimer` hook exposes three control functions to the user interface:
 
-| Function | Purpose |
-|----------|---------|
-| `toggleTimer()` | Starts or pauses the timer |
-| `resetTimer()` | Restores the timer to its initial state |
-| `switchMode()` | Manually switches between focus and break modes |
+| Function        | Purpose                                         |
+| --------------- | ----------------------------------------------- |
+| `toggleTimer()` | Starts or pauses the timer                      |
+| `resetTimer()`  | Restores the timer to its initial state         |
+| `switchMode()`  | Manually switches between focus and break modes |
 
 The `Timer` component consumes these functions to implement the **Start/Pause**, **Reset**, and **Switch Mode** buttons displayed in the user interface.
 
@@ -1025,18 +1131,24 @@ Internally, the remaining time is stored as the total number of seconds to simpl
 
 Before rendering, the value is converted into the standard **MM:SS** format displayed on the timer interface. Separating the internal representation from the presentation format keeps the countdown logic straightforward while providing users with a familiar and easily readable display.
 
+The timer interface also includes a circular progress indicator that visually represents the percentage of the current focus or break session completed.
+
 ---
 
-##### Future Improvements
+#### Future Improvements
 
-The current implementation uses fixed durations of **25 minutes** for focus sessions and **5 minutes** for break sessions.
+Possible future improvements for the Pomodoro module include:
 
-A future enhancement will allow users to configure these durations according to their personal preferences. This feature will require backend support for persisting timer settings in the database and restoring them whenever users access the Pomodoro module.
+- Persisting active timer state across page navigation and browser refresh.
+- Saving selected tasks together with Pomodoro sessions.
+- Recording completed Pomodoro sessions to provide productivity history and statistics.
 
 ## 4. User Guide
 
 ### 4.1. Account
+
 #### Login
+
 1. Enter your registered email
 2. Enter your registered password
 3. Click <kbd>Login</kbd> to login to your account
@@ -1052,6 +1164,7 @@ A future enhancement will allow users to configure these durations according to 
 ---
 
 #### Create new account
+
 1. Enter your display name
 2. Enter your NUS email
 3. Enter your password. There are restrictions on the password that you need to satisfy
@@ -1065,111 +1178,122 @@ A future enhancement will allow users to configure these durations according to 
   <em>Figure 9.2. Register Page</em>
 </p>
 
-
 ### 4.2. Dashboard
 
 #### Add a Course
+
 1. Click on <kbd>+ Course</kbd> and select **NUS Course** to open the **Add NUS Course** dialog
-<p align="center">
-  <img src="images/guide/add-course-button.png" width="800"/>
-</p>
-<p align="center">
-  <em>Figure 9.3. Add Course Button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-course-button.png" width="800"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.3. Add Course Button</em>
+ </p>
 
 2. Search for the course by its module code
-<p align="center">
-  <img src="images/guide/search-code.jpeg" width="500"/>
-</p>
-<p align="center">
-  <em>Figure 9.4. Searching for a Course</em>
-</p>
+ <p align="center">
+   <img src="images/guide/search-code.jpeg" width="500"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.4. Searching for a Course</em>
+ </p>
 
 3. Click on the course to add it to dashboard
+
 ---
 
 #### Delete a Course
+
 1. Click on <kbd>🗑️</kbd> to switch to **DELETE** mode
-<p align="center">
-  <img src="images/guide/delete-course-button.png" width="350"/>
-</p>
-<p align="center">
-  <em>Figure 9.5. DELETE Mode button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/delete-course-button.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.5. DELETE Mode button</em>
+ </p>
 
 2. Select the course you want to delete
-<p align="center">
-  <img src="images/guide/course-delete-mode.png" width="500"/>
-</p>
-<p align="center">
-  <em>Figure 9.6. Courses in DELETE mode</em>
-</p>
-
+ <p align="center">
+   <img src="images/guide/course-delete-mode.png" width="500"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.6. Courses in DELETE mode</em>
+ </p>
 
 3. A dialog will pop up. Click <kbd>Delete</kbd> to delete the course
-<p align="center">
-  <img src="images/guide/delete-course-dialog.png" width="500"/>
-</p>
-<p align="center">
-  <em>Figure 9.7. Delete Course Dialog</em>
-</p>
+ <p align="center">
+   <img src="images/guide/delete-course-dialog.png" width="500"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.7. Delete Course Dialog</em>
+ </p>
 
 ### 4.3. Resources Management
 
 #### Create a Folder
+
 1. Click on <kbd>+ Folder</kbd> to open the **Create New Folder** dialog
-<p align="center">
-  <img src="images/guide/add-folder-button.png" width="350"/>
-</p>
-<p align="center">
-  <em>Figure 9.8. Add Folder Button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-folder-button.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.8. Add Folder Button</em>
+ </p>
 
 2. Enter the **Folder Name** and **Folder Description**
-<p align="center">
-  <img src="images/guide/add-folder-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.9. Create New Folder Dialog</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-folder-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.9. Create New Folder Dialog</em>
+ </p>
 
 3. Click <kbd>Create</kbd> to create the folder
+
 ---
+
 #### Create a Link
+
 To create a new link in the **Links** section:
+
 1. Click <kbd>+ Link</kbd> to open the **Create New Link** dialog
-<p align="center">
-  <img src="images/guide/add-link-button.png" width="350"/>
-</p>
-<p align="center">
-  <em>Figure 9.10. Create Link button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-link-button.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.10. Create Link button</em>
+ </p>
 
 2. Enter the **Link Title** and **Link URL**
-<p align="center">
-  <img src="images/guide/add-link-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.11. Create New Link Dialog</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-link-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.11. Create New Link Dialog</em>
+ </p>
 
 3. Click <kbd>Create</kbd> to create the link
 
 To create a new link in a folder:
+
 1. Select the folder that you want to add a new link
 2. In the right panel, click on <kbd>+</kbd> to open the **Create New Link** dialog
-<p align="center">
-  <img src="images/guide/add-link-in-folder.png" width="350"/>
-</p>
-<p align="center">
-  <em>Figure 9.12. Create Link Button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-link-in-folder.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.12. Create Link Button</em>
+ </p>
 
 3. Enter the **Link Title** and **Link URL**
 4. Click <kbd>Create</kbd> to create the link
+
 ---
+
 #### Manage Folders and Links
+
 To edit or delete a folder:
+
 1. Click on <kbd>✏️</kbd> or <kbd>🗑️</kbd> to switch the **Folders** section to **EDIT** or **DELETE** mode
 
 <p align="center">
@@ -1199,6 +1323,7 @@ To edit or delete a folder:
 </p>
 
 To edit or delete a link in a folder:
+
 1. Hover your mouse on the link, and click on <kbd>✏️</kbd> or <kbd>🗑️</kbd> icons to edit or delete it
 
 <p align="center">
@@ -1227,99 +1352,114 @@ To edit or delete a link in a folder:
 </p>
 
 ### 4.4. Scheduler
+
 #### Add an Event
+
 To add a class of the course:
+
 1. Click on <kbd>+</kbd> and select **NUS Class**
-<p align="center">
-  <img src="images/guide/add-event-button.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.19. Add Event Button</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-event-button.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.19. Add Event Button</em>
+ </p>
 
 2. The **Add NUS Class** dialog will pop up. Click on the class to add it
-<p align="center">
-  <img src="images/guide/add-class-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.20. Add NUS Class Dialog</em>
-</p>
+ <p align="center">
+   <img src="images/guide/add-class-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.20. Add NUS Class Dialog</em>
+ </p>
 
 To add a custom event:
+
 1. Click on <kbd>+</kbd> and select **Custom Event**
 2. The **Create New Event** dialog will pop up. Fill in the information for the new event
-<p align="center">
-  <img src="images/guide/add-event-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.21. Create New Event Dialog</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/add-event-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.21. Create New Event Dialog</em>
+ </p>
 
 3. Click on <kbd>Create</kbd> to create the event
+
 ---
+
 #### Edit or Delete an Event
+
 1. On the calendar, click on the event that you want to edit or delete
 2. The **Event Info** dialog will pop up. Click on <kbd>Edit</kbd> or <kbd>Delete</kbd> to edit or delete the event
-<p align="center">
-  <img src="images/guide/event-info-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.22. Event Info Dialog</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/event-info-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.22. Event Info Dialog</em>
+ </p>
 
 3. When clicking on <kbd>Edit</kbd>, the **Edit Event** dialog will pop up. Make changes to the event details and click on <kbd>Update</kbd> to save changes
-<p align="center">
-  <img src="images/guide/edit-event-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.23. Edit Event Dialog</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/edit-event-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.23. Edit Event Dialog</em>
+ </p>
 
 4. When clicking on <kbd>Delete</kbd>, a dialog will pop up. Click on <kbd>Delete</kbd> to delete the event
-<p align="center">
-  <img src="images/guide/delete-event-dialog.png" width="450"/>
-</p>
-<p align="center">
-  <em>Figure 9.24. Delete Event Dialog</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/delete-event-dialog.png" width="450"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.24. Delete Event Dialog</em>
+ </p>
 
 ---
+
 #### Navigating Between Weeks
+
 1. Use the navigation tool to navigate between the weeks of the semester
-<p align="center">
-  <img src="images/guide/week-nav.png" width="350"/>
-</p>
-<p align="center">
-  <em>Figure 9.25. Week Navigation Toolbar</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/week-nav.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.25. Week Navigation Toolbar</em>
+ </p>
 
 2. Click on the dropdown list and select the week that you want to display
 3. Click on <kbd><</kbd> to move to the previous week
 4. Click on <kbd>></kbd> to move to the next week
 
 ---
+
 ### 4.5. Task Management
+
 #### Add a task
+
 1. Click on <kbd>+</kbd> at the bottom of the task list
-<p align="center">
-  <img src="images/guide/add-task-button.png" width="250"/>
-</p>
-<p align="center">
-  <em>Figure 9.26. Add New Task Button</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/add-task-button.png" width="250"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.26. Add New Task Button</em>
+ </p>
 2. Enter the task name
-<p align="center">
-  <img src="images/guide/enter-task-name.png" width="250"/>
-</p>
-<p align="center">
-  <em>Figure 9.27. Entering Task Name</em>
-</p> 
+ <p align="center">
+   <img src="images/guide/enter-task-name.png" width="250"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.27. Entering Task Name</em>
+ </p>
 
 3. Press **Enter** key to add the new task to the list
 
 ---
+
 #### Manage Tasks
+
 To edit or delete a task:
+
 1. Click on the task that you want to edit or delete
 2. Changing the task name and press **Enter** key will update the task name
 3. Click on <kbd>🗑️</kbd> will the delete the task
@@ -1329,27 +1469,147 @@ To edit or delete a task:
 </p>
 <p align="center">
   <em>Figure 9.27. Edit or Delete a Task</em>
-</p> 
+</p>
 
 To mark a task as completed:
+
 1. Click on the empty checkbox to mark the task as completed
 2. Click on the checked checkbox to mark the task uncompleted
 
 ### 4.6. Pomodoro
-#### Using the Timer
-1. Click on <kbd>Start</kbd> to start the session. The Timer will be in **Focus** mode and start counting down
-2. To pause the Timer, click on <kbd>Pause</kbd>
-3. To resume the Timer, click on <kbd>Start</kbd> again
-4. To reset the Timer and sessions counter, click on <kbd>Reset</kbd>
+
+#### Custom Pomodoro Timers
+
+1. Click "Pick Timer" button or the button that shows currently selected timer name.
+ <p align="center">
+   <img src="images/guide/press-pick-timer.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.28. Press on Pick Timer Button</em>
+ </p>
+
+2. Add, Pick, Edit, Delete A Timer
+
+- Add A Timer
+
+    To add timer, press 'Add Timer' button, fill up the form and press Save.
+
 <p align="center">
-  <img src="images/guide/timer-controller.png" width="450"/>
+  <img src="images/guide/add-timer-button.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.28. Timer Controller</em>
-</p> 
+  <em>Figure 9.29. Press on add timer Button</em>
+</p>
+
+<p align="center">
+  <img src="images/guide/add-timer.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.30. Add a timer</em>
+</p>
+
+- Pick A Timer
+
+    To pick a timer, just press on it
+
+<p align="center">
+  <img src="images/guide/pick-diff-timer.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.31. Pick a timer</em>
+</p>
+
+- Edit A timer
+
+    To Edit a timer, press on edit button, change the fields and press Save
+
+<p align="center">
+  <img src="images/guide/edit-timer-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.32. Edit Timer Button</em>
+</p>
+
+<p align="center">
+  <img src="images/guide/edit-timer.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.33. Edit Timer</em>
+</p>
+
+- Delete A Timer
+
+    To delete a timer, press on delete button
+
+<p align="center">
+<img src="images/guide/delete-timer.png" width="350"/>
+</p>
+<p align="center">
+<em>Figure 9.34. Delete Timer</em>
+</p>
+
+#### Pick an Incomplete Task
+
+1. Press **"Select Your Task"**.
+
+<p align="center">
+  <img src="images/guide/select-incompletetask-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.35. Select Your Task Button</em>
+</p>
+
+2. Click the task you wish to complete.
+
+<p align="center">
+  <img src="images/guide/select-incompletetask.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.36. Select a Task</em>
+</p>
+
+3. To change the selected task, click the same button again and choose another task.
+
+<p align="center">
+  <img src="images/guide/incompletetask-displayed-button.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.37. Selected Task Display</em>
+</p>
+
+<p align="center">
+  <img src="images/guide/pick-another-incompletetask.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.38. Select Another Task</em>
+</p>
+
+4. To remove the selected task, click the **×** button.
+
+<p align="center">
+  <img src="images/guide/remove-selected-incompletetask.png" width="350"/>
+</p>
+<p align="center">
+  <em>Figure 9.39. Remove Selected Task</em>
+</p>
+
+#### Using the Timer
+
+1. Click on <kbd>Start</kbd> to start the session. The Timer will be in **Focus** mode and start counting down. The <kbd>Start</kbd> will switches to <kbd>Pause</kbd>
+2. To pause the Timer, click on <kbd>Pause</kbd>
+3. To resume the Timer, click on <kbd>Start</kbd> again
+4. To reset the Timer, click on <kbd>Reset</kbd>
+ <p align="center">
+   <img src="images/guide/timer-controller.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.40. Timer Controller</em>
+ </p>
 
 ---
+
 #### Switching Between Focus and Break Sessions
+
 1. When in **Focus** session, click on <kbd>Switch to Break</kbd> will instantly switch the timer to **Break** session
 2. When in **Break** session, click on <kbd>Switch to Focus</kbd> will instantly switch the timer to **Focus** session
 
@@ -1357,16 +1617,16 @@ To mark a task as completed:
   <img src="images/guide/switch-session.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.27. Switch to Break session</em>
-</p> 
+  <em>Figure 9.41. Switch to Break session</em>
+</p>
 
 # 5. Testing
 
 To improve the reliability and maintainability of **NUS Savnac**, multiple levels of software testing were carried out throughout the development process. Rather than relying solely on manual verification, the project adopts a layered testing strategy to validate different parts of the system independently. Three complementary testing approaches are employed:
 
-* **Integration Testing** verifies the correctness of backend REST APIs and their interactions with the database.
-* **Component Testing** ensures that individual React components behave correctly when rendered in isolation.
-* **End-to-End (E2E) Testing** validates complete user workflows across both the frontend and backend, simulating real user interactions with the system.
+- **Integration Testing** verifies the correctness of backend REST APIs and their interactions with the database.
+- **Component Testing** ensures that individual React components behave correctly when rendered in isolation.
+- **End-to-End (E2E) Testing** validates complete user workflows across both the frontend and backend, simulating real user interactions with the system.
 
 Together, these testing approaches provide confidence that individual components function correctly, APIs behave as expected, and the overall application operates reliably from the user's perspective.
 
@@ -1399,3 +1659,23 @@ End-to-End (E2E) testing is implemented using **Playwright** to simulate real us
 Unlike integration and component testing, E2E tests validate complete user workflows that span both the frontend and backend. Typical scenarios include user authentication, course management, resource management, scheduler operations, task management, and other major features available within the application.
 
 Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions.
+
+# 6. SWE Practices
+
+## 6.1. Version Control & Collaboration
+
+- Adopted a feature-branch workflow using GitHub to manage parallel development among team members.
+- Created dedicated branches for individual features (e.g., Pomodoro extension, settings, task management) to prevent conflicts with the main codebase.
+- Used Pull Requests (PRs) for code review and integration, allowing team members to review changes before merging.
+- Maintained clear commit messages and organized commits to improve code maintainability and traceability.
+
+## 6.2. Continuous Integration Discipline
+
+- Maintained the `main` branch as a stable and deployment-ready branch.
+- Tested new features locally before merging changes into shared branches.
+- Verified that frontend and backend services remained compatible after feature integration.
+- Ensured successful builds and deployment checks before releasing updates to the production environment.
+
+```
+
+```
