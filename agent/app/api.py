@@ -49,3 +49,8 @@ async def agent_revise(request: ReviseRequest):
     )
 
     return result["current_plan"]
+
+
+@app.get("/health")
+async def health():
+    return {"status": "ok"}
