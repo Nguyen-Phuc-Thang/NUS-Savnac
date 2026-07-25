@@ -63,7 +63,7 @@ const TimerCard = ({
                     <div className="flex w-full items-center justify-between">
                         {/**Top Left */}
                         <div className="flex flex-1 min-w-0 items-center gap-1">
-                            {selected && <Check className="shrink-0"/>}
+                            {selected && <Check className="shrink-0" />}
                             <h1 className="truncate font-bold text-xl">
                                 {timer.name}
                             </h1>
@@ -109,9 +109,10 @@ const TimerCard = ({
                                         </AlertDialogCancel>
 
                                         <AlertDialogAction
-                                            onClick={() =>
-                                                onDeleteTimer(timer.pomodoroId)
-                                            }
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onDeleteTimer(timer.pomodoroId);
+                                            }}
                                         >
                                             Delete
                                         </AlertDialogAction>
