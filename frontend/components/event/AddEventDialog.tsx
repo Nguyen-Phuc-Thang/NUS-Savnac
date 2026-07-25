@@ -1,26 +1,40 @@
-"use client";
+'use client';
 
 // React Hooks
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 // UI Components
-import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "@/components/ui/combobox";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Field, FieldLabel } from "@/components/ui/field";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import {
+    Combobox,
+    ComboboxContent,
+    ComboboxEmpty,
+    ComboboxInput,
+    ComboboxItem,
+    ComboboxList,
+} from '@/components/ui/combobox';
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog';
+import { Field, FieldLabel } from '@/components/ui/field';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Checkbox } from '@/components/ui/checkbox';
 
 // Utils
-import { eventTypes } from "@/lib/constants/event";
-import { weeks, days } from "@/lib/constants/time";
+import { eventTypes } from '@/lib/constants/event';
+import { weeks, days } from '@/lib/constants/time';
 
 interface AddEventDialogProps {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     eventTitleInput: string;
     setEventTitleInput: (value: string) => void;
-    eventTypeInput: typeof eventTypes[number];
-    setEventTypeInput: (value: typeof eventTypes[number]) => void;
+    eventTypeInput: (typeof eventTypes)[number];
+    setEventTypeInput: (value: (typeof eventTypes)[number]) => void;
     eventWeekInput: string;
     setEventWeekInput: (value: string) => void;
     eventDayInput: string;
@@ -35,6 +49,8 @@ interface AddEventDialogProps {
     setEventEndTimeMinuteInput: (value: string) => void;
     eventVenueInput: string;
     setEventVenueInput: (value: string) => void;
+    eventReminderInput: boolean;
+    setEventReminderInput: (value: boolean) => void;
     onCreate: () => void;
 }
 
@@ -59,29 +75,35 @@ export default function AddEventDialog({
     setEventEndTimeMinuteInput,
     eventVenueInput,
     setEventVenueInput,
-    onCreate
+    eventReminderInput,
+    setEventReminderInput,
+    onCreate,
 }: AddEventDialogProps) {
-
     useEffect(() => {
-        setEventTitleInput("");
-        setEventTypeInput("CLASS");
-        setEventWeekInput("");
-        setEventDayInput("");
-        setEventStartTimeHourInput("");
-        setEventStartTimeMinuteInput("");
-        setEventEndTimeHourInput("");
-        setEventEndTimeMinuteInput("");
-        setEventVenueInput("");
+        setEventTitleInput('');
+        setEventTypeInput('CLASS');
+        setEventWeekInput('');
+        setEventDayInput('');
+        setEventStartTimeHourInput('');
+        setEventStartTimeMinuteInput('');
+        setEventEndTimeHourInput('');
+        setEventEndTimeMinuteInput('');
+        setEventVenueInput('');
+        setEventReminderInput(false);
     }, [open]);
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="w-[50vw] max-w-none">
                 <DialogHeader>
-                    <DialogTitle className="font-heading text-2xl">Create New Event</DialogTitle>
+                    <DialogTitle className="font-heading text-2xl">
+                        Create New Event
+                    </DialogTitle>
                 </DialogHeader>
                 <div>
                     <Field className="w-full">
-                        <FieldLabel className="font-sans text-md">Event Title</FieldLabel>
+                        <FieldLabel className="font-sans text-md">
+                            Event Title
+                        </FieldLabel>
                         <Input
                             type="text"
                             placeholder="Enter event title"
@@ -93,13 +115,23 @@ export default function AddEventDialog({
 
                     <div className="w-full mt-4 font-sans">
                         <p className="font-semibold mb-2">Event Type</p>
-                        <Combobox items={eventTypes} value={eventTypeInput} onValueChange={(value) => setEventTypeInput(value ?? "CLASS")}>
+                        <Combobox
+                            items={eventTypes}
+                            value={eventTypeInput}
+                            onValueChange={(value) =>
+                                setEventTypeInput(value ?? 'CLASS')
+                            }
+                        >
                             <ComboboxInput placeholder="Select an event type" />
                             <ComboboxContent>
                                 <ComboboxEmpty>No items found.</ComboboxEmpty>
                                 <ComboboxList className="max-h-none">
                                     {(item) => (
-                                        <ComboboxItem className='font-sans' key={item} value={item}>
+                                        <ComboboxItem
+                                            className="font-sans"
+                                            key={item}
+                                            value={item}
+                                        >
                                             {item}
                                         </ComboboxItem>
                                     )}
@@ -110,13 +142,23 @@ export default function AddEventDialog({
 
                     <div className="w-full mt-4 font-sans">
                         <p className="font-semibold mb-2">Week</p>
-                        <Combobox items={weeks} value={eventWeekInput} onValueChange={(value) => setEventWeekInput(value ?? "")}>
+                        <Combobox
+                            items={weeks}
+                            value={eventWeekInput}
+                            onValueChange={(value) =>
+                                setEventWeekInput(value ?? '')
+                            }
+                        >
                             <ComboboxInput placeholder="Select a week" />
                             <ComboboxContent>
                                 <ComboboxEmpty>No items found.</ComboboxEmpty>
                                 <ComboboxList className="max-h-none">
                                     {(item) => (
-                                        <ComboboxItem className='font-sans' key={item} value={item}>
+                                        <ComboboxItem
+                                            className="font-sans"
+                                            key={item}
+                                            value={item}
+                                        >
                                             {item}
                                         </ComboboxItem>
                                     )}
@@ -127,13 +169,23 @@ export default function AddEventDialog({
 
                     <div className="w-full mt-4 font-sans">
                         <p className="font-semibold mb-2">Day</p>
-                        <Combobox items={days} value={eventDayInput} onValueChange={(value) => setEventDayInput(value ?? "")}>
+                        <Combobox
+                            items={days}
+                            value={eventDayInput}
+                            onValueChange={(value) =>
+                                setEventDayInput(value ?? '')
+                            }
+                        >
                             <ComboboxInput placeholder="Select a day" />
                             <ComboboxContent>
                                 <ComboboxEmpty>No items found.</ComboboxEmpty>
                                 <ComboboxList className="max-h-none">
                                     {(item) => (
-                                        <ComboboxItem className='font-sans' key={item} value={item}>
+                                        <ComboboxItem
+                                            className="font-sans"
+                                            key={item}
+                                            value={item}
+                                        >
                                             {item}
                                         </ComboboxItem>
                                     )}
@@ -142,16 +194,22 @@ export default function AddEventDialog({
                         </Combobox>
                     </div>
 
-                    <div className="w-full mt-4 font-sans flex flex-row gap-10" >
+                    <div className="w-full mt-4 font-sans flex flex-row gap-10">
                         <div>
-                            <p className="font-sans font-semibold mt-4 mb-2">Start Time</p>
+                            <p className="font-sans font-semibold mt-4 mb-2">
+                                Start Time
+                            </p>
                             <div>
                                 <Input
                                     type="number"
                                     placeholder="HH"
                                     className="w-20 font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
                                     value={eventStartTimeHourInput}
-                                    onChange={(e) => setEventStartTimeHourInput(e.target.value)}
+                                    onChange={(e) =>
+                                        setEventStartTimeHourInput(
+                                            e.target.value,
+                                        )
+                                    }
                                 />
                                 <span className="mx-2">:</span>
                                 <Input
@@ -159,19 +217,27 @@ export default function AddEventDialog({
                                     placeholder="MM"
                                     className="w-20 font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
                                     value={eventStartTimeMinuteInput}
-                                    onChange={(e) => setEventStartTimeMinuteInput(e.target.value)}
+                                    onChange={(e) =>
+                                        setEventStartTimeMinuteInput(
+                                            e.target.value,
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
                         <div>
-                            <p className="font-sans font-semibold mt-4 mb-2">End Time</p>
+                            <p className="font-sans font-semibold mt-4 mb-2">
+                                End Time
+                            </p>
                             <div>
                                 <Input
                                     type="number"
                                     placeholder="HH"
                                     className="w-20 font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
                                     value={eventEndTimeHourInput}
-                                    onChange={(e) => setEventEndTimeHourInput(e.target.value)}
+                                    onChange={(e) =>
+                                        setEventEndTimeHourInput(e.target.value)
+                                    }
                                 />
                                 <span className="mx-2">:</span>
                                 <Input
@@ -179,14 +245,20 @@ export default function AddEventDialog({
                                     placeholder="MM"
                                     className="w-20 font-sans h-12 border border-input focus-visible:ring-2 focus-visible:ring-secondary focus-visible:outline-none focus-visible:border-secondary"
                                     value={eventEndTimeMinuteInput}
-                                    onChange={(e) => setEventEndTimeMinuteInput(e.target.value)}
+                                    onChange={(e) =>
+                                        setEventEndTimeMinuteInput(
+                                            e.target.value,
+                                        )
+                                    }
                                 />
                             </div>
                         </div>
                     </div>
 
                     <Field className="w-full mt-5">
-                        <FieldLabel className="font-sans text-md">Venue</FieldLabel>
+                        <FieldLabel className="font-sans text-md">
+                            Venue
+                        </FieldLabel>
                         <Input
                             type="text"
                             placeholder="Enter event venue"
@@ -196,12 +268,34 @@ export default function AddEventDialog({
                         />
                     </Field>
 
+                    <div className="mt-8 flex items-start gap-3 font-sans">
+                        <Checkbox
+                            checked={eventReminderInput}
+                            onCheckedChange={(checked) =>
+                                setEventReminderInput(checked === true)
+                            }
+                        />
+                        <div className="flex flex-col gap-1">
+                            <label className="text-sm font-medium leading-none">
+                                Turn on reminder for this event
+                            </label>
+                            <p className="text-sm text-muted-foreground italic">
+                                User will be reminded via email 24 hours before
+                                the event starts.
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={onCreate} className='font-sans px-6 py-5 bg-secondary' type="submit">Create</Button>
+                    <Button
+                        onClick={onCreate}
+                        className="font-sans px-6 py-5 bg-secondary"
+                        type="submit"
+                    >
+                        Create
+                    </Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
     );
-
 }
