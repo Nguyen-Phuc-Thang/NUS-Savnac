@@ -1767,7 +1767,7 @@ System testing was performed manually during development to verify that major us
 Below are some test cases:
 
 | Feature             | Test Case                                  | Expected Result                                                      |
-| ------------------- | ------------------------------------------ | -------------------------------------------------------------------- | --- |
+| ------------------- | ------------------------------------------ | -------------------------------------------------------------------- |
 | Authentication      | Login with valid credentials               | User is successfully authenticated and redirected to the application |
 | Authentication      | Login with invalid credentials             | Error message is displayed and access is denied                      |
 | Course Management   | Add a new course                           | Course is added and displayed in user's course list                  |
@@ -1777,8 +1777,7 @@ Below are some test cases:
 | Task Management     | Access another user's data                 | User cannot access other users' tasks                                |
 | Pomodoro Timer      | Create and configure custom timer          | Timer settings are saved and loaded correctly                        |
 | Pomodoro Timer      | Start and complete a Pomodoro session      | Timer counts down and changes session correctly                      |
-| Navigation          | Navigate between pages                     | Pages load correctly without errors                                  |     |
-
+| Navigation          | Navigate between pages                     | Pages load correctly without errors                                  |
 <!-- ## 5.2. Component Testing
 
 Frontend component testing is implemented using **React Testing Library**. Instead of testing the application as a whole, component tests focus on verifying the behavior of individual React components in isolation.
@@ -1812,7 +1811,3 @@ Each test interacts with the application through the browser in the same manner 
 - Tested new features locally before merging changes into shared branches.
 - Verified that frontend and backend services remained compatible after feature integration.
 - Ensured successful builds and deployment checks before releasing updates to the production environment.
-
-```
-
-```
