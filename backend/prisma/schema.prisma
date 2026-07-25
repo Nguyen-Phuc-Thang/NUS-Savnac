@@ -102,6 +102,8 @@ model Event {
   startTime String
   endTime   String?
   venue     String?
+
+  reminders Reminder[]
 }
 
 enum TaskType {
@@ -129,4 +131,11 @@ model Pomodoro {
   createdAt  DateTime @default(now())
   userId     String   @db.Uuid
   user       User?    @relation(fields: [userId], references: [id])
+}
+
+model Reminder {
+  reminderId String   @id @default(uuid()) @db.Uuid
+  eventId    String   @db.Uuid
+  event      Event    @relation(fields: [eventId], references: [eventId], onDelete: Cascade)
+  remindAt   DateTime
 }

@@ -8,7 +8,7 @@ async function bootstrap() {
     origin: process.env.FRONTEND_URL,
     credentials: true,
   });
-  console.log(`Frontend URL: ${process.env.FRONTEND_URL}`);
+
   app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
@@ -18,10 +18,6 @@ async function bootstrap() {
     }),
   );
 
-  const port = Number(process.env.PORT) || 3001;
-
-  await app.listen(port, '0.0.0.0');
-
-  console.log(`Server is running on port ${port}`);
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
