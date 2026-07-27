@@ -1416,7 +1416,7 @@ The module also includes a password management section. However, password modifi
 <img src="images/settings-page.png" width="900"/>
 </p> 
 <p align="center"> 
-<em>Figure 9.1. Settings Page</em> 
+<em>Figure 11.1. Settings Page</em> 
 </p>
 
 #### Key Functionalities
@@ -1456,7 +1456,7 @@ When a user updates their display name, the backend validates the request and pe
   <img src="images/guide/login.png" width="900"/>
 </p>
 <p align="center">
-  <em>Figure 9.1. Login Page</em>
+  <em>Figure 12.1. Login Page</em>
 </p>
 
 ---
@@ -1473,7 +1473,7 @@ When a user updates their display name, the backend validates the request and pe
   <img src="images/guide/register.png" width="900"/>
 </p>
 <p align="center">
-  <em>Figure 9.2. Register Page</em>
+  <em>Figure 12.2. Register Page</em>
 </p>
 
 ### 4.2. Dashboard
@@ -1485,7 +1485,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/add-course-button.png" width="800"/>
  </p>
  <p align="center">
-   <em>Figure 9.3. Add Course Button</em>
+   <em>Figure 12.3. Add Course Button</em>
  </p>
 
 2. Search for the course by its module code
@@ -1493,7 +1493,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/search-code.jpeg" width="500"/>
  </p>
  <p align="center">
-   <em>Figure 9.4. Searching for a Course</em>
+   <em>Figure 12.4. Searching for a Course</em>
  </p>
 
 3. Click on the course to add it to dashboard
@@ -1507,7 +1507,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/delete-course-button.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.5. DELETE Mode button</em>
+   <em>Figure 12.5. DELETE Mode button</em>
  </p>
 
 2. Select the course you want to delete
@@ -1515,7 +1515,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/course-delete-mode.png" width="500"/>
  </p>
  <p align="center">
-   <em>Figure 9.6. Courses in DELETE mode</em>
+   <em>Figure 12.6. Courses in DELETE mode</em>
  </p>
 
 3. A dialog will pop up. Click <kbd>Delete</kbd> to delete the course
@@ -1523,7 +1523,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/delete-course-dialog.png" width="500"/>
  </p>
  <p align="center">
-   <em>Figure 9.7. Delete Course Dialog</em>
+   <em>Figure 12.7. Delete Course Dialog</em>
  </p>
 
 ### 4.3. Resources Management
@@ -1535,7 +1535,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/add-folder-button.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.8. Add Folder Button</em>
+   <em>Figure 12.8. Add Folder Button</em>
  </p>
 
 2. Enter the **Folder Name** and **Folder Description**
@@ -1543,7 +1543,7 @@ When a user updates their display name, the backend validates the request and pe
    <img src="images/guide/add-folder-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.9. Create New Folder Dialog</em>
+   <em>Figure 12.9. Create New Folder Dialog</em>
  </p>
 
 3. Click <kbd>Create</kbd> to create the folder
@@ -1559,7 +1559,7 @@ To create a new link in the **Links** section:
    <img src="images/guide/add-link-button.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.10. Create Link button</em>
+   <em>Figure 12.10. Create Link button</em>
  </p>
 
 2. Enter the **Link Title** and **Link URL**
@@ -1567,7 +1567,7 @@ To create a new link in the **Links** section:
    <img src="images/guide/add-link-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.11. Create New Link Dialog</em>
+   <em>Figure 12.11. Create New Link Dialog</em>
  </p>
 
 3. Click <kbd>Create</kbd> to create the link
@@ -1580,7 +1580,7 @@ To create a new link in a folder:
    <img src="images/guide/add-link-in-folder.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.12. Create Link Button</em>
+   <em>Figure 12.12. Create Link Button</em>
  </p>
 
 3. Enter the **Link Title** and **Link URL**
@@ -1598,7 +1598,7 @@ To edit or delete a folder:
   <img src="images/guide/folder-grid-toolbar.png" width="250"/>
 </p>
 <p align="center">
-  <em>Figure 9.13. EDIT and DELETE mode buttons</em>
+  <em>Figure 12.13. EDIT and DELETE mode buttons</em>
 </p>
 
 2. Select the folder that you want to edit or delete
@@ -1608,7 +1608,7 @@ To edit or delete a folder:
   <img src="images/guide/edit-folder-dialog.png" width="450"/>
 </p>
 <p align="center">
-  <em>Figure 9.14. Edit Folder Dialog</em>
+  <em>Figure 12.14. Edit Folder Dialog</em>
 </p>
 
 4. In **DELETE** mode, a dialog will pop up. Click on <kbd>Delete</kbd> to delete the folder
@@ -1617,7 +1617,7 @@ To edit or delete a folder:
   <img src="images/guide/delete-folder-dialog.png" width="450"/>
 </p>
 <p align="center">
-  <em>Figure 9.15. Delete Folder Dialog</em>
+  <em>Figure 12.15. Delete Folder Dialog</em>
 </p>
 
 To edit or delete a link in a folder:
@@ -1628,7 +1628,7 @@ To edit or delete a link in a folder:
   <img src="images/guide/link-hovered.png" width="250"/>
 </p>
 <p align="center">
-  <em>Figure 9.16. Link When Hovered</em>
+  <em>Figure 12.16. Link When Hovered</em>
 </p>
 
 2. When clicking on <kbd>✏️</kbd>, the **Edit Link** dialog will pop up. Make changes to the **title** and **URL** of the link and click <kbd>Update</kbd>
@@ -1637,7 +1637,7 @@ To edit or delete a link in a folder:
   <img src="images/guide/edit-link-dialog.png" width="450"/>
 </p>
 <p align="center">
-  <em>Figure 9.17. Edit Link Dialog</em>
+  <em>Figure 12.17. Edit Link Dialog</em>
 </p>
 
 3. When clicking on <kbd>🗑️</kbd>, a dialog will pop up. Click <kbd>Delete</kbd> to delete the link.
@@ -1646,7 +1646,7 @@ To edit or delete a link in a folder:
   <img src="images/guide/delete-link-dialog.png" width="450"/>
 </p>
 <p align="center">
-  <em>Figure 9.18. Delete Link Dialog</em>
+  <em>Figure 12.18. Delete Link Dialog</em>
 </p>
 
 ### 4.4. Scheduler
@@ -1660,7 +1660,7 @@ To add a class of the course:
    <img src="images/guide/add-event-button.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.19. Add Event Button</em>
+   <em>Figure 12.19. Add Event Button</em>
  </p>
 
 2. The **Add NUS Class** dialog will pop up. Click on the class to add it
@@ -1668,7 +1668,7 @@ To add a class of the course:
    <img src="images/guide/add-class-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.20. Add NUS Class Dialog</em>
+   <em>Figure 12.20. Add NUS Class Dialog</em>
  </p>
 
 To add a custom event:
@@ -1679,7 +1679,7 @@ To add a custom event:
    <img src="images/guide/add-event-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.21. Create New Event Dialog</em>
+   <em>Figure 12.21. Create New Event Dialog</em>
  </p>
 
 3. Click on <kbd>Create</kbd> to create the event
@@ -1694,7 +1694,7 @@ To add a custom event:
    <img src="images/guide/event-info-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.22. Event Info Dialog</em>
+   <em>Figure 12.22. Event Info Dialog</em>
  </p>
 
 3. When clicking on <kbd>Edit</kbd>, the **Edit Event** dialog will pop up. Make changes to the event details and click on <kbd>Update</kbd> to save changes
@@ -1702,7 +1702,7 @@ To add a custom event:
    <img src="images/guide/edit-event-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.23. Edit Event Dialog</em>
+   <em>Figure 12.23. Edit Event Dialog</em>
  </p>
 
 4. When clicking on <kbd>Delete</kbd>, a dialog will pop up. Click on <kbd>Delete</kbd> to delete the event
@@ -1710,7 +1710,7 @@ To add a custom event:
    <img src="images/guide/delete-event-dialog.png" width="450"/>
  </p>
  <p align="center">
-   <em>Figure 9.24. Delete Event Dialog</em>
+   <em>Figure 12.24. Delete Event Dialog</em>
  </p>
 
 ---
@@ -1722,7 +1722,7 @@ To add a custom event:
    <img src="images/guide/week-nav.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.25. Week Navigation Toolbar</em>
+   <em>Figure 12.25. Week Navigation Toolbar</em>
  </p>
 
 2. Click on the dropdown list and select the week that you want to display
@@ -1740,14 +1740,14 @@ To add a custom event:
    <img src="images/guide/add-task-button.png" width="250"/>
  </p>
  <p align="center">
-   <em>Figure 9.26. Add New Task Button</em>
+   <em>Figure 12.26. Add New Task Button</em>
  </p>
 2. Enter the task name
  <p align="center">
    <img src="images/guide/enter-task-name.png" width="250"/>
  </p>
  <p align="center">
-   <em>Figure 9.27. Entering Task Name</em>
+   <em>Figure 12.27. Entering Task Name</em>
  </p>
 
 3. Press **Enter** key to add the new task to the list
@@ -1766,7 +1766,7 @@ To edit or delete a task:
   <img src="images/guide/edit-task.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.27. Edit or Delete a Task</em>
+  <em>Figure 12.28. Edit or Delete a Task</em>
 </p>
 
 To mark a task as completed:
@@ -1783,7 +1783,7 @@ To mark a task as completed:
    <img src="images/guide/press-pick-timer.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.28. Press on Pick Timer Button</em>
+   <em>Figure 12.29. Press on Pick Timer Button</em>
  </p>
 
 2. Add, Pick, Edit, Delete A Timer
@@ -1796,14 +1796,14 @@ To mark a task as completed:
   <img src="images/guide/add-timer-button.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.29. Press on add timer Button</em>
+  <em>Figure 12.30. Press on add timer Button</em>
 </p>
 
 <p align="center">
   <img src="images/guide/add-timer.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.30. Add a timer</em>
+  <em>Figure 12.31. Add a timer</em>
 </p>
 
 - Pick A Timer
@@ -1814,7 +1814,7 @@ To mark a task as completed:
   <img src="images/guide/pick-diff-timer.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.31. Pick a timer</em>
+  <em>Figure 12.32. Pick a timer</em>
 </p>
 
 - Edit A timer
@@ -1825,14 +1825,14 @@ To mark a task as completed:
   <img src="images/guide/edit-timer-button.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.32. Edit Timer Button</em>
+  <em>Figure 12.33. Edit Timer Button</em>
 </p>
 
 <p align="center">
   <img src="images/guide/edit-timer.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.33. Edit Timer</em>
+  <em>Figure 12.34. Edit Timer</em>
 </p>
 
 - Delete A Timer
@@ -1843,7 +1843,7 @@ To mark a task as completed:
 <img src="images/guide/delete-timer.png" width="350"/>
 </p>
 <p align="center">
-<em>Figure 9.34. Delete Timer</em>
+<em>Figure 12.35. Delete Timer</em>
 </p>
 
 #### Pick an Incomplete Task
@@ -1854,7 +1854,7 @@ To mark a task as completed:
   <img src="images/guide/select-incompletetask-button.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.35. Select Your Task Button</em>
+  <em>Figure 12.36. Select Your Task Button</em>
 </p>
 
 2. Click the task you wish to complete.
@@ -1863,7 +1863,7 @@ To mark a task as completed:
   <img src="images/guide/select-incompletetask.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.36. Select a Task</em>
+  <em>Figure 12.37. Select a Task</em>
 </p>
 
 3. To change the selected task, click the same button again and choose another task.
@@ -1872,14 +1872,14 @@ To mark a task as completed:
   <img src="images/guide/incompletetask-displayed-button.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.37. Selected Task Display</em>
+  <em>Figure 12.38. Selected Task Display</em>
 </p>
 
 <p align="center">
   <img src="images/guide/pick-another-incompletetask.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.38. Select Another Task</em>
+  <em>Figure 12.39. Select Another Task</em>
 </p>
 
 4. To remove the selected task, click the **×** button.
@@ -1888,7 +1888,7 @@ To mark a task as completed:
   <img src="images/guide/remove-selected-incompletetask.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.39. Remove Selected Task</em>
+  <em>Figure 12.40. Remove Selected Task</em>
 </p>
 
 #### Using the Timer
@@ -1901,7 +1901,7 @@ To mark a task as completed:
    <img src="images/guide/timer-controller.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.40. Timer Controller</em>
+   <em>Figure 12.41. Timer Controller</em>
  </p>
 
 ---
@@ -1915,7 +1915,7 @@ To mark a task as completed:
   <img src="images/guide/switch-session.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.41. Switch to Break session</em>
+  <em>Figure 12.42. Switch to Break session</em>
 </p>
 
 ### 4.7. Planning Agent
@@ -1929,7 +1929,7 @@ To mark a task as completed:
    <img src="images/guide/planning-preferences.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.42. Planning Preferences</em>
+   <em>Figure 12.43. Planning Preferences</em>
  </p>
 
 4. Click <kbd>Start Planning</kbd> to start planning for the event. Wait for a couple of minutes for the agent to return the plan
@@ -1938,7 +1938,7 @@ To mark a task as completed:
    <img src="images/guide/final-plan.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.43. Suggested Plan by the Agent</em>
+   <em>Figure 12.44. Suggested Plan by the Agent</em>
  </p>
 
 #### Request revision
@@ -1951,7 +1951,7 @@ To mark a task as completed:
    <img src="images/guide/revise-chat-box.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.44. Revise Plan Chat Box</em>
+   <em>Figure 12.45. Revise Plan Chat Box</em>
  </p>
 
 #### Save plan
@@ -1969,7 +1969,7 @@ To mark a task as completed:
    <img src="images/guide/revise-chat-box.png" width="350"/>
  </p>
  <p align="center">
-   <em>Figure 9.45. Reminder Checkbox</em>
+   <em>Figure 12.46. Reminder Checkbox</em>
  </p>
 
 2. You will receive a reminder via your registered email 24 hours before the event starts
@@ -1987,19 +1987,20 @@ To mark a task as completed:
   <img src="images/settings-page.png" width="350"/>
 </p>
 <p align="center">
-  <em>Figure 9.xx. Settings Page</em>
+  <em>Figure 12.47. Settings Page</em>
 </p>
 
 # 5. Testing
 
-To improve the reliability and maintainability of **NUS Savnac**, a multi-level testing strategy was planned covering automated testing and user validation. Due to project timeline constraints, the implemented automated testing focuses on backend integration testing, while other testing levels are considered future improvements.
+To improve the reliability and quality of NUS Savnac, multiple testing approaches were adopted throughout development. Automated testing was implemented at different levels to verify backend APIs, frontend components, and complete user workflows, while manual validation was also performed during development to ensure the system behaved as expected under real usage.
 
-| Testing Level       | Purpose                                                                      | Status             |
-| ------------------- | ---------------------------------------------------------------------------- | ------------------ |
-| Unit Testing        | Verify individual functions and modules independently                        | Not implemented    |
-| Integration Testing | Verify correctness of backend REST APIs and their interactions with database | Implemented        |
-| System Testing      | Validate complete application workflows                                      | Manually performed |
-| User Testing        | Gather feedback from target users                                            | Not performed      |
+The testing strategy consists of three main levels:
+
+| Testing Level       | Purpose                                                                 | Framework                      |
+| ------------------- | ----------------------------------------------------------------------- | ------------------------------ |
+| Integration Testing | Verify interactions between backend controllers, services, and database | Jest + Supertest               |
+| Component Testing   | Verify the behaviour of individual frontend React components            | Vitest + React Testing Library |
+| System Testing      | Validate complete end-to-end user workflows across the application      | Playwright                     |
 
 Together, these testing approaches provide confidence that individual components function correctly, APIs behave as expected, and the overall application operates reliably from the user's perspective.
 
@@ -2129,16 +2130,16 @@ Below are some test cases:
 ## 6.1. Version Control & Collaboration
 
 - Adopted a feature-branch workflow using GitHub to manage parallel development among team members.
-- Created dedicated branches for individual features (e.g., Pomodoro extension, settings, task management) to prevent conflicts with the main codebase.
+- Created dedicated branches for individual features (e.g., dashboard, scheduler, pomodoro-extension) to prevent conflicts with the main codebase.
 - Used Pull Requests (PRs) for code review and integration, allowing team members to review changes before merging.
 - Maintained clear commit messages and organized commits to improve code maintainability and traceability.
 
 ## 6.2. Testing & Quality Assurance
 
-- Maintained the `main` branch as a stable and deployment-ready branch.
-- Tested new features locally before merging changes into shared branches.
-- Verified that frontend and backend services remained compatible after feature integration.
-- Ensured successful builds and deployment checks before releasing updates to the production environment.
+- Developers tested new features locally before creating Pull Requests.
+- Code changes were manually verified to ensure new functionality did not affect existing features.
+- Frontend and backend changes were tested together to confirm API compatibility.
+- Production deployments were monitored after release to identify unexpected issues.
 
 ## 6.3. Continuous Integration and Continuous Deployment
 
