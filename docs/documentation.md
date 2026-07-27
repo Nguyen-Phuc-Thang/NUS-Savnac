@@ -41,20 +41,23 @@ _Password: 123456_
 - [Scheduler](#34-scheduler)
 - [Task Management](#35-task-management)
 - [Pomodoro Timer](#36-pomodoro-timer)
-- [Settings](#37-settings)
+- [Planning Agent](#37-planning-agent)
+- [Reminder System](#38-reminder-system)
+- [Settings](#39-settings)
 
 4. [User Guide](#4-user-guide)
 
 5. [Testing](#5-testing)
 
-- [Integration Testing](#51-integration-testing)
-- [Component Testing](#52-component-testing)
-- [End To End Testing](#53-end-to-end-testing)
+- [Integration Testing](#51-integration-testing-automated)
+- [Component Testing](#52-component-testing-automated)
+- [System Testing](#53-system-testing-automated)
 
 6. [SWE Practices](#6-swe-practices)
 
 - [Version Control & Collaboration](#61-version-control--collaboration)
-- [Continuous Integration Discipline](#62-continuous-integration-discipline)
+- [Testing & Quality Assurance](#62-testing--quality-assurance)
+- [Continuous Integration and Continuous Deployment](#63-continuous-integration-and-continuous-deployment)
 
 ## 1. Introduction
 
@@ -1144,9 +1147,266 @@ Possible future improvements for the Pomodoro module include:
 - Saving selected tasks together with Pomodoro sessions.
 - Recording completed Pomodoro sessions to provide productivity history and statistics.
 
-### 3.7 Settings
+### 3.7 Planning Agent
 
-#### Feature overview
+#### 3.7.1 Feature Overview
+
+The **Planning Agent** is an AI-assisted feature that helps students generate structured preparation plans for upcoming examinations and assignment deadlines. Instead of manually deciding how to distribute their study workload across multiple days, users can provide their preparation preferences and allow the agent to generate an initial plan automatically.
+
+When requesting a plan, users may specify information such as:
+
+- The amount of time available before the target event
+- The preferred preparation intensity
+- Relevant study resources or materials
+- Additional notes or planning constraints
+
+The agent combines these preferences with the selected target event and the student's existing schedule to produce a study plan that fits within the available preparation period. Existing events are considered during plan generation to reduce scheduling conflicts and avoid placing suggested study sessions over previously scheduled commitments.
+
+After the initial plan is generated, users may continue interacting with the agent through a conversational interface. They can request adjustments such as reducing the workload on a particular day, moving a study session, changing the duration of selected activities, or prioritizing specific topics.
+
+Once the user is satisfied with the revised plan, the suggested study sessions can be saved directly to the NUS Savnac Scheduler as new events.
+
+<p align="center">
+  <img src="images/agent-dialog.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.1. Agent Dialog</em>
+</p>
+
+---
+
+#### 3.7.2 Key Functionalities
+
+The Planning Agent provides the following functionalities:
+
+- **Preference-based Plan Generation**
+  Users can configure the available preparation period, study intensity, and supporting resources before requesting a plan.
+
+- **Schedule-aware Planning**
+  Existing events within the preparation period are provided to the agent so that suggested study sessions do not overlap with previously scheduled activities.
+
+- **Conversational Plan Revision**
+  Users can refine the generated plan by sending natural-language adjustment requests to the agent.
+
+- **Session-based Conversation Memory**
+  Each planning interaction is associated with a unique planning session, allowing the agent to maintain context across multiple revision requests.
+
+- **Plan Persistence**
+  Once approved, the suggested study sessions can be converted into scheduler events and stored in the database.
+
+<p align="center">
+  <img src="images/suggested-event.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.2. Study plan suggested by the agent</em>
+</p>
+---
+
+#### 3.7.3 Technical Implementation
+
+The Planning Agent is implemented as a separate **Python service**, while the main frontend and backend applications are developed using TypeScript. Separating the AI service from the primary NestJS backend allows the agent to use Python-based AI libraries without introducing additional complexity into the existing application architecture.
+
+The agent is built using **LangGraph** and **LangChain**. LangGraph provides the graph-based execution structure and conversation state management, while LangChain supplies the integration layer for communicating with the selected large language model.
+
+The current implementation uses **Google Gemini 2.5 Flash** as the underlying language model. Model requests are authenticated through a Google API key stored securely as an environment variable.
+
+The completed graph is exposed as a set of HTTP endpoints through **FastAPI**. The NestJS backend communicates with these endpoints and treats the Planning Agent as an external service. As a result, the frontend can access the agent through the same backend architecture used by the remaining NUS Savnac modules.
+
+<p align="center">
+  <img src="images/agent-service-layers.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.3. Agent Service Layers Architecture</em>
+</p>
+
+---
+
+##### Planning Request Flow
+
+The plan generation process begins when a user selects an examination or deadline and configures the required preparation preferences.
+
+Before submitting the request to the agent, the system retrieves all existing events that occur within the selected preparation period. These events provide scheduling constraints that allow the generated plan to avoid conflicts with the user's current timetable.
+
+The request sent to the agent contains four main elements:
+
+| Input                 | Purpose                                                        |
+| --------------------- | -------------------------------------------------------------- |
+| `target_event`        | The examination or deadline for which the plan is generated    |
+| `preferences`         | Preparation duration, intensity, resources, and optional notes |
+| `existing_events`     | Events that must be considered to avoid scheduling conflicts   |
+| `planning_session_id` | Unique identifier used to preserve conversation context        |
+
+The backend forwards this information to:
+
+```text
+POST /agent/plan
+```
+
+The agent processes the request through its LangGraph workflow, invokes the Gemini model, and returns a structured plan containing a sequence of proposed study events. The returned data is then rendered by the frontend for the user to review.
+
+<p align="center">
+  <img src="images/agent-arch.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 9.4. Planning Agent Internal Architecture</em>
+</p>
+
+---
+
+##### Conversation Memory and Plan Revision
+
+Each planning interaction is assigned a pre-generated `planning_session_id`. This identifier is mapped to a LangGraph `thread_id`, which allows the agent to maintain a persistent state for the current planning conversation.
+
+If the user is not satisfied with the initial result, they may submit a natural-language revision request. The request is sent to:
+
+```text
+POST /agent/revise
+```
+
+together with the same `planning_session_id`.
+
+Using the corresponding `thread_id`, LangGraph retrieves the previous planning state, including the target event, preferences, existing events, generated plan, and earlier conversation messages. The model can therefore revise the current plan without requiring the complete context to be manually reconstructed by the frontend.
+
+Although plan generation and plan revision are exposed through separate API endpoints, they remain connected through the agent's persisted conversation state. This creates an iterative planning cycle in which users can repeatedly refine the plan until it meets their expectations.
+
+---
+
+##### Saving the Generated Plan
+
+After the user approves the plan, the frontend sends the proposed study sessions to the NestJS backend.
+
+Each planned activity is converted into an event compatible with the existing Scheduler data model. The backend then creates the corresponding database records, allowing the generated sessions to appear alongside the user's classes, deadlines, examinations, and personal events.
+
+Reusing the existing Event model avoids introducing a separate storage structure for AI-generated plans and allows all scheduler operations—such as editing or deleting generated sessions—to remain consistent with manually created events.
+
+---
+
+### 3.8 Reminder System
+
+#### 3.8.1 Feature Overview
+
+The **Reminder System** helps users keep track of important academic commitments by delivering email notifications before selected events occur. It is primarily intended for time-sensitive events such as assignment deadlines, examinations, quizzes, and project milestones.
+
+When creating an event, users may enable the reminder option. If enabled, NUS Savnac schedules an email notification to be sent to the user's registered email address **24 hours before the event**.
+
+This feature complements the Scheduler by ensuring that important events remain visible even when users are not actively using the application. It reduces the likelihood of missed deadlines and allows students to manage a large number of academic commitments more reliably.
+
+<p align="center">
+  <img src="images/reminder-option.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 10.1. Turn on reminder option</em>
+</p>
+
+<p align="center">
+  <img src="images/reminder-email.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 10.2. Reminder email received by user</em>
+</p>
+
+---
+
+#### 3.8.2 Key Functionalities
+
+The Reminder System provides the following functionalities:
+
+- **Optional Event Reminders**
+  Users may enable reminders while creating supported events.
+
+- **Scheduled Email Notifications**
+  Reminder emails are delivered automatically 24 hours before the associated event.
+
+- **Asynchronous Processing**
+  Reminder jobs are processed in the background without blocking normal application requests.
+
+- **Persistent Reminder Records**
+  Reminder information is stored in the database so that scheduled notifications can be associated with their corresponding users and events.
+
+- **Reliable Queue-based Execution**
+  Redis and BullMQ are used to preserve and process delayed reminder jobs.
+
+---
+
+#### 3.8.3 Technical Implementation
+
+The Reminder System is implemented using **BullMQ** and **Redis** as the background job processing infrastructure.
+
+Since reminders may need to be executed several hours or days after they are created, they cannot be handled within the lifecycle of a normal HTTP request. Instead, each reminder is represented as a delayed background job that remains in the queue until its scheduled execution time.
+
+Redis provides the persistent data store for the BullMQ queue, while BullMQ manages job creation, delayed execution, and worker processing.
+
+<p align="center">
+  <img src="images/reminder-architecture.png" width="900"/>
+</p>
+<p align="center">
+  <em>Figure 10.3. Reminder System Architecture</em>
+</p>
+
+---
+
+##### Reminder Creation
+
+When a user creates an event with the reminder option enabled, the frontend first submits the event through the normal event creation workflow.
+
+After the event has been successfully stored, its `eventId` is sent to:
+
+```text
+POST /api/reminder/create
+```
+
+The Reminder module calculates the notification time based on the event schedule. For the current implementation, the reminder is configured to run 24 hours before the event occurs.
+
+The system then performs two related operations:
+
+1. A reminder record is created in the database and associated with the corresponding event.
+2. A delayed BullMQ job containing the generated `reminderId` is added to the reminder queue stored in Redis.
+
+Storing only the `reminderId` inside the queued job keeps the job payload lightweight. The latest reminder, event, and user information can be retrieved from the database when the job is processed.
+
+---
+
+##### Queue and Worker Processing
+
+BullMQ maintains the delayed reminder job in Redis until the scheduled execution time is reached.
+
+When the delay expires, BullMQ moves the job into the active queue and assigns it to the reminder processor. The processor extracts the `reminderId` from the job payload and calls the `ReminderService` directly to retrieve the corresponding reminder record from the database.
+
+Since the reminder record is associated with both an event and its owner, the processor can obtain the information required to construct the notification, including:
+
+- The event title
+- The event date and time
+- The event type
+- The user's registered email address
+- Any additional event details required by the email template
+
+After the required data has been retrieved, the processor generates the reminder email content and delegates the delivery operation to the application's email service, which sends the message through **Resend**.
+
+Calling `ReminderService` directly avoids unnecessary internal HTTP communication between components within the same NestJS application. It also preserves the application's layered architecture by allowing the processor to reuse the same business logic and database access methods provided by the service layer.
+
+Because the complete workflow is executed asynchronously by the BullMQ processor, scheduled reminder processing does not block incoming HTTP requests or affect the responsiveness of the main application.
+
+---
+
+##### Asynchronous Architecture
+
+The Reminder System separates immediate user-facing operations from delayed background processing.
+
+The NestJS API is responsible for creating reminder records and enqueueing jobs, while the BullMQ worker is responsible for processing those jobs at the correct time. Redis acts as the shared queue storage between the producer and worker.
+
+This architecture provides several advantages:
+
+- The HTTP request completes immediately after the reminder is scheduled.
+- Delayed jobs remain available even when no user is actively using the application.
+- Email delivery does not block the main backend process.
+- Reminder processing can be scaled independently from other backend modules.
+- Failed jobs can be retried according to the queue configuration.
+
+By using a persistent queue rather than an in-memory timer, reminders are managed more reliably and remain independent from the lifecycle of individual frontend sessions.
+
+### 3.9. Settings
+
+#### Feature Overview
 
 The Settings module allows authenticated users to manage their profile information within NUS Savnac. Currently, users may update their display name, which is reflected throughout the application after the change is saved.
 
@@ -1658,7 +1918,63 @@ To mark a task as completed:
   <em>Figure 9.41. Switch to Break session</em>
 </p>
 
-### 4.7 Settings
+### 4.7. Planning Agent
+
+#### Suggest a plan
+
+1. Click on the exam or deadline that you want to plan for on the schedule
+2. Click on the <kbd>Plan for exam</kbd> button to open the Planning Agent Dialog
+3. Select your options for _"How long to prepare before the exam"_ and _"How much to prepare"_. Also, provide the resources so that the agent can use for planning
+ <p align="center">
+   <img src="images/guide/planning-preferences.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.42. Planning Preferences</em>
+ </p>
+
+4. Click <kbd>Start Planning</kbd> to start planning for the event. Wait for a couple of minutes for the agent to return the plan
+
+ <p align="center">
+   <img src="images/guide/final-plan.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.43. Suggested Plan by the Agent</em>
+ </p>
+
+#### Request revision
+
+1. When the agent return the plan, type in your adjustment request in the chat box below if you want to make any changes
+2. Click <kbd>Revise Plan</kbd> for the agent to start revising the plan with your request
+3. Wait for a moment and the agent will return the adjusted plan
+
+ <p align="center">
+   <img src="images/guide/revise-chat-box.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.44. Revise Plan Chat Box</em>
+ </p>
+
+#### Save plan
+
+1. When you are already happy with the plan, click on the <kbd>Save plan</kbd> at the bottom right corner of the dialog to save the plan
+2. Wait for a moment for the system to save the plan and you will see the newly created deadlines on the schedule
+
+### 4.8. Reminder System
+
+#### Turn on reminder
+
+1. When creating a new event, you can tick on the reminder checkbox to turn on the reminder the event.
+
+ <p align="center">
+   <img src="images/guide/revise-chat-box.png" width="350"/>
+ </p>
+ <p align="center">
+   <em>Figure 9.45. Reminder Checkbox</em>
+ </p>
+
+2. You will receive a reminder via your registered email 24 hours before the event starts
+
+### 4.9. Settings
 
 #### Update Display Name
 
@@ -1760,9 +2076,38 @@ Below are some test cases:
 
 ---
 
-## 5.2 System Testing (Manual)
+## 5.2 Component Testing (Automated)
 
-System testing was performed manually during development to verify that major user workflows function correctly across the frontend and backend.
+Frontend component testing is implemented using **Vitest** and **React Testing Library**. Instead of testing the application as a whole, component tests focus on verifying the behavior of individual React components in isolation.
+
+The tests validate that components render the expected user interface, respond correctly to user interactions, update their states appropriately, and display the correct information according to the provided props and application state.
+
+## By testing components independently, UI-related regressions can be detected early while keeping the tests fast and maintainable.
+
+Below are some of the test cases:
+
+| Component         | Test Case                                          | Expected Result                                           |
+| ----------------- | -------------------------------------------------- | --------------------------------------------------------- |
+| Add Course Dialog | Open state is false                                | Dialog should not pop-up                                  |
+| Add Course Dialog | Open state is true                                 | Dialog pops up and the list of courses are displayed      |
+| Add Course Dialog | Search for a course                                | The list of courses updated by the typed course code      |
+| Add Folder Dialog | Folder name or folder description are not provided | Announce the user via red border input box                |
+| Add Folder Dialog | User successfully creates a folder                 | Folder dialog closes                                      |
+| Link Grid         | In Normal mode                                     | A grid of links shows up                                  |
+| Link Grid         | In Edit mode                                       | Shows edit dialog when user click on links                |
+| Link Grid         | In Delete mode                                     | Shows delete dialog when user click on links              |
+| Schedule Calendar | Navigating between weeks                           | The calendar shows the correct week                       |
+| Task List         | Adding, removing, editing tasks                    | The task list updates correspondingly with the operations |
+
+## 5.3 System Testing (Automated)
+
+System testing was performed in form of End-to-End testing (E2E Testing) during development to verify that major user workflows function correctly across the frontend and backend.
+
+E2E testing is implemented using **Playwright** to simulate real user interactions with the application.
+
+Unlike integration and component testing, E2E tests validate complete user workflows that span both the frontend and backend. Typical scenarios include user authentication, course management, resource management, scheduler operations, task management, and other major features available within the application.
+
+Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions.
 
 Below are some test cases:
 
@@ -1777,24 +2122,7 @@ Below are some test cases:
 | Task Management     | Access another user's data                 | User cannot access other users' tasks                                |
 | Pomodoro Timer      | Create and configure custom timer          | Timer settings are saved and loaded correctly                        |
 | Pomodoro Timer      | Start and complete a Pomodoro session      | Timer counts down and changes session correctly                      |
-| Navigation          | Navigate between pages                     | Pages load correctly without errors                                  |
-<!-- ## 5.2. Component Testing
-
-Frontend component testing is implemented using **React Testing Library**. Instead of testing the application as a whole, component tests focus on verifying the behavior of individual React components in isolation.
-
-The tests validate that components render the expected user interface, respond correctly to user interactions, update their states appropriately, and display the correct information according to the provided props and application state.
-
-By testing components independently, UI-related regressions can be detected early while keeping the tests fast and maintainable.
-
----
-
-## 5.3. End-to-End Testing
-
-End-to-End (E2E) testing is implemented using **Playwright** to simulate real user interactions with the application.
-
-Unlike integration and component testing, E2E tests validate complete user workflows that span both the frontend and backend. Typical scenarios include user authentication, course management, resource management, scheduler operations, task management, and other major features available within the application.
-
-Each test interacts with the application through the browser in the same manner as an actual user, ensuring that frontend components, backend APIs, database operations, and routing work together correctly. This provides an additional level of confidence that the system functions as expected under real usage conditions. -->
+| Siderbar Navigation | Navigate between pages                     | Pages load correctly without errors                                  |
 
 # 6. SWE Practices
 
@@ -1811,3 +2139,34 @@ Each test interacts with the application through the browser in the same manner 
 - Tested new features locally before merging changes into shared branches.
 - Verified that frontend and backend services remained compatible after feature integration.
 - Ensured successful builds and deployment checks before releasing updates to the production environment.
+
+## 6.3. Continuous Integration and Continuous Deployment
+
+The project implements a **Continuous Integration and Continuous Deployment (CI/CD)** workflow to automate code verification and application deployment. This workflow helps detect integration problems before changes are merged and ensures that validated updates can be released consistently.
+
+### Continuous Integration
+
+Continuous Integration is implemented using **GitHub Actions**. The CI workflow is triggered whenever changes are pushed to the repository or when a Pull Request is opened against the `main` branch.
+
+The workflow automatically performs the following checks:
+
+- Installs the required project dependencies
+- Runs backend integration tests implemented with Jest and Supertest
+- Runs frontend component tests implemented with React Testing Library
+- Runs End-to-End tests implemented with Playwright
+- Verifies that the frontend, backend, and Planning Agent services can be built successfully
+- Reports the result of each check directly on GitHub
+
+Changes are reviewed and merged only after the required CI checks have completed successfully. This reduces the risk of introducing regressions, incompatible changes, or build errors into the stable branch.
+
+### Continuous Deployment
+
+Continuous Deployment is handled through **Vercel** and **Railway**, both of which are connected to the project's GitHub repository.
+
+The frontend application is deployed through Vercel. When validated changes are pushed to the configured production branch, Vercel automatically installs the dependencies, builds the Next.js application, and deploys the latest version.
+
+The NestJS backend and Python Planning Agent are deployed through Railway. Railway automatically rebuilds and redeploys the relevant service whenever changes are pushed to its connected branch. Supporting infrastructure, including the Redis service used by the Reminder System, is also hosted on Railway.
+
+Deployment logs and service status are reviewed after each release to detect build failures, environment configuration issues, and runtime errors. Sensitive information, such as database credentials, API keys, service URLs, and authentication secrets, is managed through environment variables configured separately on each deployment platform.
+
+By combining automated verification through GitHub Actions with automated deployment through Vercel and Railway, the project maintains a more consistent and reliable software delivery process.
