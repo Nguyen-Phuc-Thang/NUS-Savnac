@@ -25,7 +25,7 @@ describe('Delete Course Dialog', () => {
 
         expect(screen.queryByText('Delete Course')).not.toBeInTheDocument();
     });
-    it('displays the dialog and all courses when open is true', () => {
+    it('displays the dialog when open is true', () => {
         render(
             <DeleteCourseDialog
                 open={true}
