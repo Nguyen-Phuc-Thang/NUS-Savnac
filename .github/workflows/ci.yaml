@@ -77,6 +77,7 @@ jobs:
             NODE_ENV: test
             DATABASE_URL: postgresql://postgres:postgres@localhost:5432/savnac_test?schema=public
             REDIS_URL: redis://localhost:6379
+            RESEND_API_KEY: re_test_ci_key
 
         steps:
             - name: Checkout repository
