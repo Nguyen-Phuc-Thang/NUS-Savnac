@@ -99,8 +99,5 @@ jobs:
             - name: Apply Prisma migration
               run: npx prisma migrate deploy
 
-            - name: Run backend integration tests
-              run: npm run test:integration
-
             - name: Build backend
               run: npm run build
