@@ -4,9 +4,26 @@ on:
     push:
 
 jobs:
-    test-workflow:
+    frontend-tests:
         runs-on: ubuntu-latest
 
+        defaults:
+            run:
+                working-directory: frontend
+
         steps:
-            - name: Print a message
-              run: echo "CI is running successfully"
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20
+                  cache: npm
+                  cache-dependency-path: frontend/package-lock.json
+
+            - name: Install frontend dependencies
+              run: npm ci
+
+            - name: Run frontend component tests
+              run: npm run test:run
