@@ -23,7 +23,7 @@ const mockCourses = [
     },
 ];
 
-describe('AddNUSCourseDialog', () => {
+describe('Add NUS Course Dialog', () => {
     it('does not display the dialog when open is false', () => {
         render(
             <AddNUSCourseDialog

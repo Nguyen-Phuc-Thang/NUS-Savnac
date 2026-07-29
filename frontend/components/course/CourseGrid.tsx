@@ -1,29 +1,34 @@
-"use client";
+'use client';
 
 // React Hooks
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 
 // Components
-import CourseCard from "@/components/course/CourseCard";
+import CourseCard from '@/components/course/CourseCard';
 
 interface CourseGridProps {
     courses: any[];
-    mode: "NORMAL" | "EDIT" | "DELETE";
+    mode: 'NORMAL' | 'EDIT' | 'DELETE';
     onCourseClick?: (course: any) => void;
     onEditModeCardClick?: () => void;
     onDeleteModeCardClick?: () => void;
 }
 
-export default function CourseGrid({ courses, mode, onCourseClick, onEditModeCardClick, onDeleteModeCardClick }: CourseGridProps) {
-
+export default function CourseGrid({
+    courses,
+    mode,
+    onCourseClick,
+    onEditModeCardClick,
+    onDeleteModeCardClick,
+}: CourseGridProps) {
     const router = useRouter();
 
     const handleCardClick = (course: any) => {
         onCourseClick?.(course);
-        if (mode === "EDIT") onEditModeCardClick?.();
-        else if (mode === "DELETE") onDeleteModeCardClick?.();
+        if (mode === 'EDIT') onEditModeCardClick?.();
+        else if (mode === 'DELETE') onDeleteModeCardClick?.();
         else router.push(`/dashboard/courses/${course.courseCode}`);
-    }
+    };
 
     return (
         <div>
@@ -39,5 +44,5 @@ export default function CourseGrid({ courses, mode, onCourseClick, onEditModeCar
                 ))}
             </div>
         </div>
-    )
+    );
 }
