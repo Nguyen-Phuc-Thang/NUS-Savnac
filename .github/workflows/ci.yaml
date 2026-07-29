@@ -1,0 +1,12 @@
+name: CI
+
+on:
+    push:
+
+jobs:
+    test-workflow:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Print a message
+              run: echo "CI is running successfully"
