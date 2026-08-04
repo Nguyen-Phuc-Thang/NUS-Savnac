@@ -1,7 +1,7 @@
 'use client';
 
 import { TimerConfig } from '@/types/timer';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 type TimerMode = 'focus' | 'break';
 
@@ -52,6 +52,8 @@ const useTimer = (selectedTimer: TimerConfig) => {
     const [isActive, setIsActive] = useState(false);
     // This ensures the storing works properly
     const [hasLoaded, setHasLoaded] = useState(false);
+
+    const timerKeyRef = useRef(selectedTimer.pomodoroId);
 
     const progress =
         timerState.mode === 'focus'
@@ -124,6 +126,11 @@ const useTimer = (selectedTimer: TimerConfig) => {
 
     // Reset to a fresh state when user switch timer
     useEffect(() => {
+        const nextKey = selectedTimer.pomodoroId;
+        if (timerKeyRef.current === nextKey) {
+            return;
+        }
+        timerKeyRef.current = nextKey;
         setIsActive(false);
         setTimerState({
             mode: 'focus',
