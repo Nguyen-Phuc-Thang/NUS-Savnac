@@ -1155,6 +1155,7 @@ The timer interface also includes a circular progress indicator that visually re
 #### Future Improvements
 
 Possible future improvements for the Pomodoro module include:
+
 - Saving selected tasks together with Pomodoro sessions.
 - Recording completed Pomodoro sessions to provide productivity history and statistics.
 
@@ -2110,6 +2111,12 @@ Below are some of the test cases:
 | Link Grid         | In Delete mode                                     | Shows delete dialog when user click on links              |
 | Schedule Calendar | Navigating between weeks                           | The calendar shows the correct week                       |
 | Task List         | Adding, removing, editing tasks                    | The task list updates correspondingly with the operations |
+| Timer             | Start or pause timer                               | Timer state updates correctly                             |
+| Timer             | Switch between focus and break mode                | Timer mode changes correctly                              |
+| TimerCard         | Display timer details                              | Timer information is shown correctly                      |
+| Pick Timer Dialog | Selecting a timer                                  | Selected timer is updated correctly                       |
+| Set Timer Dialog  | Add or edit timer                                  | Timer settings are saved correctly                        |
+| Pick Task Dialog  | Select a task                                      | Selected task is updated correctly                        |
 
 ## 5.3 System Testing (Automated)
 
