@@ -12,7 +12,7 @@ export default defineConfig({
 
         include: ['**/*.{test,spec}.{ts,tsx}'],
 
-        exclude: ['node_modules', '.next', 'tests/e2e'],
+        exclude: ['node_modules', '.next', 'tests/e2e', 'e2e'],
 
         coverage: {
             provider: 'v8',
