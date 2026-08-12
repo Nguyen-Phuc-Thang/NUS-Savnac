@@ -29,8 +29,14 @@ const Pomodoro = () => {
             );
             const data = await response.json();
             setTimers(data);
+
             if (data.length > 0) {
-                setSelectedTimer(data[0]);
+                // This ensures same timer to be selected on refresh or navigate
+                const savedId = localStorage.getItem('selected-timer-id');
+                const restoredTimer = data.find(
+                    (timer: TimerConfig) => timer.pomodoroId === savedId,
+                );
+                setSelectedTimer(restoredTimer ?? data[0]);
             }
 
             setTimerLoading(false);
@@ -149,6 +155,7 @@ const Pomodoro = () => {
 
     const handleSelectTimer = (timer: TimerConfig) => {
         setSelectedTimer(timer);
+        localStorage.setItem('selected-timer-id', timer.pomodoroId);
     };
 
     // This ensures the selected timer get update on UI
