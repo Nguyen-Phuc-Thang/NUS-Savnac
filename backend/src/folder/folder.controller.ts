@@ -1,15 +1,21 @@
-import { Body, Controller, Get, Post, Query, Patch, Delete } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { FolderService } from './folder.service';
 import GetFolderDto from './dto/get-folder.dto';
 import AddFolderDto from './dto/add-folder.dto';
 import UpdateFolderDto from './dto/update-folder.dto';
 import DeleteFolderDto from './dto/delete-folder.dto';
 
-
 @Controller('folder')
 export class FolderController {
-  constructor(private readonly folderService: FolderService) { }
-
+  constructor(private readonly folderService: FolderService) {}
 
   @Get('all-folders')
   async getAllFolders(@Query() dto: GetFolderDto) {

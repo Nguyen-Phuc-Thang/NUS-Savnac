@@ -57,14 +57,14 @@ export async function updateFolder(
     const response = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/folder/update-folder`,
         {
-            method: 'POST',
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 folderId: folderId,
-                folderName: folderName,
-                folderDescription: folderDescription,
+                name: folderName,
+                description: folderDescription,
             }),
         },
     );

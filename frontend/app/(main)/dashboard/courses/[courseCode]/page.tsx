@@ -348,30 +348,30 @@ export default function CoursePage() {
     };
 
     const handleAddClass = async (classData: any) => {
-        console.log(classData);
-        try {
-            for (const week of classData.weeks) {
-                const newEvent = await addEvent(
-                    session?.user?.id || '',
-                    'CLASS',
-                    classData.classNo,
-                    'Week ' + week.toString(),
-                    classData.day,
-                    classData.startTime,
-                    classData.endTime,
-                    classData.venue,
-                    courseData.courseId,
-                );
-                setEvents((prevEvents) => [...prevEvents, newEvent]);
-            }
-            toast.success(
-                'Class ' + classData.classNo + ' added successfully!',
-            );
-        } catch (error) {
-            toast.error('Failed to add class. Please try again later.');
-        } finally {
-            setAddClassDialogOpen(false);
-        }
+        setAddClassDialogOpen(false);
+        toast.promise(
+            (async () => {
+                for (const week of classData.weeks) {
+                    const newEvent = await addEvent(
+                        session?.user?.id || '',
+                        'CLASS',
+                        classData.classNo,
+                        'Week ' + week.toString(),
+                        classData.day,
+                        classData.startTime,
+                        classData.endTime,
+                        classData.venue,
+                        courseData.courseId,
+                    );
+                    setEvents((prevEvents) => [...prevEvents, newEvent]);
+                }
+            })(),
+            {
+                loading: `Adding classes...`,
+                success: 'Class ' + classData.classNo + ' added successfully!',
+                error: (err) => err.message,
+            },
+        );
     };
 
     const handleCreateEvent = async () => {
