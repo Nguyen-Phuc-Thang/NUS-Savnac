@@ -104,6 +104,8 @@ model Event {
   venue     String?
 
   reminders Reminder[]
+
+  @@unique([courseId, title, week, day, startTime, endTime])
 }
 
 enum TaskType {
