@@ -918,6 +918,8 @@ This integration aligns with the overall objective of NUS Savnac—providing a c
 
 The implementation follows the traditional Pomodoro workflow, consisting of alternating **Focus** and **Break** sessions.
 
+As updated, the timer now is preserved across page navigation and browser refreshes. This allows users to continue their Pomodoro sessions without losing progress.
+
 <p align="center">
   <img src="images/pomodoro-page.png" width="900"/>
 </p>
@@ -951,6 +953,9 @@ The Pomodoro module provides the following functionalities:
 
 - **Session Tracking**  
   Completed focus sessions are counted and displayed, allowing users to monitor the number of completed Pomodoro cycles.
+
+- **Timer State Persistence**
+  The active timer state is automatically saved in the browser and restored after page navigation or browser refresh. If the timer was running, the remaining time is recalculated based on the elapsed time so that the countdown continues accurately.
 
 <p align="center">
   <img src="images/timer-focus.png" width="900"/>
@@ -1080,6 +1085,14 @@ A separate boolean state, `isActive`, is maintained outside the `TimerState` obj
 
 ---
 
+##### Timer State Persistence
+
+To improve user experience, the active timer state is automatically persisted in the browser using `localStorage`. The stored information includes the current timer mode, remaining time, completed sessions, whether the timer is running, the selected timer preset, and the timestamp when the state was last saved.
+
+When the Pomodoro page is reloaded or revisited, the application restores the saved timer state if it belongs to the currently selected timer preset. If the timer was running before the page was closed, the elapsed time since the previous save is calculated and applied to the timer state. This allows the countdown to continue accurately across page navigation and browser refreshes instead of simply resuming from the previously displayed time.
+
+---
+
 ##### Countdown Mechanism
 
 The countdown is implemented using React's `useEffect` hook together with `setInterval`.
@@ -1143,7 +1156,6 @@ The timer interface also includes a circular progress indicator that visually re
 
 Possible future improvements for the Pomodoro module include:
 
-- Persisting active timer state across page navigation and browser refresh.
 - Saving selected tasks together with Pomodoro sessions.
 - Recording completed Pomodoro sessions to provide productivity history and statistics.
 
@@ -2099,6 +2111,12 @@ Below are some of the test cases:
 | Link Grid         | In Delete mode                                     | Shows delete dialog when user click on links              |
 | Schedule Calendar | Navigating between weeks                           | The calendar shows the correct week                       |
 | Task List         | Adding, removing, editing tasks                    | The task list updates correspondingly with the operations |
+| Timer             | Start or pause timer                               | Timer state updates correctly                             |
+| Timer             | Switch between focus and break mode                | Timer mode changes correctly                              |
+| TimerCard         | Display timer details                              | Timer information is shown correctly                      |
+| Pick Timer Dialog | Selecting a timer                                  | Selected timer is updated correctly                       |
+| Set Timer Dialog  | Add or edit timer                                  | Timer settings are saved correctly                        |
+| Pick Task Dialog  | Select a task                                      | Selected task is updated correctly                        |
 
 ## 5.3 System Testing (Automated)
 
