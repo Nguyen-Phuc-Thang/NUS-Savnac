@@ -54,6 +54,7 @@ export default function PickTaskDialog({
 
                 {selectedTask && (
                     <Button
+                        aria-label="Clear selected task"
                         variant="ghost"
                         size="icon"
                         onClick={() => onSelectTask(undefined)}

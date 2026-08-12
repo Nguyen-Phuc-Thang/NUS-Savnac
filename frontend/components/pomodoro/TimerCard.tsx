@@ -81,6 +81,7 @@ const TimerCard = ({
                             <AlertDialog>
                                 <AlertDialogTrigger asChild>
                                     <Button
+                                        aria-label="Delete Timer"
                                         variant="ghost"
                                         size="icon"
                                         disabled={!canDeleteTimer}

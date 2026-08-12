@@ -58,6 +58,7 @@ export default function SetTimerDialog({ mode, timer, onTimerSubmit }: Props) {
                     </Button>
                 ) : (
                     <Button
+                        aria-label="Edit Timer"
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8"
